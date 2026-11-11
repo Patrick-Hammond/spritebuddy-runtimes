@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "paths": { "@spritebuddy/core": ["../core/src/index.ts"], "pixi": ["../../node_modules/pixi8"] }
+  },
+  "include": ["src", "test"]
+}

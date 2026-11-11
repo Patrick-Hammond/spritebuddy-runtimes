@@ -1,0 +1,55 @@
+{
+  "name": "@spritebuddy/pixi",
+  "version": "0.1.0",
+  "description": "Play SpriteBuddy animations in PixiJS 5, 6, 7 and 8: per-frame timing, offsets and live layers.",
+  "license": "ISC",
+  "author": "Patrick Hammond",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Patrick-Hammond/spritebuddy-runtimes.git",
+    "directory": "packages/pixi"
+  },
+  "keywords": [
+    "spritebuddy",
+    "pixi",
+    "pixijs",
+    "spritesheet",
+    "animation",
+    "gamedev"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@spritebuddy/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "pixi.js": ">=5.3.0 <9"
+  },
+  "peerDependenciesMeta": {
+    "pixi.js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "pixi5": "npm:pixi.js@5.3.12",
+    "pixi6": "npm:pixi.js@6.5.10",
+    "pixi7": "npm:pixi.js@7.4.3",
+    "pixi8": "npm:pixi.js@8.22.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "basic.png",
+  "size": [96, 32],
+  "frames": [
+    { "name": "walk_0", "rect": [0, 0, 16, 32] },
+    { "name": "walk_1", "rect": [16, 0, 16, 32] },
+    { "name": "walk_2", "rect": [32, 0, 16, 32] },
+    { "name": "walk_3", "rect": [48, 0, 16, 32], "pivot": [8, 30] }
+  ],
+  "animations": [
+    { "name": "walk", "frames": [0, 1, 2, 3] },
+    { "name": "slow", "loop": "loop", "duration": 250, "frames": [0, 1] },
+    { "name": "empty", "frames": [] }
+  ]
+}

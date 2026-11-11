@@ -1,0 +1,1673 @@
+{
+ "fixture": "layers.anims.json",
+ "animations": [
+  {
+   "animation": "slash",
+   "checks": [
+    {
+     "time": 0,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 10,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 20,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 30,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 40,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 50,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 60,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 70,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 80,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 90,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 100,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 110,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 119,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 120,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 130,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 140,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 150,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 160,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 170,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 180,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 190,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 200,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 210,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 219,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 220,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 230,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 240,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 250,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 260,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 270,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 280,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 290,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 300,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 310,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 319,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 320,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 330,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 340,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 350,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 360,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 370,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 380,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 390,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 400,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 410,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 420,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 430,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 439,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 440,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 450,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 460,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 470,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 480,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 490,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 500,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 510,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 520,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 530,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 539,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 540,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 550,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 560,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 570,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 580,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 590,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 600,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 610,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 620,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 630,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 639,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 640,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 759,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    },
+    {
+     "time": 760,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 859,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -5,
+       "y": -4,
+       "opacity": 0.5,
+       "flipY": true
+      },
+      {
+       "frame": "body_1",
+       "x": -9,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": -15,
+       "y": -30,
+       "flipX": true
+      },
+      {
+       "frame": "sword",
+       "x": 11,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 860,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "body_0",
+       "x": -15,
+       "y": -32
+      }
+     ]
+    },
+    {
+     "time": 1000003,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "shadow",
+       "x": -8,
+       "y": -4,
+       "opacity": 0.5
+      },
+      {
+       "frame": "body_0",
+       "x": -12,
+       "y": -32
+      },
+      {
+       "frame": "sword",
+       "x": 6,
+       "y": -28
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

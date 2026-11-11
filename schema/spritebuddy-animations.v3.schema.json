@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/blob/main/schema/spritebuddy-animations.v3.schema.json",
+  "title": "SpriteBuddy animations, version 3",
+  "description": "A spritesheet's frames and animations, with per-frame timing, offsets and layers. Coordinates are sheet pixels with y down; times are milliseconds. See docs/format.md.",
+  "type": "object",
+  "required": ["format", "version", "image", "size", "frames"],
+  "properties": {
+    "format": { "const": "spritebuddy-animations" },
+    "version": { "const": 3 },
+    "image": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The sheet image, relative to this file."
+    },
+    "size": {
+      "$ref": "#/$defs/size",
+      "description": "Sheet size in pixels: [width, height]."
+    },
+    "scale": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 1,
+      "description": "Scale the sheet was exported at. Informational: every coordinate in the file is already in sheet pixels."
+    },
+    "frames": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/frame" }
+    },
+    "animations": {
+      "type": "array",
+      "default": [],
+      "items": { "$ref": "#/$defs/animation" }
+    }
+  },
+  "$defs": {
+    "int": { "type": "integer" },
+    "count": { "type": "integer", "minimum": 0 },
+    "positive": { "type": "integer", "minimum": 1 },
+    "size": {
+      "type": "array",
+      "prefixItems": [{ "$ref": "#/$defs/positive" }, { "$ref": "#/$defs/positive" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "point": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "offset": {
+      "type": "array",
+      "prefixItems": [{ "$ref": "#/$defs/int" }, { "$ref": "#/$defs/int" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "frame": {
+      "type": "object",
+      "required": ["name", "rect"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "rect": {
+          "type": "array",
+          "description": "[x, y, w, h]: where the pixels sit on the sheet, at their upright size.",
+          "prefixItems": [
+            { "$ref": "#/$defs/count" },
+            { "$ref": "#/$defs/count" },
+            { "$ref": "#/$defs/positive" },
+            { "$ref": "#/$defs/positive" }
+          ],
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "pivot": {
+          "$ref": "#/$defs/point",
+          "description": "[x, y] in full-frame pixels. Defaults to the bottom centre."
+        },
+        "rotated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Stored turned 90° clockwise: covers h columns and w rows on the sheet."
+        },
+        "trim": {
+          "type": "array",
+          "description": "[x, y, fullWidth, fullHeight]: transparent edges were cut off; the pixels start at x, y inside a full frame of this size.",
+          "prefixItems": [
+            { "$ref": "#/$defs/count" },
+            { "$ref": "#/$defs/count" },
+            { "$ref": "#/$defs/positive" },
+            { "$ref": "#/$defs/positive" }
+          ],
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    },
+    "layer": {
+      "type": "object",
+      "required": ["frame"],
+      "properties": {
+        "frame": { "$ref": "#/$defs/count", "description": "Index into frames." },
+        "x": {
+          "$ref": "#/$defs/int",
+          "default": 0,
+          "description": "Layer's full-frame left, from the base frame's left."
+        },
+        "y": {
+          "$ref": "#/$defs/int",
+          "default": 0,
+          "description": "Layer's full-frame top, from the base frame's top."
+        },
+        "z": {
+          "$ref": "#/$defs/int",
+          "default": 1,
+          "description": "Draw order; the base frame is 0."
+        },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 },
+        "flipX": { "type": "boolean", "default": false },
+        "flipY": { "type": "boolean", "default": false }
+      }
+    },
+    "animationFrame": {
+      "oneOf": [
+        { "$ref": "#/$defs/count", "description": "A frame index, with the animation's duration." },
+        {
+          "type": "object",
+          "required": ["frame"],
+          "properties": {
+            "frame": { "$ref": "#/$defs/count" },
+            "duration": { "$ref": "#/$defs/positive", "description": "Milliseconds." },
+            "offset": {
+              "$ref": "#/$defs/offset",
+              "description": "[x, y] nudge from where the pivot puts the frame; +x right, +y down."
+            },
+            "layers": { "type": "array", "items": { "$ref": "#/$defs/layer" } }
+          }
+        }
+      ]
+    },
+    "animation": {
+      "type": "object",
+      "required": ["name", "frames"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "loop": { "enum": ["loop", "pingpong", "once"], "default": "loop" },
+        "duration": {
+          "$ref": "#/$defs/positive",
+          "default": 100,
+          "description": "Milliseconds for frames that don't give their own."
+        },
+        "frames": { "type": "array", "items": { "$ref": "#/$defs/animationFrame" } }
+      }
+    }
+  }
+}
