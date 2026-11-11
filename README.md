@@ -7,11 +7,11 @@ played live instead of baked into the sheet.
 Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.json`, version
 3), plus its sheet image.
 
-| Package                              | For                   | Status      |
-| ------------------------------------ | --------------------- | ----------- |
-| [`@spritebuddy/core`](packages/core) | any JavaScript engine | in progress |
-| `@spritebuddy/pixi`                  | PixiJS 5, 6, 7 and 8  | planned     |
-| `addons/spritebuddy`                 | Godot 4               | planned     |
+| Package                              | For                     | Status                   |
+| ------------------------------------ | ----------------------- | ------------------------ |
+| [`@spritebuddy/core`](packages/core) | any JavaScript engine   | 0.1.0, not published yet |
+| [`@spritebuddy/pixi`](packages/pixi) | PixiJS 5.3+, 6, 7 and 8 | 0.1.0, not published yet |
+| `addons/spritebuddy`                 | Godot 4                 | planned                  |
 
 ## The format
 
@@ -25,7 +25,7 @@ Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.
 
 ```sh
 npm install
-npm run check      # format, typecheck, tests with 95% coverage
+npm run check      # format, typecheck, tests with 95% coverage (Pixi renders in Chromium) (Pixi tests render in Chromium)
 npm run build      # builds every package into its dist/
 UPDATE_FIXTURES=1 npx vitest run packages/core/src/golden.test.ts   # after a deliberate change
 ```

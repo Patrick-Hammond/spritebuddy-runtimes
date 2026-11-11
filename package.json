@@ -23,6 +23,9 @@
     "@types/node": "^22.20.5",
     "@vitest/coverage-v8": "^5.1.0",
     "ajv": "^8.20.0",
+    "esbuild": "^0.28.2",
+    "happy-dom": "^21.0.4",
+    "playwright": "^1.63.0",
     "prettier": "^3.10.0",
     "typescript": "5.9",
     "vitest": "^5.1.0"
