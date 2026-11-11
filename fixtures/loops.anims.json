@@ -1,0 +1,22 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "loops.png",
+  "size": [64, 16],
+  "frames": [
+    { "name": "a", "rect": [0, 0, 16, 16], "pivot": [8, 8] },
+    { "name": "b", "rect": [16, 0, 16, 16], "pivot": [8, 8] },
+    { "name": "c", "rect": [32, 0, 16, 16], "pivot": [8, 8] },
+    { "name": "d", "rect": [48, 0, 16, 16], "pivot": [8, 8] }
+  ],
+  "animations": [
+    { "name": "bounce", "loop": "pingpong", "frames": [0, 1, 2, 3] },
+    { "name": "pair", "loop": "pingpong", "frames": [0, 1] },
+    {
+      "name": "attack",
+      "loop": "once",
+      "frames": [0, { "frame": 1, "duration": 50 }, { "frame": 2, "duration": 300 }]
+    },
+    { "name": "single", "loop": "once", "duration": 80, "frames": [3] }
+  ]
+}

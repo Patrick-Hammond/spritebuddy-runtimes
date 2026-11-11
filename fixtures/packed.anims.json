@@ -1,0 +1,21 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "packed.png",
+  "size": [40, 40],
+  "scale": 1,
+  "frames": [
+    { "name": "idle_0", "rect": [0, 0, 10, 20], "pivot": [8, 24], "trim": [3, 4, 16, 24] },
+    { "name": "idle_1", "rect": [10, 0, 10, 20], "pivot": [8, 24], "rotated": true },
+    {
+      "name": "idle_2",
+      "rect": [0, 20, 12, 18],
+      "pivot": [8, 24],
+      "rotated": true,
+      "trim": [2, 6, 16, 24]
+    }
+  ],
+  "animations": [
+    { "name": "idle", "duration": 150, "frames": [0, 1, { "frame": 2, "duration": 75 }] }
+  ]
+}

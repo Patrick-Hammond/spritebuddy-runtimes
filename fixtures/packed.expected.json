@@ -1,0 +1,1090 @@
+{
+ "fixture": "packed.anims.json",
+ "animations": [
+  {
+   "animation": "idle",
+   "checks": [
+    {
+     "time": 0,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 10,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 20,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 30,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 40,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 50,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 60,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 70,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 80,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 90,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 100,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 110,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 120,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 130,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 140,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 149,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 150,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 160,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 170,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 180,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 190,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 200,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 210,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 220,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 230,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 240,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 250,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 260,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 270,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 280,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 290,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 299,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 300,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 310,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 320,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 330,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 340,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 350,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 360,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 370,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 374,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 375,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 380,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 390,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 400,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 410,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 420,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 430,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 440,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 450,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 460,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 470,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 480,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 490,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 500,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 510,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 520,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 524,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 525,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 530,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 540,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 550,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 560,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 570,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 580,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 590,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 600,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 610,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 620,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 630,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 640,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 650,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 660,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 670,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 674,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 675,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 680,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 690,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 700,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 710,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 720,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 730,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 740,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 749,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 750,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 899,
+     "index": 0,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_0",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 900,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 1049,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 1050,
+     "index": 2,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_2",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    },
+    {
+     "time": 1000003,
+     "index": 1,
+     "done": false,
+     "parts": [
+      {
+       "frame": "idle_1",
+       "x": -8,
+       "y": -24
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

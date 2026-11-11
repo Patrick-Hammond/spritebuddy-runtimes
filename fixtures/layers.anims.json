@@ -1,0 +1,37 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "layers.png",
+  "size": [64, 32],
+  "frames": [
+    { "name": "body_0", "rect": [0, 0, 24, 32], "pivot": [12, 32] },
+    { "name": "body_1", "rect": [24, 0, 24, 32], "pivot": [11, 31] },
+    { "name": "sword", "rect": [48, 0, 8, 20], "pivot": [4, 20] },
+    { "name": "shadow", "rect": [48, 20, 16, 6] }
+  ],
+  "animations": [
+    {
+      "name": "slash",
+      "frames": [
+        {
+          "frame": 0,
+          "duration": 120,
+          "layers": [
+            { "frame": 2, "x": 18, "y": 4, "z": 2 },
+            { "frame": 3, "x": 4, "y": 28, "z": -1, "opacity": 0.5 }
+          ]
+        },
+        {
+          "frame": 1,
+          "offset": [2, -1],
+          "layers": [
+            { "frame": 2, "x": -6, "y": 2, "flipX": true },
+            { "frame": 3, "x": 4, "y": 28, "z": -1, "opacity": 0.5, "flipY": true },
+            { "frame": 2, "x": 20, "y": 0, "z": 1 }
+          ]
+        },
+        { "frame": 0, "offset": [-3, 0] }
+      ]
+    }
+  ]
+}

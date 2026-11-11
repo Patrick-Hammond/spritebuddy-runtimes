@@ -1,0 +1,30 @@
+{
+  "name": "spritebuddy-runtimes",
+  "private": true,
+  "license": "ISC",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "fixtures": "node scripts/fixtures.mjs",
+    "check": "npm run format:check && npm run typecheck && npm run test:coverage"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^5.1.0",
+    "ajv": "^8.20.0",
+    "prettier": "^3.10.0",
+    "typescript": "5.9",
+    "vitest": "^5.1.0"
+  }
+}
