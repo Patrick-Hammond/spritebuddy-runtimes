@@ -11,7 +11,7 @@ Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.
 | ------------------------------------ | ----------------------- | ------------------------ |
 | [`@spritebuddy/core`](packages/core) | any JavaScript engine   | 0.1.0, not published yet |
 | [`@spritebuddy/pixi`](packages/pixi) | PixiJS 5.3+, 6, 7 and 8 | 0.1.0, not published yet |
-| `addons/spritebuddy`                 | Godot 4                 | planned                  |
+| [`addons/spritebuddy`](godot)        | Godot 4.3+              | 0.1.0                    |
 
 ## The format
 
