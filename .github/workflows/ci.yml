@@ -1,9 +1,7 @@
 name: CI
 
+# Started by hand only (Actions tab > CI > Run workflow), to save Actions minutes.
 on:
-  pull_request:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
