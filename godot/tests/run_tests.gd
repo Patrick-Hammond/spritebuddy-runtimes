@@ -7,7 +7,7 @@ var failures := 0
 var checks := 0
 
 
-func _init() -> void:
+func _initialize() -> void:
 	var fixtures := ProjectSettings.globalize_path("res://").path_join("../fixtures").simplify_path()
 	var dir := DirAccess.open(fixtures)
 	if dir == null:
@@ -18,6 +18,9 @@ func _init() -> void:
 				_check_fixture(fixtures, fixture_name)
 	_check_errors()
 	_check_sprite_frames(fixtures)
+	# Scenes only get _ready once the main loop runs.
+	await process_frame
+	_check_example()
 	print("%d checks, %d failures" % [checks, failures])
 	quit(1 if failures > 0 else 0)
 
@@ -96,3 +99,24 @@ func _check_sprite_frames(dir: String) -> void:
 	_expect(frames.get_frame_count(&"bounce") == 6, "ping-pong is unrolled into 6 frames")
 	_expect(frames.get_animation_loop(&"attack") == false, "once doesn't loop")
 	_expect(is_equal_approx(frames.get_frame_duration(&"attack", 2), 300.0), "frame durations are ms at 1000 fps")
+
+
+## The example scene loads, shows its three slimes, and a hop goes back to each one's own
+## animation when it ends.
+func _check_example() -> void:
+	var scene: PackedScene = load("res://examples/slime_demo.tscn")
+	_expect(scene != null, "the example scene loads")
+	if scene == null:
+		return
+	var demo := scene.instantiate()
+	root.add_child(demo)
+	var slimes: Array = demo.call("_slimes")
+	_expect(slimes.size() == 3, "the example has 3 slimes, got %d" % slimes.size())
+	var homes := ["idle", "idle", "party"]
+	for i in mini(slimes.size(), homes.size()):
+		var slime: SpriteBuddySprite2D = slimes[i]
+		_expect(slime.playing and slime.animation == homes[i], "%s plays %s, got %s" % [slime.name, homes[i], slime.animation])
+		slime.play("hop")
+		slime.advance(10000.0)
+		_expect(slime.playing and slime.animation == homes[i], "%s goes back to %s after a hop, got %s" % [slime.name, homes[i], slime.animation])
+	demo.queue_free()

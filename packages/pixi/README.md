@@ -24,12 +24,18 @@ hero.onComplete = () => hero.play('idle'); // for "once" animations
 hero.play('attack');
 ```
 
+The sprite's origin is where the character stands (the frame's pivot), so `x` and `y` put its
+feet on the ground. Scale it up for pixel art: `hero.scale.set(4)`.
+
 With PixiJS 7 or 8 you can use `Assets` instead:
 
 ```ts
 PIXI.extensions.add(sb.assetsParser);
 const knight = await PIXI.Assets.load('assets/knight.anims.json'); // a SpriteBuddySheet
 ```
+
+The [PixiJS example](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/pixi) is a complete page: three slimes from one
+sheet, one wearing a hat drawn as a live layer, and a hop on click.
 
 ## API
 
@@ -44,3 +50,5 @@ const knight = await PIXI.Assets.load('assets/knight.anims.json'); // a SpriteBu
 
 Every PixiJS version is tested by rendering the shared fixtures in Chromium and comparing each
 pixel with a software render of the format's rules.
+
+Licence: ISC.

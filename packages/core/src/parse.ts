@@ -7,7 +7,7 @@ import {
   type LayerDef,
   type LoopMode,
   type SpriteBuddyFile,
-} from './types';
+} from './types.js';
 
 /** Thrown for a file that isn't a readable SpriteBuddy runtime file; `path` says where. */
 export class FormatError extends Error {

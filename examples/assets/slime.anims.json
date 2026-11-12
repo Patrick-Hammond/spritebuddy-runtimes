@@ -1,0 +1,115 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "slime.png",
+  "size": [64, 16],
+  "scale": 1,
+  "frames": [
+    {
+      "name": "slime_tall",
+      "rect": [0, 0, 16, 16],
+      "pivot": [8, 16]
+    },
+    {
+      "name": "slime",
+      "rect": [16, 0, 16, 16],
+      "pivot": [8, 16]
+    },
+    {
+      "name": "slime_squash",
+      "rect": [32, 0, 16, 16],
+      "pivot": [8, 16]
+    },
+    {
+      "name": "hat",
+      "rect": [48, 0, 16, 16]
+    }
+  ],
+  "animations": [
+    {
+      "name": "idle",
+      "loop": "pingpong",
+      "duration": 160,
+      "frames": [0, 1, 2]
+    },
+    {
+      "name": "party",
+      "loop": "pingpong",
+      "duration": 160,
+      "frames": [
+        {
+          "frame": 0,
+          "layers": [
+            {
+              "frame": 3,
+              "x": 4,
+              "y": -2,
+              "z": 1
+            }
+          ]
+        },
+        {
+          "frame": 1,
+          "layers": [
+            {
+              "frame": 3,
+              "x": 4,
+              "y": 0,
+              "z": 1
+            }
+          ]
+        },
+        {
+          "frame": 2,
+          "layers": [
+            {
+              "frame": 3,
+              "x": 4,
+              "y": 3,
+              "z": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hop",
+      "loop": "once",
+      "duration": 70,
+      "frames": [
+        {
+          "frame": 2,
+          "duration": 120
+        },
+        {
+          "frame": 0,
+          "offset": [0, -4]
+        },
+        {
+          "frame": 0,
+          "offset": [0, -9]
+        },
+        {
+          "frame": 0,
+          "offset": [0, -11],
+          "duration": 120
+        },
+        {
+          "frame": 0,
+          "offset": [0, -9]
+        },
+        {
+          "frame": 1,
+          "offset": [0, -4]
+        },
+        {
+          "frame": 2,
+          "duration": 120
+        },
+        {
+          "frame": 1
+        }
+      ]
+    }
+  ]
+}

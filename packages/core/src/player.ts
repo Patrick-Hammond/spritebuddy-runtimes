@@ -1,6 +1,6 @@
-import { partsOf, type Part } from './resolve';
-import { frameAt } from './timing';
-import type { AnimationDef, SpriteBuddyFile } from './types';
+import { partsOf, type Part } from './resolve.js';
+import { frameAt } from './timing.js';
+import type { AnimationDef, SpriteBuddyFile } from './types.js';
 
 export interface PlayerState {
   /** The animation playing, or null before `play`. */

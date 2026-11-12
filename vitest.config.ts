@@ -2,7 +2,12 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    include: ['packages/*/src/**/*.test.ts', 'packages/*/test/**/*.test.ts', 'schema/**/*.test.ts'],
+    include: [
+      'packages/*/src/**/*.test.ts',
+      'packages/*/test/**/*.test.ts',
+      'schema/**/*.test.ts',
+      'examples/**/*.test.ts',
+    ],
     alias: {
       '@spritebuddy/core': new URL('./packages/core/src/index.ts', import.meta.url).pathname,
     },

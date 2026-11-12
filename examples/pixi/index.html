@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SpriteBuddy: PixiJS example</title>
+    <link rel="stylesheet" href="../example.css" />
+    <!--
+      Where the browser finds each package: this repo's builds (run `npm run build` first) and
+      the PixiJS 8 the tests use. In your own page, point them at a CDN instead:
+        "pixi.js": "https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.mjs",
+        "@spritebuddy/pixi": "https://cdn.jsdelivr.net/npm/@spritebuddy/pixi@0.1.0/dist/index.js",
+        "@spritebuddy/core": "https://cdn.jsdelivr.net/npm/@spritebuddy/core@0.1.0/dist/index.js"
+      or `npm install pixi.js @spritebuddy/pixi` and let your bundler resolve them.
+    -->
+    <script type="importmap">
+      {
+        "imports": {
+          "pixi.js": "../../node_modules/pixi8/dist/pixi.mjs",
+          "@spritebuddy/pixi": "../../packages/pixi/dist/index.js",
+          "@spritebuddy/core": "../../packages/core/dist/index.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>@spritebuddy/pixi with PixiJS 8</h1>
+    <p>Three slimes from one sheet. Click one to make it hop.</p>
+    <div id="stage"></div>
+    <p id="status" class="status" aria-live="polite"></p>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
