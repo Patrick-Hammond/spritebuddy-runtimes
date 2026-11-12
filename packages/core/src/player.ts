@@ -1,5 +1,5 @@
 import { partsOf, type Part } from './resolve.js';
-import { frameAt } from './timing.js';
+import { eventsBetween, frameAt, type FrameEvent } from './timing.js';
 import type { AnimationDef, SpriteBuddyFile } from './types.js';
 
 export interface PlayerState {
@@ -12,6 +12,18 @@ export interface PlayerState {
   readonly done: boolean;
   /** What to draw now, bottom to top. */
   readonly parts: readonly Part[];
+}
+
+export interface PlayerEvents {
+  /** Called with the frame index each time the frame changes. */
+  onFrame?: (index: number) => void;
+  /** Called when a `once` animation ends. */
+  onComplete?: () => void;
+  /**
+   * Called for each event of a frame as it starts showing (see {@link eventsBetween}). `play`
+   * fires the first frame's events; `seek` jumps without firing any.
+   */
+  onEvent?: (name: string, index: number) => void;
 }
 
 /**
@@ -31,14 +43,13 @@ export class Player {
   #parts: readonly Part[] = [];
   #onFrame?: (index: number) => void;
   #onComplete?: () => void;
+  #onEvent?: (name: string, index: number) => void;
 
-  constructor(
-    file: SpriteBuddyFile,
-    events: { onFrame?: (index: number) => void; onComplete?: () => void } = {},
-  ) {
+  constructor(file: SpriteBuddyFile, events: PlayerEvents = {}) {
     this.file = file;
     this.#onFrame = events.onFrame;
     this.#onComplete = events.onComplete;
+    this.#onEvent = events.onEvent;
   }
 
   /** Names of every animation in the file. */
@@ -66,7 +77,9 @@ export class Player {
     this.#index = -1;
     this.#done = false;
     this.playing = true;
-    this.seek(time);
+    this.#time = Math.max(0, time);
+    const index = frameAt(anim, this.#time).index;
+    this.#refresh(index < 0 ? [] : anim.frames[index]!.events.map((name) => ({ name, index })));
     return this;
   }
 
@@ -84,9 +97,11 @@ export class Player {
 
   /** Moves time on by `ms` (times {@link speed}) while playing. */
   update(ms: number): this {
-    if (this.playing && this.#animation) {
+    const anim = this.#animation;
+    if (this.playing && anim) {
+      const from = this.#time;
       this.#time += Math.max(0, ms) * this.speed;
-      this.#refresh();
+      this.#refresh(this.#onEvent ? eventsBetween(anim, from, this.#time) : []);
     }
     return this;
   }
@@ -105,7 +120,8 @@ export class Player {
     return this.#parts;
   }
 
-  #refresh(): void {
+  /** Works out the frame now showing, then reports frame, events and completion in that order. */
+  #refresh(fired: readonly FrameEvent[] = []): void {
     const anim = this.#animation;
     if (!anim) return;
     const pos = frameAt(anim, this.#time);
@@ -113,6 +129,7 @@ export class Player {
     this.#index = pos.index;
     this.#parts = pos.index < 0 ? [] : partsOf(this.file, anim.frames[pos.index]!);
     if (changed && pos.index >= 0) this.#onFrame?.(pos.index);
+    for (const e of fired) this.#onEvent?.(e.name, e.index);
     if (pos.done && !this.#done) {
       this.#done = true;
       this.playing = false;

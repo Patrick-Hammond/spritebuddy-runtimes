@@ -1,6 +1,6 @@
 {
   "name": "@spritebuddy/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Reads SpriteBuddy animation files and works out what to draw at any moment. No dependencies, any engine.",
   "license": "ISC",
   "author": "Patrick Hammond",

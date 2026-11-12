@@ -15,7 +15,10 @@ npm install @spritebuddy/core
 import { parseFile, Player } from '@spritebuddy/core';
 
 const file = parseFile(await (await fetch('knight.anims.json')).json());
-const player = new Player(file, { onComplete: () => player.play('idle') }).play('attack');
+const player = new Player(file, {
+  onComplete: () => player.play('idle'),
+  onEvent: (name) => name === 'hit' && dealDamage(), // events tagged on frames in SpriteBuddy
+}).play('attack');
 
 // every tick
 player.update(deltaMs);
@@ -34,17 +37,21 @@ this with a 2D canvas, rotation, trim and flips included, in about 60 lines.
 
 - `parseFile(json)` checks a runtime file and fills in every default. It throws a
   `FormatError` that says where the file is wrong, and refuses versions newer than `VERSION`.
-- `new Player(file, { onFrame, onComplete })` keeps time for one sprite:
+- `new Player(file, { onFrame, onEvent, onComplete })` keeps time for one sprite:
   - `play(name, fromMs?)` starts an animation (it throws for an unknown name, listing the
     names there are), `stop()`, `seek(ms)` and `update(ms)`.
   - `speed` (1 is normal), `playing`, `names`, `animation(name)`.
   - `parts`: what to draw now, bottom to top. `state` adds the animation, frame index, time
     and whether a `once` animation is done.
-  - `onFrame(index)` fires when the frame changes; `onComplete()` when a `once` animation
-    ends.
+  - `onFrame(index)` fires when the frame changes; `onEvent(name, index)` for each event
+    tagged on a frame as it starts showing (after `onFrame`), including frames a long tick
+    skipped; `onComplete()` when a `once` animation ends. `play` fires the first frame's
+    events; `seek` fires none.
 - The pure functions underneath, for engines that keep their own clock:
   - `frameAt(animation, ms)` gives the frame index showing at a time, and whether it is done.
   - `partsOf(file, animationFrame)` gives the parts to draw for one frame.
+  - `eventsBetween(animation, fromMs, toMs)` lists the events of frames starting after `fromMs`
+    up to `toMs`, at most one cycle's worth.
   - `boundsOf`, `cycleDuration` and `cycleOrder` help with layout and timelines.
 - The JSON Schema ships as `@spritebuddy/core/schema.json`.
 

@@ -85,4 +85,16 @@ async function loadSheet(url: string) {
   return result;
 }
 
-Object.assign(window, { renderFrames, loadSheet, sbVersion: sb.version });
+/** Plays the events fixture's "walk" for 240 ms and lists what the emitter heard. */
+function hearEvents(json: unknown) {
+  const sheet = sb.sheet(json, P.Texture.from(sheetCanvas(48, 16)));
+  const sprite = sheet.sprite('walk', { autoUpdate: false });
+  const heard: string[] = [];
+  sprite.on('event', (name: string, index: number) => heard.push(`event ${name} ${index}`));
+  sprite.on('event:step', (index: number) => heard.push(`step ${index}`));
+  sprite.onEvent = (name, index) => heard.push(`onEvent ${name} ${index}`);
+  for (let t = 0; t < 240; t += 40) sprite.update(40);
+  return heard;
+}
+
+Object.assign(window, { renderFrames, loadSheet, hearEvents, sbVersion: sb.version });

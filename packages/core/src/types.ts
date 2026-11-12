@@ -66,6 +66,11 @@ export interface AnimationFrameDef {
   /** Nudge in pixels from where the pivot puts the frame (+x right, +y down). */
   readonly offset: Point;
   readonly layers: readonly LayerDef[];
+  /**
+   * Names fired when this frame starts showing, such as `"hit"` on the frame a sword lands or
+   * `"step"` on a footstep. Empty for most frames.
+   */
+  readonly events: readonly string[];
 }
 
 export interface AnimationDef {

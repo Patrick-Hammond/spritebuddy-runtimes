@@ -1,0 +1,32 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "events.png",
+  "size": [48, 16],
+  "frames": [
+    { "name": "a", "rect": [0, 0, 16, 16], "pivot": [8, 16] },
+    { "name": "b", "rect": [16, 0, 16, 16], "pivot": [8, 16] },
+    { "name": "c", "rect": [32, 0, 16, 16], "pivot": [8, 16] }
+  ],
+  "animations": [
+    {
+      "name": "swing",
+      "loop": "once",
+      "frames": [
+        { "frame": 0, "events": ["windup"] },
+        { "frame": 1, "duration": 20, "events": ["hit", "shake"] },
+        2
+      ]
+    },
+    {
+      "name": "walk",
+      "duration": 80,
+      "frames": [{ "frame": 0, "events": ["step"] }, 1, { "frame": 2, "events": ["step"] }]
+    },
+    {
+      "name": "bob",
+      "loop": "pingpong",
+      "frames": [{ "frame": 0, "events": ["top"] }, 1, { "frame": 2, "events": ["bottom"] }]
+    }
+  ]
+}

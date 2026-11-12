@@ -133,7 +133,12 @@
               "$ref": "#/$defs/offset",
               "description": "[x, y] nudge from where the pivot puts the frame; +x right, +y down."
             },
-            "layers": { "type": "array", "items": { "$ref": "#/$defs/layer" } }
+            "layers": { "type": "array", "items": { "$ref": "#/$defs/layer" } },
+            "events": {
+              "type": "array",
+              "description": "Names fired when this frame starts showing, such as \"hit\" or \"step\".",
+              "items": { "type": "string", "minLength": 1 }
+            }
           }
         }
       ]

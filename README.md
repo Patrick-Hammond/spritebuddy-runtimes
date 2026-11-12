@@ -2,16 +2,17 @@
 
 Play animations exported from [SpriteBuddy](https://github.com/Patrick-Hammond/spritebuddy) in
 your game, with per-frame timing, loop, ping-pong and play-once modes, frame offsets and layers
-played live instead of baked into the sheet.
+played live instead of baked into the sheet, and frame events (such as `"hit"` when the sword
+lands) for your game to listen for.
 
 Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.json`, version
 3), plus its sheet image.
 
-| Package                              | For                     | Status                   |
-| ------------------------------------ | ----------------------- | ------------------------ |
-| [`@spritebuddy/core`](packages/core) | any JavaScript engine   | 0.1.0, not published yet |
-| [`@spritebuddy/pixi`](packages/pixi) | PixiJS 5.3+, 6, 7 and 8 | 0.1.0, not published yet |
-| [`addons/spritebuddy`](godot)        | Godot 4.3+              | 0.1.0                    |
+| Package                              | For                     | Status       |
+| ------------------------------------ | ----------------------- | ------------ |
+| [`@spritebuddy/core`](packages/core) | any JavaScript engine   | 0.1.0 on npm |
+| [`@spritebuddy/pixi`](packages/pixi) | PixiJS 5.3+, 6, 7 and 8 | 0.1.0 on npm |
+| [`addons/spritebuddy`](godot)        | Godot 4.3+              | 0.1.0        |
 
 ## Getting started
 

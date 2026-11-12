@@ -47,6 +47,12 @@ export interface SpriteBuddySprite {
   onFrame: ((index: number) => void) | null;
   /** Called when a `once` animation ends. */
   onComplete: (() => void) | null;
+  /**
+   * Called for each frame event (such as `"hit"`) as its frame starts showing, with the frame's
+   * index in the animation. The sprite also emits `"event"` (name, index) and `"event:<name>"`
+   * (index), so `sprite.on('event:hit', ...)` works too.
+   */
+  onEvent: ((name: string, index: number) => void) | null;
   play(animation: string, time?: number): this;
   stop(): this;
   /** Jumps to `ms` into the animation. */
@@ -59,6 +65,9 @@ export interface SpriteBuddySprite {
   x: number;
   y: number;
   readonly children: readonly unknown[];
+  /** PixiJS's event emitter, typed loosely so any PixiJS version fits. */
+  on(event: string, listener: (...args: any[]) => void, context?: unknown): this;
+  off(event: string, listener?: (...args: any[]) => void, context?: unknown): this;
 }
 
 /** What `spriteBuddy(PIXI)` returns. */
@@ -144,6 +153,9 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
   const Container = PIXI.Container as new () => {
     addChild(child: unknown): unknown;
     destroy(options?: unknown): void;
+    emit?(event: string, ...args: unknown[]): boolean;
+    on(event: string, listener: (...args: any[]) => void, context?: unknown): any;
+    off(event: string, listener?: (...args: any[]) => void, context?: unknown): any;
     x: number;
     y: number;
     readonly children: unknown[];
@@ -163,6 +175,7 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
     readonly player: Player;
     onFrame: ((index: number) => void) | null = null;
     onComplete: (() => void) | null = null;
+    onEvent: ((name: string, index: number) => void) | null = null;
     #pool: PixiSprite[] = [];
     #auto = false;
     #tick = () => this.update(PIXI.Ticker.shared.deltaMS);
@@ -173,6 +186,11 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
       this.player = new Player(sheet.file, {
         onFrame: (i) => this.onFrame?.(i),
         onComplete: () => this.onComplete?.(),
+        onEvent: (name, index) => {
+          this.onEvent?.(name, index);
+          this.emit?.('event', name, index);
+          this.emit?.(`event:${name}`, index);
+        },
       });
       if (options.speed !== undefined) this.player.speed = options.speed;
       const first = animation ?? sheet.animations[0];

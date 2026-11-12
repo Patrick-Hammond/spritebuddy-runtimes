@@ -21,6 +21,7 @@ hero.y = 300;
 app.stage.addChild(hero);
 
 hero.onComplete = () => hero.play('idle'); // for "once" animations
+hero.on('event:hit', () => enemy.takeHit()); // an event tagged on a frame in SpriteBuddy
 hero.play('attack');
 ```
 
@@ -45,8 +46,11 @@ sheet, one wearing a hat drawn as a live layer, and a hop on click.
 - `sheet.sprite(animation?, { autoPlay, autoUpdate, speed })` makes an animated sprite.
   `sheet.textures`, `sheet.texture(name)` and `sheet.animations` are there too.
 - A sprite has `play(name, time?)`, `stop()`, `seek(ms)`, `update(ms)`, `speed`, `playing`,
-  `animation`, `onFrame` and `onComplete`. It moves on with `Ticker.shared` unless you set
+  `animation`, `onFrame`, `onEvent` and `onComplete`. It moves on with `Ticker.shared` unless you set
   `autoUpdate = false` and call `update(ms)` yourself.
+- Frame events: as a frame tagged with events starts showing, the sprite calls
+  `onEvent(name, index)` and emits `"event"` (name, index) and `"event:<name>"` (index) on its
+  PixiJS event emitter, so `hero.on('event:step', playFootstep)` works.
 
 Every PixiJS version is tested by rendering the shared fixtures in Chromium and comparing each
 pixel with a software render of the format's rules.

@@ -18,6 +18,7 @@ func _initialize() -> void:
 				_check_fixture(fixtures, fixture_name)
 	_check_errors()
 	_check_sprite_frames(fixtures)
+	_check_frame_event_signal(fixtures)
 	# Scenes only get _ready once the main loop runs.
 	await process_frame
 	_check_example()
@@ -63,6 +64,15 @@ func _check_fixture(dir: String, fixture: String) -> void:
 					and got.flip_x == want.get("flipX", false) \
 					and got.flip_y == want.get("flipY", false)
 				_expect(same, "%s part %d: got %s %s, expected %s" % [where, i, got.frame.name, got.position, want])
+		for tick in table.get("events", []):
+			var fired := SpriteBuddyFile.events_between(animation, float(tick.from), float(tick.to))
+			var got := []
+			for event in fired:
+				got.append([event.name, event.index])
+			var want := []
+			for pair in tick.fired:
+				want.append([pair[0], int(pair[1])])
+			_expect(got == want, "%s %s events (%d, %d]: got %s, expected %s" % [fixture, table.animation, int(tick.from), int(tick.to), got, want])
 
 
 func _check_errors() -> void:
@@ -84,6 +94,8 @@ func _check_errors() -> void:
 		[{ "animations": [{ "name": "w", "loop": "bounce", "frames": [] }] }, "animations[0].loop"],
 		[{ "animations": [{ "name": "w", "frames": [{ "frame": 0, "layers": [{ "frame": 0, "opacity": 2 }] }] }] }, "animations[0].frames[0].layers[0].opacity"],
 		[{ "animations": [{ "name": "w", "frames": [] }, { "name": "w", "frames": [] }] }, "animations[1].name: duplicate"],
+		[{ "animations": [{ "name": "w", "frames": [{ "frame": 0, "events": "hit" }] }] }, "animations[0].frames[0].events: expected a list"],
+		[{ "animations": [{ "name": "w", "frames": [{ "frame": 0, "events": ["hit", ""] }] }] }, "animations[0].frames[0].events[1]: expected a non-empty string"],
 	]
 	for c in cases:
 		var data := base.duplicate(true)
@@ -99,6 +111,29 @@ func _check_sprite_frames(dir: String) -> void:
 	_expect(frames.get_frame_count(&"bounce") == 6, "ping-pong is unrolled into 6 frames")
 	_expect(frames.get_animation_loop(&"attack") == false, "once doesn't loop")
 	_expect(is_equal_approx(frames.get_frame_duration(&"attack", 2), 300.0), "frame durations are ms at 1000 fps")
+
+
+## SpriteBuddySprite2D emits frame_event after frame_changed and before animation_finished.
+func _check_frame_event_signal(dir: String) -> void:
+	var file := SpriteBuddyFile.parse_text(FileAccess.get_file_as_string(dir.path_join("events.anims.json")))
+	var sprite := SpriteBuddySprite2D.new()
+	sprite.set_file(file)
+	var log: Array[String] = []
+	sprite.frame_changed.connect(func(index: int) -> void: log.append("frame %d" % index))
+	sprite.frame_event.connect(func(event_name: StringName, index: int) -> void: log.append("%s %d" % [event_name, index]))
+	sprite.animation_finished.connect(func(animation_name: String) -> void: log.append("done " + animation_name))
+	sprite.play("swing")
+	_expect(log == ["frame 0", "windup 0"], "play fires the first frame's events, got %s" % [log])
+	log.clear()
+	sprite.advance(500.0)
+	_expect(log == ["frame 2", "hit 1", "shake 1", "done swing"], "a long tick fires skipped frames' events, got %s" % [log])
+	log.clear()
+	sprite.play("walk")
+	log.clear()
+	for i in 6:
+		sprite.advance(40.0)
+	_expect(log == ["frame 1", "frame 2", "step 2", "frame 0", "step 0"], "walk steps on frames 2 and 0, got %s" % [log])
+	sprite.free()
 
 
 ## The example scene loads, shows its three slimes, and a hop goes back to each one's own

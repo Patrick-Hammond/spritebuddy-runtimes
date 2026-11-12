@@ -7,6 +7,9 @@ extends Node2D
 
 ## Emitted with the frame index each time the frame changes.
 signal frame_changed(index: int)
+## Emitted for each event of a frame (such as "hit") as the frame starts showing, after
+## frame_changed. play() fires the first frame's events; seek() jumps without firing any.
+signal frame_event(event_name: StringName, index: int)
 ## Emitted when a "once" animation reaches its end.
 signal animation_finished(animation_name: String)
 
@@ -73,7 +76,13 @@ func play(animation_name: String, from_ms := 0.0) -> void:
 	frame_index = -1
 	_done = false
 	playing = true
-	seek(from_ms)
+	time = maxf(0.0, from_ms)
+	var fired: Array[Dictionary] = []
+	var first: int = SpriteBuddyFile.frame_at(_animation, time).index
+	if first >= 0:
+		for event_name in _animation.frames[first].events:
+			fired.append({ "name": event_name, "index": first })
+	_refresh(fired)
 
 
 func stop() -> void:
@@ -89,15 +98,18 @@ func seek(ms: float) -> void:
 ## Moves time on by `ms` (times speed_scale); called for you every frame while playing.
 func advance(ms: float) -> void:
 	if playing and not _animation.is_empty():
+		var from_ms := time
 		time += maxf(0.0, ms) * speed_scale
-		_refresh()
+		_refresh(SpriteBuddyFile.events_between(_animation, from_ms, time))
 
 
 func _process(delta: float) -> void:
 	advance(delta * 1000.0)
 
 
-func _refresh() -> void:
+## Works out the frame now showing, then emits frame_changed, frame_event and
+## animation_finished in that order.
+func _refresh(fired: Array[Dictionary] = []) -> void:
 	if _animation.is_empty():
 		return
 	var position_at := SpriteBuddyFile.frame_at(_animation, time)
@@ -112,6 +124,8 @@ func _refresh() -> void:
 		queue_redraw()
 		if index >= 0:
 			frame_changed.emit(index)
+	for event in fired:
+		frame_event.emit(StringName(event.name), event.index)
 	if position_at.done and not _done:
 		_done = true
 		playing = false

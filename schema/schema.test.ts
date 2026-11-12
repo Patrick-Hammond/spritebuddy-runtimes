@@ -26,6 +26,8 @@ describe('JSON Schema', () => {
       { ...good, frames: [{ name: 'a', rect: [0, 0, 0, 1] }] },
       { ...good, animations: [{ name: 'w', loop: 'bounce', frames: [] }] },
       { ...good, animations: [{ name: 'w', frames: [{ frame: 0, offset: [0.5, 0] }] }] },
+      { ...good, animations: [{ name: 'w', frames: [{ frame: 0, events: [''] }] }] },
+      { ...good, animations: [{ name: 'w', frames: [{ frame: 0, events: 'hit' }] }] },
       {
         ...good,
         animations: [{ name: 'w', frames: [{ frame: 0, layers: [{ frame: 0, opacity: 2 }] }] }],

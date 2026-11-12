@@ -52,8 +52,8 @@ describe('parseFile', () => {
       name: 'walk',
       loop: 'loop',
       frames: [
-        { frame: 0, duration: 100, offset: { x: 0, y: 0 }, layers: [] },
-        { frame: 1, duration: 100, offset: { x: 0, y: 0 }, layers: [] },
+        { frame: 0, duration: 100, offset: { x: 0, y: 0 }, layers: [], events: [] },
+        { frame: 1, duration: 100, offset: { x: 0, y: 0 }, layers: [], events: [] },
       ],
     });
     expect(file.animations[1]!.frames).toEqual([
@@ -62,8 +62,9 @@ describe('parseFile', () => {
         duration: 70,
         offset: { x: 1, y: -2 },
         layers: [{ frame: 0, x: 0, y: 0, z: 1, opacity: 1, flipX: false, flipY: false }],
+        events: [],
       },
-      { frame: 0, duration: 40, offset: { x: 0, y: 0 }, layers: [] },
+      { frame: 0, duration: 40, offset: { x: 0, y: 0 }, layers: [], events: [] },
     ]);
   });
 
@@ -140,6 +141,11 @@ describe('parseFile', () => {
     fails(anim({ name: 'w', frames: [{ frame: 0, layers: [{ frame: 0, x: 'l' }] }] }), /\.x:/);
     fails(anim({ name: 'w', frames: [{ frame: 0, layers: [{ frame: 0, y: null }] }] }), /\.y:/);
     fails(anim({ name: 'w', frames: [{ frame: 0, layers: [{ frame: 0, flipX: 0 }] }] }), /flipX/);
+    fails(anim({ name: 'w', frames: [{ frame: 0, events: 'hit' }] }), /events: expected a list/);
+    fails(
+      anim({ name: 'w', frames: [{ frame: 0, events: ['hit', ''] }] }),
+      /frames\[0\]\.events\[1\]: expected a non-empty string/,
+    );
     fails(anim({ name: '', frames: [] }), /animations\[0\]\.name/);
     fails(anim({ name: 'w' }), /animations\[0\]\.frames: expected a list/);
     fails(anim([]), /animations\[0\]: expected an object/);
