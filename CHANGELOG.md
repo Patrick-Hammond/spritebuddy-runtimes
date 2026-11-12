@@ -2,7 +2,7 @@
 
 All runtimes share one version while they are below 1.0.
 
-## Unreleased
+## 0.2.0
 
 - Frame events: a frame entry can carry `events`, names such as `"hit"` or `"step"` that fire
   as the frame starts showing. Still version 3; older runtimes ignore them.
