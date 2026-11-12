@@ -29,7 +29,7 @@ know, so later minor additions don't break older runtimes. A runtime refuses a h
       "duration": 100,
       "frames": [
         0,
-        { "frame": 1, "duration": 150, "offset": [0, -1] },
+        { "frame": 1, "duration": 150, "offset": [0, -1], "events": ["step"] },
         { "frame": 0, "layers": [{ "frame": 2, "x": 20, "y": 6, "z": 1 }] }
       ]
     }
@@ -79,6 +79,7 @@ A frame entry:
 | `duration` | integer ≥ 1 | the animation's | Display time.                                                 |
 | `offset`   | `[x, y]`    | `[0, 0]`        | Nudge from where the pivot puts the frame, +x right, +y down. |
 | `layers`   | list        | `[]`            | Extra frames drawn with this one.                             |
+| `events`   | strings     | `[]`            | Names fired when this frame starts showing. See events.       |
 
 A layer:
 
@@ -99,6 +100,22 @@ A frame shows from its start time up to, but not including, its end.
   With two frames or fewer it is the same as `loop`.
 - `once` plays the frames in order, then holds the last frame and is done.
 
+## Events
+
+A frame entry's `events` are names a game listens for, such as `"hit"` on the frame a sword
+lands or `"step"` on a footstep. Each one fires when its frame **starts** showing:
+
+- A tick from time `a` to time `b` fires the events of every frame whose start lies after `a`
+  and up to and including `b`, in order. So a long tick that skips a short frame still fires it,
+  and a frame starting exactly at `a` isn't fired twice.
+- One tick fires at most one cycle's worth, so a game that was paused doesn't get a burst.
+- Starting an animation fires its first frame's events. Jumping (seeking) fires none.
+- `loop` and `pingpong` fire them again every time the frame shows, `pingpong` on the way back
+  too; `once` fires them once.
+- A runtime reports the frame change first, then the events, then that a `once` animation is done.
+
+Events were added within version 3: older runtimes ignore them.
+
 ## Drawing a frame
 
 Put the sprite's **origin** where the character stands. For an animation frame whose base frame
@@ -111,4 +128,4 @@ has pivot `(px, py)` and whose offset is `(ox, oy)`:
 
 `@spritebuddy/core`'s `partsOf` returns exactly this list, and every runtime is tested against
 the tables in [`fixtures/`](../fixtures): for each fixture, which frame shows at a set of times
-and where every part is drawn.
+and where every part is drawn, plus, for animations with events, which events a set of ticks fire.

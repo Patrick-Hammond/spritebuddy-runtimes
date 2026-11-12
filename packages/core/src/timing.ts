@@ -44,3 +44,48 @@ export function frameAt(
   /* v8 ignore next */
   return { index: order[order.length - 1]!, done: false };
 }
+
+/** An event fired by an animation frame: its name and the frame's index in the animation. */
+export interface FrameEvent {
+  readonly name: string;
+  readonly index: number;
+}
+
+/**
+ * The events of every frame that starts showing after `from` ms and up to and including `to` ms,
+ * in the order they start. A frame that starts exactly at `from` was already counted, so calling
+ * this with each tick's old and new time fires every event once, even when a long tick skips
+ * past short frames. A ping-pong cycle fires a frame's events each time it shows. One call fires
+ * at most one cycle's worth, so a game that was paused for a minute doesn't get a burst.
+ */
+export function eventsBetween(
+  anim: Pick<AnimationDef, 'frames' | 'loop'>,
+  from: number,
+  to: number,
+): FrameEvent[] {
+  const order = cycleOrder(anim);
+  if (order.length === 0 || to <= from) return [];
+  if (!anim.frames.some((f) => f.events.length > 0)) return [];
+  const total = cycleDuration(anim);
+  const starts: number[] = [];
+  let t = 0;
+  for (const i of order) {
+    starts.push(t);
+    t += anim.frames[i]!.duration;
+  }
+  const crossed: number[] = [];
+  const once = anim.loop === 'once';
+  const first = once
+    ? 0
+    : Math.max(Math.floor(Math.max(0, from) / total), Math.floor(to / total) - 1);
+  const last = once ? 0 : Math.floor(to / total);
+  for (let cycle = first; cycle <= last; cycle++) {
+    order.forEach((index, k) => {
+      const at = cycle * total + starts[k]!;
+      if (at > from && at <= to) crossed.push(index);
+    });
+  }
+  return crossed
+    .slice(-order.length)
+    .flatMap((index) => anim.frames[index]!.events.map((name) => ({ name, index })));
+}

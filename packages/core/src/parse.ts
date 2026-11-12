@@ -148,7 +148,13 @@ function animationFrameDef(
   duration: number,
 ): AnimationFrameDef {
   if (typeof v === 'number') {
-    return { frame: frameIndex(v, path, count), duration, offset: { x: 0, y: 0 }, layers: [] };
+    return {
+      frame: frameIndex(v, path, count),
+      duration,
+      offset: { x: 0, y: 0 },
+      layers: [],
+      events: [],
+    };
   }
   const o = object(v, path);
   const [ox, oy] = opt(o.offset, [0, 0], (n) =>
@@ -160,6 +166,9 @@ function animationFrameDef(
     offset: { x: ox!, y: oy! },
     layers: opt(o.layers, [], (l) =>
       array(l, `${path}.layers`).map((layer, i) => layerDef(layer, `${path}.layers[${i}]`, count)),
+    ),
+    events: opt(o.events, [], (e) =>
+      array(e, `${path}.events`).map((name, i) => string(name, `${path}.events[${i}]`)),
     ),
   };
 }

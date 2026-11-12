@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { parseFile } from './parse';
 import { Player } from './player';
 import { boundsOf, partsOf } from './resolve';
-import { cycleDuration, cycleOrder, frameAt } from './timing';
+import { cycleDuration, cycleOrder, eventsBetween, frameAt } from './timing';
 
 const file = parseFile({
   format: 'spritebuddy-animations',
@@ -115,5 +115,92 @@ describe('Player', () => {
     const empty = new Player({ ...file, animations: [] });
     expect(() => empty.play('run')).toThrow('this file has none');
     expect(empty.seek(10).state.time).toBe(10);
+  });
+});
+
+describe('frame events', () => {
+  const evented = parseFile({
+    format: 'spritebuddy-animations',
+    version: 3,
+    image: 'hero.png',
+    size: [64, 32],
+    frames: [
+      { name: 'a', rect: [0, 0, 16, 32] },
+      { name: 'b', rect: [16, 0, 16, 32] },
+      { name: 'c', rect: [32, 0, 16, 32] },
+    ],
+    animations: [
+      {
+        name: 'swing',
+        loop: 'once',
+        frames: [
+          { frame: 0, events: ['windup'] },
+          { frame: 1, duration: 20, events: ['hit', 'shake'] },
+          2,
+        ],
+      },
+      { name: 'step', frames: [{ frame: 0, events: ['step'] }, 1, { frame: 2, events: ['step'] }] },
+      { name: 'bob', loop: 'pingpong', frames: [{ frame: 0, events: ['up'] }, 1, 2] },
+      { name: 'plain', frames: [0, 1] },
+    ],
+  });
+  const a = (name: string) => evented.animations.find((x) => x.name === name)!;
+  const names = (list: { name: string; index: number }[]) =>
+    list.map((e) => `${e.name}@${e.index}`);
+
+  it('reads events, defaulting to none', () => {
+    expect(a('swing').frames.map((f) => f.events)).toEqual([['windup'], ['hit', 'shake'], []]);
+    expect(a('plain').frames[0]!.events).toEqual([]);
+  });
+
+  it('fires the frames that start in (from, to], even ones a long tick skips', () => {
+    expect(names(eventsBetween(a('swing'), 0, 100))).toEqual(['hit@1', 'shake@1']);
+    expect(names(eventsBetween(a('swing'), 99, 100))).toEqual(['hit@1', 'shake@1']);
+    expect(eventsBetween(a('swing'), 100, 119)).toEqual([]);
+    expect(names(eventsBetween(a('swing'), 50, 500))).toEqual(['hit@1', 'shake@1']);
+    expect(eventsBetween(a('swing'), 300, 900)).toEqual([]); // a once animation doesn't repeat
+    expect(eventsBetween(a('swing'), 10, 10)).toEqual([]);
+    expect(eventsBetween(a('plain'), 0, 1000)).toEqual([]);
+    expect(eventsBetween({ loop: 'loop', frames: [] }, 0, 10)).toEqual([]);
+  });
+
+  it('repeats on loops and on the way back of a ping-pong, at most one cycle per call', () => {
+    expect(names(eventsBetween(a('step'), 0, 300))).toEqual(['step@2', 'step@0']);
+    expect(names(eventsBetween(a('step'), 250, 1_000_000))).toEqual(['step@2', 'step@0']);
+    // bob plays 0 1 2 1, 400 ms a cycle; frame 0 shows once a cycle.
+    expect(names(eventsBetween(a('bob'), 0, 400))).toEqual(['up@0']);
+    expect(names(eventsBetween(a('bob'), 0, 800))).toEqual(['up@0']); // capped at one cycle
+    expect(names(eventsBetween(a('bob'), 399, 400))).toEqual(['up@0']);
+  });
+
+  it('lets a Player report events after the frame and before completion', () => {
+    const log: string[] = [];
+    const player = new Player(evented, {
+      onFrame: (i) => log.push(`frame ${i}`),
+      onEvent: (name, i) => log.push(`${name} ${i} showing ${player.state.index}`),
+      onComplete: () => log.push('done'),
+    });
+    player.play('swing');
+    expect(log).toEqual(['frame 0', 'windup 0 showing 0']);
+    log.length = 0;
+    player.update(500);
+    expect(log).toEqual(['frame 2', 'hit 1 showing 2', 'shake 1 showing 2', 'done']);
+    log.length = 0;
+    player.play('step', 150).seek(0).update(50);
+    expect(log).toEqual(['frame 1', 'frame 0']); // seek doesn't fire, and frame 1 has none
+    player.update(150);
+    expect(log).toEqual(['frame 1', 'frame 0', 'frame 2', 'step 2 showing 2']);
+    log.length = 0;
+    player.update(100);
+    expect(log).toEqual(['frame 0', 'step 0 showing 0']);
+    log.length = 0;
+    player.play('plain');
+    expect(log).toEqual(['frame 0']);
+  });
+
+  it('skips the work without a listener', () => {
+    const player = new Player(evented).play('step');
+    player.update(250);
+    expect(player.state.index).toBe(2);
   });
 });

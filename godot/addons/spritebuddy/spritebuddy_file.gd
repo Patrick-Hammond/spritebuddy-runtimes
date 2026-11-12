@@ -6,7 +6,8 @@ extends RefCounted
 ## Frames are Dictionaries: { name, rect: Rect2i, pivot: Vector2, rotated: bool,
 ## trim: Vector2i (or null), size: Vector2i (the full frame) }.
 ## Animations are Dictionaries: { name, loop: "loop" | "pingpong" | "once", frames: [entry] },
-## where an entry is { frame: int, duration: int (ms), offset: Vector2i, layers: [layer] } and a
+## where an entry is { frame: int, duration: int (ms), offset: Vector2i, layers: [layer],
+## events: PackedStringArray (names fired when the frame starts showing) } and a
 ## layer is { frame: int, position: Vector2i, z: int, opacity: float, flip_x: bool, flip_y: bool }.
 
 const FORMAT := "spritebuddy-animations"
@@ -99,6 +100,43 @@ static func frame_at(animation: Dictionary, time_ms: float) -> Dictionary:
 		if rest < 0.0:
 			return { "index": i, "done": false }
 	return { "index": order[order.size() - 1], "done": false }
+
+
+## The events of every frame that starts showing after `from_ms` and up to and including `to_ms`,
+## in the order they start: [{ name: String, index: int }]. A frame starting exactly at `from_ms`
+## was already counted, so passing each tick's old and new time fires every event once, even when
+## a long tick skips short frames. One call fires at most one cycle's worth.
+static func events_between(animation: Dictionary, from_ms: float, to_ms: float) -> Array[Dictionary]:
+	var fired: Array[Dictionary] = []
+	var order := cycle_order(animation)
+	if order.is_empty() or to_ms <= from_ms:
+		return fired
+	var any := false
+	for entry in animation.frames:
+		if not entry.events.is_empty():
+			any = true
+			break
+	if not any:
+		return fired
+	var total := float(cycle_duration(animation))
+	var starts: Array[float] = []
+	var t := 0.0
+	for i in order:
+		starts.append(t)
+		t += float(animation.frames[i].duration)
+	var once: bool = animation.loop == "once"
+	var first := 0 if once else maxi(floori(maxf(0.0, from_ms) / total), floori(to_ms / total) - 1)
+	var last := 0 if once else floori(to_ms / total)
+	var crossed: Array[int] = []
+	for cycle in range(first, last + 1):
+		for k in order.size():
+			var at := cycle * total + starts[k]
+			if at > from_ms and at <= to_ms:
+				crossed.append(order[k])
+	for index in crossed.slice(maxi(0, crossed.size() - order.size())):
+		for event_name in animation.frames[index].events:
+			fired.append({ "name": event_name, "index": index })
+	return fired
 
 
 ## Everything to draw for an animation frame entry, bottom to top: { frame (Dictionary),
@@ -323,7 +361,7 @@ func _entry(value: Variant, duration: int) -> Variant:
 		var index: Variant = _frame_index(value)
 		if index is String:
 			return ": " + index
-		return { "frame": index, "duration": duration, "offset": Vector2i.ZERO, "layers": [] }
+		return { "frame": index, "duration": duration, "offset": Vector2i.ZERO, "layers": [], "events": PackedStringArray() }
 	if typeof(value) != TYPE_DICTIONARY:
 		return ": expected an object"
 	var index: Variant = _frame_index(value.get("frame"))
@@ -348,7 +386,15 @@ func _entry(value: Variant, duration: int) -> Variant:
 		if layer is String:
 			return ".layers[%d]%s" % [i, layer]
 		layers.append(layer)
-	return { "frame": index, "duration": duration, "offset": offset, "layers": layers }
+	var events := PackedStringArray()
+	var names: Variant = value.get("events", [])
+	if typeof(names) != TYPE_ARRAY:
+		return ".events: expected a list"
+	for i in names.size():
+		if typeof(names[i]) != TYPE_STRING or String(names[i]).is_empty():
+			return ".events[%d]: expected a non-empty string" % i
+		events.append(names[i])
+	return { "frame": index, "duration": duration, "offset": offset, "layers": layers, "events": events }
 
 
 func _animation(value: Variant) -> Variant:

@@ -144,4 +144,23 @@ describe.each(VERSIONS)('%s', (version) => {
     expect(errors).toEqual([]);
     await p.close();
   }, 60_000);
+
+  it('emits frame events on the sprite', async () => {
+    const { p, errors } = await page(version);
+    const heard = await p.evaluate(
+      (json) => (window as any).hearEvents(json), // eslint-disable-line @typescript-eslint/no-explicit-any
+      JSON.parse(fixture('events')),
+    );
+    // walk: 80 ms frames, step on frames 0 and 2; frame 2 starts at 160 and frame 0 again at 240.
+    expect(heard).toEqual([
+      'onEvent step 2',
+      'event step 2',
+      'step 2',
+      'onEvent step 0',
+      'event step 0',
+      'step 0',
+    ]);
+    expect(errors).toEqual([]);
+    await p.close();
+  }, 60_000);
 });

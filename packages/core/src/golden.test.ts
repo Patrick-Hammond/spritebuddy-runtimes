@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parseFile } from './parse';
 import { partsOf } from './resolve';
-import { cycleDuration, frameAt } from './timing';
+import { cycleDuration, eventsBetween, frameAt } from './timing';
 import type { AnimationDef, SpriteBuddyFile } from './types';
 
 /**
@@ -30,9 +30,31 @@ function sampleTimes(anim: AnimationDef): number[] {
   return [...times].sort((a, b) => a - b);
 }
 
+/**
+ * Ticks for the event tables: 30 ms steps over two and a half cycles (so ticks straddle frame
+ * starts), then one long tick that skips several cycles.
+ */
+function eventTicks(anim: AnimationDef): [number, number][] {
+  const total = cycleDuration(anim);
+  const ticks: [number, number][] = [];
+  for (let t = 0; t < total * 2.5; t += 30) ticks.push([t, t + 30]);
+  ticks.push([total * 2.5, total * 10 + 1]);
+  return ticks;
+}
+
 export function goldenTable(file: SpriteBuddyFile) {
   return file.animations.map((anim) => ({
     animation: anim.name,
+    // Only animations with events get an event table, so older fixtures stay as they were.
+    ...(anim.frames.some((f) => f.events.length > 0)
+      ? {
+          events: eventTicks(anim).map(([from, to]) => ({
+            from,
+            to,
+            fired: eventsBetween(anim, from, to).map((e) => [e.name, e.index]),
+          })),
+        }
+      : {}),
     checks: sampleTimes(anim).map((time) => {
       const pos = frameAt(anim, time);
       return {

@@ -20,10 +20,15 @@ hero.file_path = "res://art/knight.anims.json"
 add_child(hero)
 hero.play("attack")
 hero.animation_finished.connect(func(_name): hero.play("idle"))
+hero.frame_event.connect(func(event_name, _index):
+	if event_name == &"hit":
+		enemy.take_hit())
 ```
 
 - `play(name, from_ms)`, `stop()`, `seek(ms)`, `advance(ms)`, `speed_scale`, `playing`, `time`,
-  `frame_index`, and the `frame_changed` and `animation_finished` signals.
+  `frame_index`, and the `frame_changed`, `frame_event(event_name, index)` and
+  `animation_finished` signals. `frame_event` fires for each event tagged on a frame as it
+  starts showing, even when a long frame skips past it.
 - `pixel_art` (on by default) uses nearest-neighbour filtering.
 - `SpriteBuddyFile.load_path(path)` gives you the parsed file; `to_sprite_frames()` turns it into
   a `SpriteFrames` for `AnimatedSprite2D` when you don't need layers or offsets.

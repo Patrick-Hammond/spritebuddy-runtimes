@@ -36,8 +36,13 @@ function fakePixi(version: 6 | 7 | 8) {
     x = 0;
     y = 0;
     destroyed = false;
+    emitted: unknown[][] = [];
     addChild(c: unknown) {
       this.children.push(c);
+    }
+    emit(...args: unknown[]) {
+      this.emitted.push(args);
+      return true;
     }
     destroy() {
       this.destroyed = true;
@@ -263,6 +268,41 @@ describe('spriteBuddy', () => {
     expect((spriteBuddy(fakePixi(6).PIXI).assetsParser as typeof parser).extension.type).toBe(
       'load-parser',
     );
+  });
+});
+
+describe('frame events', () => {
+  it('calls onEvent and emits "event" and "event:<name>" as frames start', () => {
+    const { PIXI, Texture } = fakePixi(8);
+    const file = {
+      ...packed,
+      animations: [
+        {
+          name: 'swing',
+          loop: 'once',
+          frames: [
+            { frame: 0, events: ['windup'] },
+            { frame: 1, events: ['hit'] },
+          ],
+        },
+      ],
+    };
+    const sheet = spriteBuddy(PIXI).sheet(file, new Texture({ source: {} }) as never);
+    const sprite = sheet.sprite('swing', { autoUpdate: false });
+    const emitted = (sprite as unknown as { emitted: unknown[][] }).emitted;
+    // The first frame's events fire while the sprite is being made, before onEvent can be set.
+    expect(emitted).toEqual([
+      ['event', 'windup', 0],
+      ['event:windup', 0],
+    ]);
+    const seen: [string, number][] = [];
+    sprite.onEvent = (name, index) => seen.push([name, index]);
+    sprite.update(150);
+    expect(seen).toEqual([['hit', 1]]);
+    expect(emitted.slice(2)).toEqual([
+      ['event', 'hit', 1],
+      ['event:hit', 1],
+    ]);
   });
 });
 
