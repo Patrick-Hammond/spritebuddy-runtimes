@@ -1,7 +1,7 @@
 import { FORMAT, parseFile, Player, type FrameDef, type SpriteBuddyFile } from '@spritebuddy/core';
-import type { PixiNamespace, PixiTexture } from './pixi-types';
+import type { PixiNamespace, PixiTexture } from './pixi-types.js';
 
-export type { PixiNamespace } from './pixi-types';
+export type { PixiNamespace } from './pixi-types.js';
 
 export interface SheetOptions {
   /** Nearest-neighbour sampling, so pixel art stays crisp when scaled. Defaults to true. */

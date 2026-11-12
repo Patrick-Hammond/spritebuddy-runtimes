@@ -16,8 +16,9 @@
     "test:coverage": "vitest run --coverage",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "fixtures": "node scripts/fixtures.mjs",
-    "check": "npm run format:check && npm run typecheck && npm run test:coverage"
+    "check": "npm run format:check && npm run typecheck && npm run test:coverage",
+    "examples": "npm run build && echo \"Examples at http://localhost:8080/examples/\" && esbuild --servedir=. --serve=8080",
+    "examples:assets": "node scripts/example-assets.mjs && prettier --write examples/assets godot/examples/art"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

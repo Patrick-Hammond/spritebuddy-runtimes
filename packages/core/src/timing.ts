@@ -1,4 +1,4 @@
-import type { AnimationDef } from './types';
+import type { AnimationDef } from './types.js';
 
 export interface PlaybackPosition {
   /** Index into the animation's `frames`, or -1 for an animation with no frames. */

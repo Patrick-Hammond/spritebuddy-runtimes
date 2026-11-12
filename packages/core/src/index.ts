@@ -1,4 +1,4 @@
-export { FORMAT, VERSION } from './types';
+export { FORMAT, VERSION } from './types.js';
 export type {
   AnimationDef,
   AnimationFrameDef,
@@ -9,8 +9,8 @@ export type {
   Rect,
   SpriteBuddyFile,
   Trim,
-} from './types';
-export { DEFAULT_DURATION, FormatError, parseFile } from './parse';
-export { cycleDuration, cycleOrder, frameAt, type PlaybackPosition } from './timing';
-export { boundsOf, partsOf, type Part } from './resolve';
-export { Player, type PlayerState } from './player';
+} from './types.js';
+export { DEFAULT_DURATION, FormatError, parseFile } from './parse.js';
+export { cycleDuration, cycleOrder, frameAt, type PlaybackPosition } from './timing.js';
+export { boundsOf, partsOf, type Part } from './resolve.js';
+export { Player, type PlayerState } from './player.js';

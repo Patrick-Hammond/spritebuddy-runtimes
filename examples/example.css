@@ -1,0 +1,42 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+}
+body {
+  margin: 0 auto;
+  max-width: 520px;
+  padding: 16px;
+  background: #141a22;
+  color: #e6edf3;
+}
+canvas {
+  display: block;
+  max-width: 100%;
+  background: #1d2430;
+  border-radius: 8px;
+  image-rendering: pixelated;
+}
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+button {
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: #5cc468;
+  color: #0b1a0e;
+  font: inherit;
+  cursor: pointer;
+}
+.status {
+  min-height: 1.5em;
+  color: #9fb0c0;
+}
+a {
+  color: #8fd19a;
+}
+h1 {
+  font-size: 1.4rem;
+}

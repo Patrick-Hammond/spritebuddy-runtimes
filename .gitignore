@@ -4,3 +4,5 @@ coverage
 *.tsbuildinfo
 godot/.godot
 packages/*/schema.json
+godot/**/*.uid
+godot/**/*.import

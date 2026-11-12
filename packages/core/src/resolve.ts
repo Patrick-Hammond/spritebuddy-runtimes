@@ -1,4 +1,4 @@
-import type { AnimationFrameDef, FrameDef, SpriteBuddyFile } from './types';
+import type { AnimationFrameDef, FrameDef, SpriteBuddyFile } from './types.js';
 
 /**
  * One image to draw for an animation frame: the base frame or one of its layers, in draw order.

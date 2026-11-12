@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SpriteBuddy: canvas example</title>
+    <link rel="stylesheet" href="../example.css" />
+    <!--
+      The import map tells the browser where `@spritebuddy/core` lives. Here it is this repo's
+      build (run `npm run build` first). In your own page, point it at a CDN instead:
+        "@spritebuddy/core": "https://cdn.jsdelivr.net/npm/@spritebuddy/core@0.1.0/dist/index.js"
+      or install the package and let your bundler resolve it.
+    -->
+    <script type="importmap">
+      { "imports": { "@spritebuddy/core": "../../packages/core/dist/index.js" } }
+    </script>
+  </head>
+  <body>
+    <h1>@spritebuddy/core with a plain 2D canvas</h1>
+    <p>No engine at all: the core package says what to draw and where, the page draws it.</p>
+    <canvas id="stage" width="480" height="240"></canvas>
+    <div id="buttons" class="buttons"></div>
+    <p id="status" class="status" aria-live="polite"></p>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

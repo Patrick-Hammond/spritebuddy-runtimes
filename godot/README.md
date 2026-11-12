@@ -1,7 +1,7 @@
 # SpriteBuddy for Godot 4
 
 Plays [SpriteBuddy](https://github.com/Patrick-Hammond/spritebuddy) runtime files
-(`.anims.json`, [format](../docs/format.md)) in Godot 4.3 or newer, with per-frame timing, loop
+(`.anims.json`, [format](https://github.com/Patrick-Hammond/spritebuddy-runtimes/blob/main/docs/format.md)) in Godot 4.3 or newer, with per-frame timing, loop
 modes, frame offsets and live layers.
 
 ## Install
@@ -28,11 +28,17 @@ hero.animation_finished.connect(func(_name): hero.play("idle"))
 - `SpriteBuddyFile.load_path(path)` gives you the parsed file; `to_sprite_frames()` turns it into
   a `SpriteFrames` for `AnimatedSprite2D` when you don't need layers or offsets.
 
+## Example
+
+Open the `godot` folder in Godot and press Run: `examples/slime_demo.tscn` (the project's main
+scene) shows three slimes from one sheet, two placed in the scene and one made in code, with a
+hat drawn as a live layer. Click a slime, or press Space, to make it hop.
+
 ## Tests
 
 ```sh
 godot --headless --path godot -s tests/run_tests.gd
 ```
 
-They check the shared golden tables in `fixtures/` and the file checks. CI runs them on every
-pull request.
+They check the shared golden tables in `fixtures/`, the file checks and the example scene. CI
+runs them in Godot 4.3 and 4.5 when started by hand.
