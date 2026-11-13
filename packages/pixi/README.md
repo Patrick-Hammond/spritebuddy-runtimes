@@ -45,6 +45,11 @@ sheet, one wearing a hat drawn as a live layer, and a hop on click.
 - `sb.sheet(json, texture)` makes a sheet from a file and an image you loaded yourself.
 - `sheet.sprite(animation?, { autoPlay, autoUpdate, speed })` makes an animated sprite.
   `sheet.textures`, `sheet.texture(name)` and `sheet.animations` are there too.
+- Normal maps: when the file has `normals`, `sb.load()` (and the Assets parser) loads it too
+  (`{ normals: false }` skips it) and `sheet.normalTextures` holds one normal-map texture per
+  frame, cut exactly like `sheet.textures`; `sheet.normalTexture(name)` finds one. With
+  `sb.sheet()`, pass the loaded image as `{ normalMap }`. PixiJS has no built-in 2D lighting, so
+  hand these to your own lighting shader or filter.
 - A sprite has `play(name, time?)`, `stop()`, `seek(ms)`, `update(ms)`, `speed`, `playing`,
   `animation`, `onFrame`, `onEvent` and `onComplete`. It moves on with `Ticker.shared` unless you set
   `autoUpdate = false` and call `update(ms)` yourself.

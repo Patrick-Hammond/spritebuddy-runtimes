@@ -6,6 +6,13 @@ export type { PixiNamespace } from './pixi-types.js';
 export interface SheetOptions {
   /** Nearest-neighbour sampling, so pixel art stays crisp when scaled. Defaults to true. */
   readonly pixelArt?: boolean;
+  /**
+   * The normal map, for `sheet()`: an already loaded texture of the file's `normals` image. `load()`
+   * and the Assets parser load it for you.
+   */
+  readonly normalMap?: PixiTexture;
+  /** `load()` and the Assets parser: load the file's normal map when it has one. Defaults to true. */
+  readonly normals?: boolean;
 }
 
 export interface SpriteOptions {
@@ -26,6 +33,13 @@ export interface SpriteBuddySheet {
   readonly animations: readonly string[];
   /** The texture of the frame called `name`. */
   texture(name: string): PixiTexture | undefined;
+  /**
+   * One normal-map texture per frame, cut exactly like {@link textures}, or null when the file
+   * has no normal map (or it wasn't loaded). Hand them to your lighting shader or filter.
+   */
+  readonly normalTextures: readonly PixiTexture[] | null;
+  /** The normal-map texture of the frame called `name`. */
+  normalTexture(name: string): PixiTexture | undefined;
   /** A new animated sprite, playing `animation` (default: the first one). */
   sprite(animation?: string, options?: SpriteOptions): SpriteBuddySprite;
   /** Destroys the frame textures and the sheet image. */
@@ -136,15 +150,24 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
     if (options.pixelArt !== false) setNearest(image);
     const base = baseOf(image);
     const textures = file.frames.map((f) => frameTexture(base, f));
+    const normalMap = options.normalMap;
+    if (normalMap && options.pixelArt !== false) setNearest(normalMap);
+    const normalBase = normalMap && baseOf(normalMap);
+    const normalTextures = normalMap ? file.frames.map((f) => frameTexture(normalBase, f)) : null;
+    const indexOf = (name: string) => file.frames.findIndex((f) => f.name === name);
     const sheet: SpriteBuddySheet = {
       file,
       textures,
+      normalTextures,
       animations: file.animations.map((a) => a.name),
-      texture: (name) => textures[file.frames.findIndex((f) => f.name === name)],
+      texture: (name) => textures[indexOf(name)],
+      normalTexture: (name) => normalTextures?.[indexOf(name)],
       sprite: (animation, spriteOptions) => new SpriteClass(sheet, animation, spriteOptions),
       destroy() {
         for (const t of textures) t.destroy(false);
+        for (const t of normalTextures ?? []) t.destroy(false);
         image.destroy(true);
+        normalMap?.destroy(true);
       },
     };
     return sheet;
@@ -287,7 +310,13 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Couldn't load ${url}: ${response.status}`);
       const file = parseFile(await response.json());
-      return makeSheet(file, await loadImage(siblingUrl(url, file.image)), options);
+      const [image, normalMap] = await Promise.all([
+        loadImage(siblingUrl(url, file.image)),
+        file.normals && options?.normals !== false
+          ? loadImage(siblingUrl(url, file.normals))
+          : undefined,
+      ]);
+      return makeSheet(file, image, { ...options, normalMap });
     },
     assetsParser: {
       name: 'spritebuddy',
@@ -306,8 +335,12 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
         loader: { load(url: string): Promise<PixiTexture> },
       ) {
         const file = parseFile(asset);
-        const image = await loader.load(siblingUrl(resolved?.src ?? '', file.image));
-        return makeSheet(file, image);
+        const src = resolved?.src ?? '';
+        const [image, normalMap] = await Promise.all([
+          loader.load(siblingUrl(src, file.image)),
+          file.normals ? loader.load(siblingUrl(src, file.normals)) : undefined,
+        ]);
+        return makeSheet(file, image, { normalMap });
       },
       async unload(sheet: SpriteBuddySheet) {
         sheet.destroy();

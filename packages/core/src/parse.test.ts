@@ -161,6 +161,25 @@ describe('parseFile', () => {
     );
   });
 
+  it('reads the normal map, which is optional', () => {
+    expect(parseFile(base()).normals).toBeNull();
+    expect(parseFile({ ...base(), normals: 'hero_n.png' }).normals).toBe('hero_n.png');
+    fails({ ...base(), normals: '' }, /normals: expected a non-empty string/);
+    fails({ ...base(), normals: 7 }, /normals: expected a non-empty string/);
+  });
+
+  it('ignores the editor lighting settings on an animation', () => {
+    const file = parseFile({
+      ...base(),
+      animations: [{ name: 'walk', frames: [0], lighting: { light: { angle: 315 } } }],
+    });
+    expect(file.animations[0]).toEqual({
+      name: 'walk',
+      loop: 'loop',
+      frames: [{ frame: 0, duration: 100, offset: { x: 0, y: 0 }, layers: [], events: [] }],
+    });
+  });
+
   it('keeps the path on the error', () => {
     try {
       parseFile({ ...base(), image: 3 });

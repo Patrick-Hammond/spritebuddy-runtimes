@@ -6,12 +6,21 @@
   "type": "object",
   "required": ["format", "version", "image", "size", "frames"],
   "properties": {
-    "format": { "const": "spritebuddy-animations" },
-    "version": { "const": 3 },
+    "format": {
+      "const": "spritebuddy-animations"
+    },
+    "version": {
+      "const": 3
+    },
     "image": {
       "type": "string",
       "minLength": 1,
       "description": "The sheet image, relative to this file."
+    },
+    "normals": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A normal-map image with the same size and frame layout as image, relative to this file. RGB holds the surface direction as (n + 1) / 2 with green pointing up (Y+). For real-time lighting; runtimes that don't light ignore it."
     },
     "size": {
       "$ref": "#/$defs/size",
@@ -25,33 +34,66 @@
     },
     "frames": {
       "type": "array",
-      "items": { "$ref": "#/$defs/frame" }
+      "items": {
+        "$ref": "#/$defs/frame"
+      }
     },
     "animations": {
       "type": "array",
       "default": [],
-      "items": { "$ref": "#/$defs/animation" }
+      "items": {
+        "$ref": "#/$defs/animation"
+      }
     }
   },
   "$defs": {
-    "int": { "type": "integer" },
-    "count": { "type": "integer", "minimum": 0 },
-    "positive": { "type": "integer", "minimum": 1 },
+    "int": {
+      "type": "integer"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "positive": {
+      "type": "integer",
+      "minimum": 1
+    },
     "size": {
       "type": "array",
-      "prefixItems": [{ "$ref": "#/$defs/positive" }, { "$ref": "#/$defs/positive" }],
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/positive"
+        },
+        {
+          "$ref": "#/$defs/positive"
+        }
+      ],
       "minItems": 2,
       "maxItems": 2
     },
     "point": {
       "type": "array",
-      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
       "minItems": 2,
       "maxItems": 2
     },
     "offset": {
       "type": "array",
-      "prefixItems": [{ "$ref": "#/$defs/int" }, { "$ref": "#/$defs/int" }],
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/int"
+        },
+        {
+          "$ref": "#/$defs/int"
+        }
+      ],
       "minItems": 2,
       "maxItems": 2
     },
@@ -59,15 +101,26 @@
       "type": "object",
       "required": ["name", "rect"],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
         "rect": {
           "type": "array",
           "description": "[x, y, w, h]: where the pixels sit on the sheet, at their upright size.",
           "prefixItems": [
-            { "$ref": "#/$defs/count" },
-            { "$ref": "#/$defs/count" },
-            { "$ref": "#/$defs/positive" },
-            { "$ref": "#/$defs/positive" }
+            {
+              "$ref": "#/$defs/count"
+            },
+            {
+              "$ref": "#/$defs/count"
+            },
+            {
+              "$ref": "#/$defs/positive"
+            },
+            {
+              "$ref": "#/$defs/positive"
+            }
           ],
           "minItems": 4,
           "maxItems": 4
@@ -79,16 +132,24 @@
         "rotated": {
           "type": "boolean",
           "default": false,
-          "description": "Stored turned 90° clockwise: covers h columns and w rows on the sheet."
+          "description": "Stored turned 90\u00b0 clockwise: covers h columns and w rows on the sheet."
         },
         "trim": {
           "type": "array",
           "description": "[x, y, fullWidth, fullHeight]: transparent edges were cut off; the pixels start at x, y inside a full frame of this size.",
           "prefixItems": [
-            { "$ref": "#/$defs/count" },
-            { "$ref": "#/$defs/count" },
-            { "$ref": "#/$defs/positive" },
-            { "$ref": "#/$defs/positive" }
+            {
+              "$ref": "#/$defs/count"
+            },
+            {
+              "$ref": "#/$defs/count"
+            },
+            {
+              "$ref": "#/$defs/positive"
+            },
+            {
+              "$ref": "#/$defs/positive"
+            }
           ],
           "minItems": 4,
           "maxItems": 4
@@ -99,7 +160,10 @@
       "type": "object",
       "required": ["frame"],
       "properties": {
-        "frame": { "$ref": "#/$defs/count", "description": "Index into frames." },
+        "frame": {
+          "$ref": "#/$defs/count",
+          "description": "Index into frames."
+        },
         "x": {
           "$ref": "#/$defs/int",
           "default": 0,
@@ -115,29 +179,56 @@
           "default": 1,
           "description": "Draw order; the base frame is 0."
         },
-        "opacity": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 },
-        "flipX": { "type": "boolean", "default": false },
-        "flipY": { "type": "boolean", "default": false }
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1
+        },
+        "flipX": {
+          "type": "boolean",
+          "default": false
+        },
+        "flipY": {
+          "type": "boolean",
+          "default": false
+        }
       }
     },
     "animationFrame": {
       "oneOf": [
-        { "$ref": "#/$defs/count", "description": "A frame index, with the animation's duration." },
+        {
+          "$ref": "#/$defs/count",
+          "description": "A frame index, with the animation's duration."
+        },
         {
           "type": "object",
           "required": ["frame"],
           "properties": {
-            "frame": { "$ref": "#/$defs/count" },
-            "duration": { "$ref": "#/$defs/positive", "description": "Milliseconds." },
+            "frame": {
+              "$ref": "#/$defs/count"
+            },
+            "duration": {
+              "$ref": "#/$defs/positive",
+              "description": "Milliseconds."
+            },
             "offset": {
               "$ref": "#/$defs/offset",
               "description": "[x, y] nudge from where the pivot puts the frame; +x right, +y down."
             },
-            "layers": { "type": "array", "items": { "$ref": "#/$defs/layer" } },
+            "layers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/layer"
+              }
+            },
             "events": {
               "type": "array",
               "description": "Names fired when this frame starts showing, such as \"hit\" or \"step\".",
-              "items": { "type": "string", "minLength": 1 }
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           }
         }
@@ -147,14 +238,104 @@
       "type": "object",
       "required": ["name", "frames"],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
-        "loop": { "enum": ["loop", "pingpong", "once"], "default": "loop" },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "loop": {
+          "enum": ["loop", "pingpong", "once"],
+          "default": "loop"
+        },
         "duration": {
           "$ref": "#/$defs/positive",
           "default": 100,
           "description": "Milliseconds for frames that don't give their own."
         },
-        "frames": { "type": "array", "items": { "$ref": "#/$defs/animationFrame" } }
+        "frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/animationFrame"
+          }
+        },
+        "lighting": {
+          "$ref": "#/$defs/lighting"
+        }
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "description": "SpriteBuddy Pro's lighting settings for the animation, kept so the editor can read them back. Runtimes ignore them. Missing values mean the editor's defaults.",
+      "properties": {
+        "light": {
+          "type": "object",
+          "properties": {
+            "angle": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360,
+              "description": "Where the light comes from, in degrees clockwise from the top."
+            },
+            "height": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90,
+              "description": "Elevation in degrees: 90 shines from the viewer, below 0 from behind."
+            },
+            "size": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "brightness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "ambient": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "bands": {
+              "enum": [0, 2, 3, 4]
+            },
+            "paletteSnap": {
+              "type": "boolean"
+            }
+          }
+        },
+        "normals": {
+          "type": "object",
+          "properties": {
+            "shape": {
+              "enum": ["pillow", "bevel"]
+            },
+            "depth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "softness": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32
+            },
+            "detail": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
       }
     }
   }

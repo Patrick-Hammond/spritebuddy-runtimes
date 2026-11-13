@@ -84,6 +84,11 @@ export interface SpriteBuddyFile {
   readonly version: number;
   /** The sheet image's file name, relative to the runtime file. */
   readonly image: string;
+  /**
+   * A normal-map image with the same size and frame layout as `image`, for real-time lighting,
+   * or null when the export has none. Relative to the runtime file.
+   */
+  readonly normals: string | null;
   readonly width: number;
   readonly height: number;
   /** Scale the sheet was exported at (1 = original pixels). */

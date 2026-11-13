@@ -234,6 +234,7 @@ export function parseFile(json: unknown): SpriteBuddyFile {
   return {
     version,
     image: string(o.image, 'image'),
+    normals: opt(o.normals, null, (n) => string(n, 'normals')),
     width,
     height,
     scale: opt(o.scale, 1, (s) => number(s, 'scale', 1e-6, 1e6)),

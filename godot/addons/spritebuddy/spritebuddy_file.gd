@@ -23,6 +23,11 @@ var frames: Array[Dictionary] = []
 var animations: Array[Dictionary] = []
 ## The sheet texture, set by load_path() (or by you).
 var texture: Texture2D
+## The normal map's path ("" when the file has none), resolved like `image` by load_path().
+var normals: String = ""
+## The sheet and its normal map as one CanvasTexture, so Light2D and DirectionalLight2D light
+## the sprite. Set by load_path() when the file has a normal map, or by set_normal_texture().
+var canvas_texture: CanvasTexture
 
 
 ## Loads a runtime file and its sheet image from a res:// (or user://) path. Returns null and
@@ -41,7 +46,25 @@ static func load_path(path: String) -> SpriteBuddyFile:
 	if file.texture == null:
 		push_error("SpriteBuddy: can't load the sheet %s" % file.image)
 		return null
+	if file.normals != "":
+		if not (file.normals.begins_with("res://") or file.normals.begins_with("user://")):
+			file.normals = path.get_base_dir().path_join(file.normals)
+		var normal_texture := load(file.normals) as Texture2D
+		if normal_texture == null:
+			push_warning("SpriteBuddy: can't load the normal map %s; drawing unlit" % file.normals)
+		else:
+			file.set_normal_texture(normal_texture)
 	return file
+
+
+## Pairs `texture` with a normal map (same size and layout) in `canvas_texture`. Null clears it.
+func set_normal_texture(normal_texture: Texture2D) -> void:
+	if normal_texture == null or texture == null:
+		canvas_texture = null
+		return
+	canvas_texture = CanvasTexture.new()
+	canvas_texture.diffuse_texture = texture
+	canvas_texture.normal_texture = normal_texture
 
 
 ## Parses the text of a runtime file. Returns null and pushes an error saying where it's wrong.
@@ -232,6 +255,10 @@ func _read(data: Variant) -> String:
 	if typeof(data.get("image")) != TYPE_STRING or String(data.image).is_empty():
 		return "image: expected a non-empty string"
 	image = data.image
+	if data.has("normals"):
+		if typeof(data.normals) != TYPE_STRING or String(data.normals).is_empty():
+			return "normals: expected a non-empty string"
+		normals = data.normals
 	var sheet_size: Variant = _ints(data.get("size"), 2, [1, 1])
 	if sheet_size is String:
 		return "size: " + sheet_size
