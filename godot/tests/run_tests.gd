@@ -19,6 +19,7 @@ func _initialize() -> void:
 	_check_errors()
 	_check_sprite_frames(fixtures)
 	_check_frame_event_signal(fixtures)
+	_check_normals(fixtures)
 	# Scenes only get _ready once the main loop runs.
 	await process_frame
 	_check_example()
@@ -96,6 +97,8 @@ func _check_errors() -> void:
 		[{ "animations": [{ "name": "w", "frames": [] }, { "name": "w", "frames": [] }] }, "animations[1].name: duplicate"],
 		[{ "animations": [{ "name": "w", "frames": [{ "frame": 0, "events": "hit" }] }] }, "animations[0].frames[0].events: expected a list"],
 		[{ "animations": [{ "name": "w", "frames": [{ "frame": 0, "events": ["hit", ""] }] }] }, "animations[0].frames[0].events[1]: expected a non-empty string"],
+		[{ "normals": "" }, "normals: expected a non-empty string"],
+		[{ "normals": 3 }, "normals: expected a non-empty string"],
 	]
 	for c in cases:
 		var data := base.duplicate(true)
@@ -111,6 +114,29 @@ func _check_sprite_frames(dir: String) -> void:
 	_expect(frames.get_frame_count(&"bounce") == 6, "ping-pong is unrolled into 6 frames")
 	_expect(frames.get_animation_loop(&"attack") == false, "once doesn't loop")
 	_expect(is_equal_approx(frames.get_frame_duration(&"attack", 2), 300.0), "frame durations are ms at 1000 fps")
+
+
+## A file with a normal map draws through a CanvasTexture, unless use_normals is off.
+func _check_normals(dir: String) -> void:
+	var file := SpriteBuddyFile.parse_text(FileAccess.get_file_as_string(dir.path_join("normals.anims.json")))
+	_expect(file.normals == "knight_n.png", "the normal map's name is read")
+	var plain := SpriteBuddyFile.parse_text(FileAccess.get_file_as_string(dir.path_join("basic.anims.json")))
+	_expect(plain.normals == "", "a file without a normal map has none")
+	var normal_map := PlaceholderTexture2D.new()
+	file.set_normal_texture(normal_map)
+	_expect(file.canvas_texture == null, "no CanvasTexture before the sheet is loaded")
+	file.texture = PlaceholderTexture2D.new()
+	file.set_normal_texture(normal_map)
+	_expect(file.canvas_texture != null and file.canvas_texture.diffuse_texture == file.texture and file.canvas_texture.normal_texture == normal_map, "the CanvasTexture pairs the sheet with its normal map")
+	var sprite := SpriteBuddySprite2D.new()
+	sprite.set_file(file)
+	_expect(sprite.sheet_texture() == file.canvas_texture, "the sprite draws with the normal map")
+	sprite.use_normals = false
+	_expect(sprite.sheet_texture() == file.texture, "use_normals off draws the plain sheet")
+	file.set_normal_texture(null)
+	sprite.use_normals = true
+	_expect(sprite.sheet_texture() == file.texture, "clearing the normal map draws the plain sheet")
+	sprite.free()
 
 
 ## SpriteBuddySprite2D emits frame_event after frame_changed and before animation_finished.

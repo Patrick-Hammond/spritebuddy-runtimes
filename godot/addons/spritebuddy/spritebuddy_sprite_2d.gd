@@ -36,6 +36,12 @@ signal animation_finished(animation_name: String)
 		pixel_art = value
 		texture_filter = TEXTURE_FILTER_NEAREST if value else TEXTURE_FILTER_PARENT_NODE
 
+## Draws with the file's normal map when it has one, so 2D lights light the sprite.
+@export var use_normals := true:
+	set(value):
+		use_normals = value
+		queue_redraw()
+
 var file: SpriteBuddyFile
 var playing := false
 ## Ms since the animation started, scaled by speed_scale.
@@ -148,6 +154,16 @@ func _draw() -> void:
 	draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
+## The texture parts are drawn from: the sheet with its normal map when there is one and
+## use_normals is on, else the plain sheet.
+func sheet_texture() -> Texture2D:
+	if file == null:
+		return null
+	if use_normals and file.canvas_texture != null:
+		return file.canvas_texture
+	return file.texture
+
+
 ## Draws one part: its full frame's top-left at `part.position`, flipped within the full frame,
 ## a rotated frame turned back upright.
 func _draw_part(part: Dictionary) -> void:
@@ -166,7 +182,7 @@ func _draw_part(part: Dictionary) -> void:
 		local = local * Transform2D(-PI / 2.0, trim + Vector2(0, rect.size.y))
 		draw_set_transform_matrix(local)
 		var stored := Rect2(Vector2(rect.position), Vector2(rect.size.y, rect.size.x))
-		draw_texture_rect_region(file.texture, Rect2(Vector2.ZERO, stored.size), stored, color)
+		draw_texture_rect_region(sheet_texture(), Rect2(Vector2.ZERO, stored.size), stored, color)
 	else:
 		draw_set_transform_matrix(local)
-		draw_texture_rect_region(file.texture, Rect2(trim, Vector2(rect.size)), Rect2(rect), color)
+		draw_texture_rect_region(sheet_texture(), Rect2(trim, Vector2(rect.size)), Rect2(rect), color)

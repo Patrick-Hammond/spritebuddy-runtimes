@@ -30,6 +30,10 @@ hero.frame_event.connect(func(event_name, _index):
   `animation_finished` signals. `frame_event` fires for each event tagged on a frame as it
   starts showing, even when a long frame skips past it.
 - `pixel_art` (on by default) uses nearest-neighbour filtering.
+- Normal maps: when the export has one (`normals` in the file, `<name>_n.png` beside the sheet),
+  the sprite draws through a `CanvasTexture`, so `PointLight2D` and `DirectionalLight2D` light
+  it. Turn `use_normals` off to draw it unlit. `SpriteBuddyFile.set_normal_texture()` pairs a
+  normal map you loaded yourself.
 - `SpriteBuddyFile.load_path(path)` gives you the parsed file; `to_sprite_frames()` turns it into
   a `SpriteFrames` for `AnimatedSprite2D` when you don't need layers or offsets.
 

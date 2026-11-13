@@ -1,0 +1,23 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "knight.png",
+  "normals": "knight_n.png",
+  "size": [64, 32],
+  "frames": [
+    { "name": "idle_0", "rect": [0, 0, 16, 32] },
+    { "name": "idle_1", "rect": [16, 0, 16, 32] },
+    { "name": "idle_2", "rect": [32, 0, 32, 16], "rotated": true }
+  ],
+  "animations": [
+    {
+      "name": "idle",
+      "frames": [0, 1, { "frame": 2, "duration": 150 }],
+      "lighting": {
+        "light": { "angle": 300, "height": 30, "bands": 3, "paletteSnap": true },
+        "normals": { "shape": "bevel", "softness": 3 }
+      }
+    },
+    { "name": "turn", "frames": [{ "frame": 0, "layers": [{ "frame": 1, "flipX": true }] }] }
+  ]
+}

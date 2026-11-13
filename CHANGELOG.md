@@ -2,6 +2,19 @@
 
 All runtimes share one version while they are below 1.0.
 
+## Unreleased
+
+- Normal maps for real-time lighting: an optional top-level `normals` image with the sheet's
+  layout, and an animation's `lighting` settings (editor only, runtimes ignore them). Still
+  version 3; older runtimes ignore both.
+  - `@spritebuddy/core`: `SpriteBuddyFile.normals`.
+  - `@spritebuddy/pixi`: loads the normal map and offers `sheet.normalTextures` and
+    `sheet.normalTexture(name)`; `sb.sheet()` takes `{ normalMap }`, `sb.load()` takes
+    `{ normals: false }`.
+  - Godot: `SpriteBuddySprite2D` draws through a `CanvasTexture` so 2D lights light it
+    (`use_normals`), and `SpriteBuddyFile.normals`, `canvas_texture` and `set_normal_texture()`.
+  - JSON Schema and docs for both fields, and a `normals` fixture.
+
 ## 0.2.0
 
 - Frame events: a frame entry can carry `events`, names such as `"hit"` or `"step"` that fire

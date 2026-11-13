@@ -271,6 +271,81 @@ describe('spriteBuddy', () => {
   });
 });
 
+describe('normal maps', () => {
+  const lit = JSON.parse(
+    readFileSync(join(__dirname, '../../../fixtures/normals.anims.json'), 'utf8'),
+  ) as Record<string, unknown>;
+
+  it('cuts normal textures exactly like the frames, and destroys them with the sheet', () => {
+    for (const version of [6, 8] as const) {
+      const { PIXI, Texture } = fakePixi(version);
+      const image = new Texture({ source: { id: 'img' } });
+      const normalMap = new Texture({ source: { id: 'n' } });
+      const sheet = spriteBuddy(PIXI).sheet(lit, image as never, { normalMap: normalMap as never });
+      const normals = sheet.normalTextures as unknown as InstanceType<typeof Texture>[];
+      const colours = sheet.textures as unknown as InstanceType<typeof Texture>[];
+      expect(normals).toHaveLength(colours.length);
+      normals.forEach((n, i) => {
+        if (version === 8) {
+          expect(n.args[0]).toMatchObject({
+            ...(colours[i]!.args[0] as object),
+            source: { id: 'n' },
+          });
+        } else {
+          expect(n.args.slice(1)).toEqual(colours[i]!.args.slice(1));
+          expect(n.baseTexture).toEqual(expect.objectContaining({ id: 'n' }));
+        }
+      });
+      expect(sheet.normalTexture('idle_2')).toBe(normals[2]);
+      expect(sheet.normalTexture('nope')).toBeUndefined();
+      sheet.destroy();
+      expect(normals[0]!.destroyed).toBe(false);
+      expect(normalMap.destroyed).toBe(true);
+    }
+  });
+
+  it('has none without a normal map', () => {
+    const { PIXI, Texture } = fakePixi(8);
+    const sheet = spriteBuddy(PIXI).sheet(lit, new Texture({ source: {} }) as never);
+    expect(sheet.normalTextures).toBeNull();
+    expect(sheet.normalTexture('idle_0')).toBeUndefined();
+    expect(() => sheet.destroy()).not.toThrow();
+  });
+
+  it('loads the normal map beside the sheet unless asked not to', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, json: async () => lit })),
+    );
+    const v7 = fakePixi(7);
+    const sheet = await spriteBuddy(v7.PIXI).load('/art/knight.anims.json');
+    expect(v7.loads).toEqual(['/art/knight.png', '/art/knight_n.png']);
+    expect(sheet.normalTextures).toHaveLength(3);
+    const v8 = fakePixi(8);
+    const plain = await spriteBuddy(v8.PIXI).load('/art/knight.anims.json', { normals: false });
+    expect(v8.loads).toEqual(['/art/knight.png']);
+    expect(plain.normalTextures).toBeNull();
+  });
+
+  it('loads the normal map through the Assets parser', async () => {
+    const { PIXI, Texture } = fakePixi(8);
+    const parser = spriteBuddy(PIXI).assetsParser as {
+      parse(
+        a: unknown,
+        r: { src?: string } | undefined,
+        l: { load(u: string): Promise<unknown> },
+      ): Promise<{ normalTextures: unknown[] | null }>;
+    };
+    const load = vi.fn(async (url: string) => new Texture({ source: { url } }));
+    const sheet = await parser.parse(lit, { src: 'sprites/knight.anims.json' }, { load });
+    expect(load.mock.calls.map((c) => c[0])).toEqual([
+      'sprites/knight.png',
+      'sprites/knight_n.png',
+    ]);
+    expect(sheet.normalTextures).toHaveLength(3);
+  });
+});
+
 describe('frame events', () => {
   it('calls onEvent and emits "event" and "event:<name>" as frames start', () => {
     const { PIXI, Texture } = fakePixi(8);
