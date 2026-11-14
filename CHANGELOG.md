@@ -2,7 +2,7 @@
 
 All runtimes share one version while they are below 1.0.
 
-## Unreleased
+## 0.3.0
 
 - Normal maps for real-time lighting: an optional top-level `normals` image with the sheet's
   layout, and an animation's `lighting` settings (editor only, runtimes ignore them). Still
