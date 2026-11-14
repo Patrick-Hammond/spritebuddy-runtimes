@@ -5,6 +5,7 @@ import {
   type AnimationFrameDef,
   type FrameDef,
   type LayerDef,
+  type LightDef,
   type LoopMode,
   type SpriteBuddyFile,
 } from './types.js';
@@ -190,7 +191,28 @@ function animationDef(v: unknown, path: string, count: number): AnimationDef {
     frames: array(o.frames, `${path}.frames`).map((f, i) =>
       animationFrameDef(f, `${path}.frames[${i}]`, count, duration),
     ),
+    light: lightDef(o.lighting),
   };
+}
+
+const LIGHT_NUMBERS = ['angle', 'height', 'size', 'brightness', 'ambient', 'opacity', 'bands'];
+
+/**
+ * Picks the editor's light out of an animation's `lighting`. Runtimes don't need it to play the
+ * file, so a field of the wrong type is dropped rather than refused.
+ */
+function lightDef(lighting: unknown): LightDef | null {
+  const light = isObject(lighting) ? lighting.light : undefined;
+  if (!isObject(light)) return null;
+  const out: Record<string, number | string> = {};
+  for (const key of LIGHT_NUMBERS) {
+    const v = light[key];
+    if (typeof v === 'number' && Number.isFinite(v)) out[key] = v;
+  }
+  if (typeof light.color === 'string' && /^#[0-9a-f]{6}$/i.test(light.color)) {
+    out.color = light.color;
+  }
+  return out as LightDef;
 }
 
 /**

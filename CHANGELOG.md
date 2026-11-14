@@ -14,6 +14,13 @@ All runtimes share one version while they are below 1.0.
   - Godot: `SpriteBuddySprite2D` draws through a `CanvasTexture` so 2D lights light it
     (`use_normals`), and `SpriteBuddyFile.normals`, `canvas_texture` and `set_normal_texture()`.
   - JSON Schema and docs for both fields, and a `normals` fixture.
+- Real-time lighting in PixiJS 8: `sb.light(settings)` makes a directional light that works like
+  SpriteBuddy Pro's (angle, height, size, colour, brightness, ambient, opacity, cel bands), and
+  `sheet.sprite(name, { light })` draws the sprite with a normal-mapped shader. Change the light
+  at any time. Flipped layers, rotated frames and flipped or turned sprites are lit correctly.
+  - `@spritebuddy/core`: `AnimationDef.light`, the editor's light for the animation (or null).
+  - `@spritebuddy/pixi`: `sb.light()`, `SpriteOptions.light`, `sprite.light`,
+    `sheet.editorLight(name)`, `DEFAULT_LIGHT` and `lightDirection()`.
 
 ## 0.2.0
 

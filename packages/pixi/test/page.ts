@@ -1,19 +1,19 @@
 // Bundled once per PixiJS version; `pixi` is aliased to that version's package.
 import * as PIXI from 'pixi';
 import { spriteBuddy } from '../src/index';
-import { sheetPixel } from './pattern';
+import { normalPixel, sheetPixel } from './pattern';
 
 const sb = spriteBuddy(PIXI as never);
 const P = PIXI as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-function sheetCanvas(width: number, height: number): HTMLCanvasElement {
+function sheetCanvas(width: number, height: number, pixel = sheetPixel): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d')!;
   const img = ctx.createImageData(width, height);
   for (let y = 0; y < height; y++)
-    for (let x = 0; x < width; x++) img.data.set(sheetPixel(x, y), (y * width + x) * 4);
+    for (let x = 0; x < width; x++) img.data.set(pixel(x, y), (y * width + x) * 4);
   ctx.putImageData(img, 0, 0);
   return canvas;
 }
@@ -70,6 +70,44 @@ async function renderFrames(
   return { version: sb.version, frames: out };
 }
 
+/** Renders a lit sprite (PixiJS 8) at each frame of `animation`, mirrored or turned if asked. */
+async function renderLit(
+  json: unknown,
+  animation: string,
+  light: Record<string, number>,
+  origin: { x: number; y: number },
+  size: { w: number; h: number },
+  transform: 'none' | 'mirror' | 'turn',
+) {
+  const file = json as { size: [number, number] };
+  const image = P.Texture.from(sheetCanvas(file.size[0], file.size[1]));
+  const normalMap = P.Texture.from(sheetCanvas(file.size[0], file.size[1], normalPixel));
+  const sheet = sb.sheet(json, image, { normalMap });
+  const sprite = sheet.sprite(animation, { autoUpdate: false, light: sb.light(light) });
+  sprite.x = origin.x;
+  sprite.y = origin.y;
+  if (transform === 'mirror') (sprite as any).scale.x = -1;
+  if (transform === 'turn') (sprite as any).rotation = Math.PI / 2;
+  const stage = new P.Container();
+  stage.addChild(sprite);
+  const r = await renderer(size.w, size.h);
+  const frames = sprite.player.state.animation!.frames.length;
+  const out = [];
+  for (let i = 0; i < frames; i++) {
+    sprite.seek(
+      sprite.player.state.animation!.frames.slice(0, i).reduce((t, f) => t + f.duration, 0),
+    );
+    out.push({
+      index: sprite.player.state.index,
+      pixels: await snapshot(r, stage, size.w, size.h),
+    });
+  }
+  // Changing the light takes effect on the next render.
+  sprite.light!.set({ ambient: 1, brightness: 0, opacity: 1 });
+  const unlit = await snapshot(r, stage, size.w, size.h);
+  return { frames: out, unlit };
+}
+
 async function loadSheet(url: string) {
   const sheet = await sb.load(url);
   const result: Record<string, unknown> = {
@@ -97,4 +135,4 @@ function hearEvents(json: unknown) {
   return heard;
 }
 
-Object.assign(window, { renderFrames, loadSheet, hearEvents, sbVersion: sb.version });
+Object.assign(window, { renderFrames, renderLit, loadSheet, hearEvents, sbVersion: sb.version });

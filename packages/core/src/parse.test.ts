@@ -55,6 +55,7 @@ describe('parseFile', () => {
         { frame: 0, duration: 100, offset: { x: 0, y: 0 }, layers: [], events: [] },
         { frame: 1, duration: 100, offset: { x: 0, y: 0 }, layers: [], events: [] },
       ],
+      light: null,
     });
     expect(file.animations[1]!.frames).toEqual([
       {
@@ -168,16 +169,35 @@ describe('parseFile', () => {
     fails({ ...base(), normals: 7 }, /normals: expected a non-empty string/);
   });
 
-  it('ignores the editor lighting settings on an animation', () => {
+  it("keeps the editor's light on an animation, dropping fields of the wrong type", () => {
     const file = parseFile({
       ...base(),
-      animations: [{ name: 'walk', frames: [0], lighting: { light: { angle: 315 } } }],
+      animations: [
+        {
+          name: 'walk',
+          frames: [0],
+          lighting: {
+            light: { angle: 315, height: '45', color: '#FFF4E0', bands: 3, paletteSnap: true },
+            normals: { shape: 'pillow' },
+          },
+        },
+        { name: 'a', frames: [0], lighting: { light: { color: 'red', size: Infinity } } },
+        { name: 'b', frames: [0], lighting: { normals: {} } },
+        { name: 'c', frames: [0], lighting: 7 },
+      ],
     });
     expect(file.animations[0]).toEqual({
       name: 'walk',
       loop: 'loop',
       frames: [{ frame: 0, duration: 100, offset: { x: 0, y: 0 }, layers: [], events: [] }],
+      light: { angle: 315, color: '#FFF4E0', bands: 3 },
     });
+    expect(file.animations.map((a) => a.light)).toEqual([
+      file.animations[0]!.light,
+      {},
+      null,
+      null,
+    ]);
   });
 
   it('keeps the path on the error', () => {

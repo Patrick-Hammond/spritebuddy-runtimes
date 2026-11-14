@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { chromium, type Browser } from 'playwright';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { parseFile } from '@spritebuddy/core';
-import { partsAt, sheetPixel, softwareRender } from './pattern';
+import { litShade, mirrorX, partsAt, rotateCW, sheetPixel, softwareRender } from './pattern';
 import { png } from './png.test-util';
 
 /**
@@ -163,4 +163,63 @@ describe.each(VERSIONS)('%s', (version) => {
     expect(errors).toEqual([]);
     await p.close();
   }, 60_000);
+});
+
+describe('pixi8 lit sprites', () => {
+  const base = {
+    angle: 300,
+    height: 30,
+    size: 0.5,
+    color: 0xffe0c0,
+    brightness: 1.2,
+    ambient: 0.3,
+    opacity: 0.9,
+    bands: 0,
+  };
+  const origin = { x: 24, y: 40 };
+  const size = { w: 48, h: 48 };
+
+  it.each([
+    { animation: 'idle', transform: 'none', bands: 0 },
+    { animation: 'idle', transform: 'mirror', bands: 0 },
+    { animation: 'idle', transform: 'turn', bands: 0 },
+    { animation: 'turn', transform: 'none', bands: 0 },
+    { animation: 'turn', transform: 'mirror', bands: 0 },
+    { animation: 'idle', transform: 'none', bands: 3 },
+  ] as const)(
+    'lights $animation ($transform, $bands bands) like the editor',
+    async ({ animation, transform, bands }) => {
+      const { p, errors } = await page('pixi8');
+      const json = JSON.parse(fixture('normals'));
+      const light = { ...base, bands };
+      const result = (await p.evaluate(
+        ([json, animation, light, origin, size, transform]) =>
+          (window as any).renderLit(json, animation, light, origin, size, transform), // eslint-disable-line @typescript-eslint/no-explicit-any
+        [json, animation, light, origin, size, transform] as const,
+      )) as { frames: { index: number; pixels: number[] }[]; unlit: number[] };
+      const file = parseFile(json);
+      // A mirrored (or turned) sprite is the plain one lit from the mirrored (or turned back)
+      // side, then mirrored (or turned).
+      const angle = { none: light.angle, mirror: 360 - light.angle, turn: light.angle - 90 };
+      const seen = { ...light, angle: angle[transform] };
+      const flip = (image: ReturnType<typeof softwareRender>) =>
+        transform === 'mirror'
+          ? mirrorX(image, origin.x)
+          : transform === 'turn'
+            ? rotateCW(image, origin.x, origin.y)
+            : image;
+      expect(result.frames.length).toBeGreaterThan(0);
+      for (const frame of result.frames) {
+        const parts = partsAt(file, animation, frame.index);
+        const expected = flip(softwareRender(parts, origin, size.w, size.h, litShade(seen)));
+        expect(mismatches(frame.pixels, expected.data, size.w), `frame ${frame.index}`).toEqual([]);
+      }
+      const last = result.frames.at(-1)!.index;
+      const plain = flip(softwareRender(partsAt(file, animation, last), origin, size.w, size.h));
+      expect(mismatches(result.unlit, plain.data, size.w), 'unlit').toEqual([]);
+      expect(errors).toEqual([]);
+      await p.close();
+    },
+    60_000,
+  );
 });

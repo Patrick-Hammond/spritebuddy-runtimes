@@ -24,4 +24,10 @@ export interface PixiNamespace {
   readonly ExtensionType?: any;
   /** PixiJS 5 to 7. */
   readonly SCALE_MODES?: any;
+  /** PixiJS 8, for lit sprites. */
+  readonly Mesh?: any;
+  readonly MeshGeometry?: any;
+  readonly Shader?: any;
+  readonly GlProgram?: any;
+  readonly UniformGroup?: any;
 }
