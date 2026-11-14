@@ -10,9 +10,9 @@ Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.
 
 | Package                              | For                     | Status       |
 | ------------------------------------ | ----------------------- | ------------ |
-| [`@spritebuddy/core`](packages/core) | any JavaScript engine   | 0.2.0 on npm |
-| [`@spritebuddy/pixi`](packages/pixi) | PixiJS 5.3+, 6, 7 and 8 | 0.2.0 on npm |
-| [`addons/spritebuddy`](godot)        | Godot 4.3+              | 0.2.0        |
+| [`@spritebuddy/core`](packages/core) | any JavaScript engine   | 0.3.0 on npm |
+| [`@spritebuddy/pixi`](packages/pixi) | PixiJS 5.3+, 6, 7 and 8 | 0.3.0 on npm |
+| [`addons/spritebuddy`](godot)        | Godot 4.3+              | 0.3.0        |
 
 ## Getting started
 
