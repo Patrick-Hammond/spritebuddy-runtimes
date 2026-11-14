@@ -4,6 +4,7 @@ export type {
   AnimationFrameDef,
   FrameDef,
   LayerDef,
+  LightDef,
   LoopMode,
   Point,
   Rect,

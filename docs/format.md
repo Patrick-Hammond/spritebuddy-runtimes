@@ -147,5 +147,12 @@ convention), blue is +z (towards the viewer). Alpha matches the sheet.
 
 `lighting` on an animation holds SpriteBuddy Pro's light and normal settings (`light`: `angle`,
 `height`, `size`, `color`, `brightness`, `ambient`, `opacity`, `bands`, `paletteSnap`; `normals`:
-`shape`, `depth`, `softness`, `detail`), so SpriteBuddy can read them back. Runtimes ignore it;
-lighting baked into frames needs no runtime support at all.
+`shape`, `depth`, `softness`, `detail`), so SpriteBuddy can read them back. Lighting baked into
+frames needs no runtime support at all. Runtimes don't need `lighting` to play the file; one that
+lights in real time can use `light` to match the editor (`@spritebuddy/core` keeps it as
+`AnimationDef.light`). The defaults are angle 315, height 45, size 0.5, colour `#fff4e0`,
+brightness 1, ambient 0.35, opacity 1 and no bands, and each pixel's colour `C` becomes
+`C × (ambient + brightness × d × colour)` mixed over `C` by `opacity`, where `d` is
+`clamp((n·l + w) / (1 + w), 0, 1)` with `w = 0.6 × size`, rounded to `bands` even levels when
+banding is on, and `l` points at the light: `(sin angle · cos height, cos angle · cos height,
+sin height)` with y up.

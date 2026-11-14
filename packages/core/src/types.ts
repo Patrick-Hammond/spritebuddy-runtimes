@@ -73,10 +73,33 @@ export interface AnimationFrameDef {
   readonly events: readonly string[];
 }
 
+/**
+ * The light SpriteBuddy Pro lit an animation with (its `lighting.light`), so a runtime that lights
+ * in real time can match the editor. Only the fields the file sets are here; see the format docs
+ * for their defaults.
+ */
+export interface LightDef {
+  /** Where the light comes from, in degrees clockwise from the top of the screen. */
+  readonly angle?: number;
+  /** Elevation in degrees: 90 shines from the viewer, below 0 from behind. */
+  readonly height?: number;
+  /** How far the light wraps round the shape, 0 to 1. */
+  readonly size?: number;
+  /** `"#rrggbb"`. */
+  readonly color?: string;
+  readonly brightness?: number;
+  readonly ambient?: number;
+  readonly opacity?: number;
+  /** Cel shading levels (2, 3 or 4), or 0 for smooth. */
+  readonly bands?: number;
+}
+
 export interface AnimationDef {
   readonly name: string;
   readonly loop: LoopMode;
   readonly frames: readonly AnimationFrameDef[];
+  /** The editor's light for this animation, or null when it has none. */
+  readonly light: LightDef | null;
 }
 
 /** A parsed runtime file, with every default filled in. */

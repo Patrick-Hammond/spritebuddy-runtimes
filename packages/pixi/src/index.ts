@@ -1,7 +1,23 @@
-import { FORMAT, parseFile, Player, type FrameDef, type SpriteBuddyFile } from '@spritebuddy/core';
+import {
+  FORMAT,
+  parseFile,
+  Player,
+  type FrameDef,
+  type LightDef,
+  type SpriteBuddyFile,
+} from '@spritebuddy/core';
+import {
+  createLight,
+  createLitPart,
+  lightInternals,
+  type LightSettings,
+  type LitPart,
+  type SpriteBuddyLight,
+} from './lit.js';
 import type { PixiNamespace, PixiTexture } from './pixi-types.js';
 
 export type { PixiNamespace } from './pixi-types.js';
+export { DEFAULT_LIGHT, lightDirection, type LightSettings, type SpriteBuddyLight } from './lit.js';
 
 export interface SheetOptions {
   /** Nearest-neighbour sampling, so pixel art stays crisp when scaled. Defaults to true. */
@@ -22,6 +38,11 @@ export interface SpriteOptions {
   readonly autoUpdate?: boolean;
   /** Playback rate: 1 is normal. */
   readonly speed?: number;
+  /**
+   * PixiJS 8 with the WebGL renderer: lights the sprite in real time with its normal map, made
+   * by `sb.light()`. The sheet needs its normal map loaded.
+   */
+  readonly light?: SpriteBuddyLight;
 }
 
 /** A loaded runtime file: one PixiJS texture per frame, ready to make sprites from. */
@@ -40,6 +61,11 @@ export interface SpriteBuddySheet {
   readonly normalTextures: readonly PixiTexture[] | null;
   /** The normal-map texture of the frame called `name`. */
   normalTexture(name: string): PixiTexture | undefined;
+  /**
+   * The light SpriteBuddy Pro lit `animation` with (default: the first one), or null. Pass it to
+   * `sb.light()` to light the game the way the editor's preview did.
+   */
+  editorLight(animation?: string): LightDef | null;
   /** A new animated sprite, playing `animation` (default: the first one). */
   sprite(animation?: string, options?: SpriteOptions): SpriteBuddySprite;
   /** Destroys the frame textures and the sheet image. */
@@ -55,6 +81,8 @@ export interface SpriteBuddySprite {
   readonly player: Player;
   /** The animation playing (or last played). */
   readonly animation: string | null;
+  /** The light the sprite is lit by, or null when it isn't lit. */
+  readonly light: SpriteBuddyLight | null;
   readonly playing: boolean;
   speed: number;
   /** Called with the frame index each time the frame changes. */
@@ -99,6 +127,11 @@ export interface SpriteBuddyPixi {
    * a {@link SpriteBuddySheet}. Add it once with `extensions.add(sb.assetsParser)`.
    */
   readonly assetsParser: object;
+  /**
+   * PixiJS 8: a directional light for `sheet.sprite(name, { light })`. Unset settings are
+   * SpriteBuddy Pro's defaults; `sb.light(sheet.editorLight('walk'))` uses the editor's.
+   */
+  light(settings?: LightSettings | LightDef | null): SpriteBuddyLight;
   /** Major PixiJS version detected: 5 or 6 (one code path), 7 or 8. */
   readonly version: number;
 }
@@ -141,6 +174,9 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
       : new PIXI.Texture(base, frame, orig, trim, rotate);
   }
 
+  /** Each sheet's images, for lit sprites (looked up by its texture list). */
+  const images = new WeakMap<object, { image: PixiTexture; normalMap?: PixiTexture }>();
+
   function makeSheet(
     raw: unknown,
     image: PixiTexture,
@@ -155,6 +191,7 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
     const normalBase = normalMap && baseOf(normalMap);
     const normalTextures = normalMap ? file.frames.map((f) => frameTexture(normalBase, f)) : null;
     const indexOf = (name: string) => file.frames.findIndex((f) => f.name === name);
+    images.set(textures, { image, normalMap });
     const sheet: SpriteBuddySheet = {
       file,
       textures,
@@ -162,6 +199,11 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
       animations: file.animations.map((a) => a.name),
       texture: (name) => textures[indexOf(name)],
       normalTexture: (name) => normalTextures?.[indexOf(name)],
+      editorLight: (animation) =>
+        (animation === undefined
+          ? file.animations[0]
+          : file.animations.find((a) => a.name === animation)
+        )?.light ?? null,
       sprite: (animation, spriteOptions) => new SpriteClass(sheet, animation, spriteOptions),
       destroy() {
         for (const t of textures) t.destroy(false);
@@ -199,13 +241,17 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
     onFrame: ((index: number) => void) | null = null;
     onComplete: (() => void) | null = null;
     onEvent: ((name: string, index: number) => void) | null = null;
+    readonly light: SpriteBuddyLight | null;
     #pool: PixiSprite[] = [];
+    #lit: LitPart[] = [];
     #auto = false;
     #tick = () => this.update(PIXI.Ticker.shared.deltaMS);
 
     constructor(sheet: SpriteBuddySheet, animation?: string, options: SpriteOptions = {}) {
       super();
       this.sheet = sheet;
+      this.light = options.light ?? null;
+      if (this.light) checkLit(sheet, this.light);
       this.player = new Player(sheet.file, {
         onFrame: (i) => this.onFrame?.(i),
         onComplete: () => this.onComplete?.(),
@@ -274,11 +320,19 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
       super.destroy(options);
     }
 
-    /** Puts one child sprite per part where the part's full frame belongs. */
+    /** Puts one child sprite (or lit mesh) per part where the part's full frame belongs. */
     #draw(): void {
       const parts = this.player.parts;
       while (this.#pool.length < parts.length) {
-        const s = new PIXI.Sprite(PIXI.Texture.EMPTY) as PixiSprite;
+        let s: PixiSprite;
+        if (this.light) {
+          const { image, normalMap } = images.get(this.sheet.textures)!;
+          const lit = createLitPart(PIXI, image, normalMap!, lightInternals(this.light)!);
+          this.#lit.push(lit);
+          s = lit.mesh;
+        } else {
+          s = new PIXI.Sprite(PIXI.Texture.EMPTY) as PixiSprite;
+        }
         this.#pool.push(s);
         this.addChild(s);
       }
@@ -286,13 +340,30 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
         const part = parts[i];
         s.visible = !!part;
         if (!part) return;
-        s.texture = this.sheet.textures[part.index]!;
+        const texture = this.sheet.textures[part.index]!;
+        if (this.light) {
+          this.#lit[i]!.setFrame(texture, this.sheet.file.frames[part.index]!.rotated);
+        } else {
+          s.texture = texture;
+        }
         s.alpha = part.opacity;
         s.scale.x = part.flipX ? -1 : 1;
         s.scale.y = part.flipY ? -1 : 1;
         s.x = part.x + (part.flipX ? part.frame.width : 0);
         s.y = part.y + (part.flipY ? part.frame.height : 0);
       });
+    }
+  }
+
+  function checkLit(sheet: SpriteBuddySheet, light: SpriteBuddyLight): void {
+    if (!v8) throw new Error('Lit sprites need PixiJS 8');
+    if (!lightInternals(light)) throw new Error('Make the light with sb.light()');
+    if (!images.get(sheet.textures)?.normalMap) {
+      throw new Error(
+        sheet.file.normals
+          ? "The sheet's normal map isn't loaded (load it without { normals: false })"
+          : 'This file has no normal map: export it from SpriteBuddy Pro with normal maps on',
+      );
     }
   }
 
@@ -306,6 +377,10 @@ export function spriteBuddy(PIXI: PixiNamespace): SpriteBuddyPixi {
   return {
     version,
     sheet: makeSheet,
+    light(settings) {
+      if (!v8) throw new Error('Lights need PixiJS 8');
+      return createLight(PIXI, settings);
+    },
     async load(url, options) {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Couldn't load ${url}: ${response.status}`);
