@@ -9,7 +9,10 @@ All runtimes share one version while they are below 1.0.
   from the light's side. A radius of 0 (the default) is the directional light as before.
 - Examples: the browser examples play a slime exported from SpriteBuddy Pro, with a normal map, a
   walk and a candle. The PixiJS page adds a second canvas where a candle lights the slime, which
-  the cursor keys move. The Godot example keeps its own drawn slime.
+  the cursor keys move.
+- Godot: a second example scene, `examples/candle_demo.tscn`: the same candle lighting the
+  exported slime with a `PointLight2D` through its normal map, moved with the arrow keys. The
+  first scene keeps its own drawn slime.
 
 ## 0.3.0
 

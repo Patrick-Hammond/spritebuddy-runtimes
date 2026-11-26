@@ -43,6 +43,12 @@ Open the `godot` folder in Godot and press Run: `examples/slime_demo.tscn` (the 
 scene) shows three slimes from one sheet, two placed in the scene and one made in code, with a
 hat drawn as a live layer. Click a slime, or press Space, to make it hop.
 
+`examples/candle_demo.tscn` (open it and press F6) lights a slime exported from SpriteBuddy Pro
+with a normal map: a flickering candle's `PointLight2D` lights it brighter the closer it gets and
+from the side the flame is on, under a `CanvasModulate` that darkens the room. The candle uses an
+unshaded `CanvasItemMaterial` and `use_normals = false`, because it makes the light. The arrow
+keys move the slime and Space makes it jump.
+
 ## Tests
 
 ```sh

@@ -23,6 +23,7 @@ func _initialize() -> void:
 	# Scenes only get _ready once the main loop runs.
 	await process_frame
 	_check_example()
+	await _check_candle_example()
 	print("%d checks, %d failures" % [checks, failures])
 	quit(1 if failures > 0 else 0)
 
@@ -180,4 +181,33 @@ func _check_example() -> void:
 		slime.play("hop")
 		slime.advance(10000.0)
 		_expect(slime.playing and slime.animation == homes[i], "%s goes back to %s after a hop, got %s" % [slime.name, homes[i], slime.animation])
+	demo.queue_free()
+
+
+## The lighting example: the slime is drawn with its normal map so the candle's light lights it,
+## the candle isn't, and the arrow keys walk the slime.
+func _check_candle_example() -> void:
+	var scene: PackedScene = load("res://examples/candle_demo.tscn")
+	_expect(scene != null, "the candle scene loads")
+	if scene == null:
+		return
+	var demo := scene.instantiate()
+	root.add_child(demo)
+	await process_frame
+	var slime: SpriteBuddySprite2D = demo.get_node("World/Slime")
+	var candle: SpriteBuddySprite2D = demo.get_node("World/Candle")
+	_expect(slime.sheet_texture() is CanvasTexture, "the slime is drawn with its normal map")
+	_expect(not (candle.sheet_texture() is CanvasTexture), "the candle is drawn unlit")
+	_expect(candle.playing and candle.animation == "candle", "the candle burns, got %s" % candle.animation)
+	_expect(demo.get_node("Light") is PointLight2D, "the candle has a point light")
+	_expect(String(demo.status.text).contains("lighting the slime from the right"), "status: %s" % demo.status.text)
+	var start := slime.position.x
+	Input.action_press("ui_right")
+	for i in 10:
+		await process_frame
+	_expect(slime.position.x > start and slime.animation == "walk", "right walks the slime right, got x %.1f %s" % [slime.position.x, slime.animation])
+	Input.action_release("ui_right")
+	await process_frame
+	await process_frame
+	_expect(slime.animation == "idle", "letting go idles, got %s" % slime.animation)
 	demo.queue_free()
