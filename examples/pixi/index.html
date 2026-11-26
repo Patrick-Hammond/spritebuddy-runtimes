@@ -25,9 +25,18 @@
   </head>
   <body>
     <h1>@spritebuddy/pixi with PixiJS 8</h1>
-    <p>Three slimes from one sheet. Click one to make it hop.</p>
+    <p>Three slimes from one sheet. Click one to make it jump.</p>
     <div id="stage"></div>
     <p id="status" class="status" aria-live="polite"></p>
     <script type="module" src="./main.js"></script>
+
+    <h2>Real-time lighting</h2>
+    <p>
+      A candle's point light lights the slime through its normal map: brighter as it gets closer,
+      and from whichever side the flame is on. Move it with the cursor keys; Space jumps.
+    </p>
+    <div id="lit-stage"></div>
+    <p id="lit-status" class="status" aria-live="polite"></p>
+    <script type="module" src="./lighting.js"></script>
   </body>
 </html>

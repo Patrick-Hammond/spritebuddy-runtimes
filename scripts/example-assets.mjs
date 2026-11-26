@@ -1,11 +1,10 @@
-// Draws the example slime sheet and writes its runtime file, so the examples have real art to
-// play without shipping anything made elsewhere. Run after changing the art:
+// Draws the Godot example's slime sheet and writes its runtime file. Run after changing the art:
 //
 //   npm run examples:assets
 //
-// It writes examples/assets/slime.png and slime.anims.json, and copies both into the Godot
-// example (godot/examples/art/), which can only load files inside its own project.
-import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs';
+// It writes godot/examples/art/slime.png and slime.anims.json. The browser examples use
+// examples/assets instead: a real export from SpriteBuddy Pro, with a normal map and a candle.
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { deflateSync } from 'node:zlib';
@@ -162,13 +161,8 @@ function png({ width, height, data }) {
   ]);
 }
 
-const assets = join(ROOT, 'examples/assets');
 const godotArt = join(ROOT, 'godot/examples/art');
-mkdirSync(assets, { recursive: true });
 mkdirSync(godotArt, { recursive: true });
-writeFileSync(join(assets, 'slime.png'), png(sheet));
-writeFileSync(join(assets, 'slime.anims.json'), JSON.stringify(file, null, 2) + '\n');
-for (const name of ['slime.png', 'slime.anims.json']) {
-  copyFileSync(join(assets, name), join(godotArt, name));
-}
-console.log(`wrote ${assets} and ${godotArt}`);
+writeFileSync(join(godotArt, 'slime.png'), png(sheet));
+writeFileSync(join(godotArt, 'slime.anims.json'), JSON.stringify(file, null, 2) + '\n');
+console.log(`wrote ${godotArt}`);

@@ -23,19 +23,14 @@ describe('example assets', () => {
     const validate = new Ajv2020({ strict: true, allErrors: true }).compile(schema);
     expect(validate(json) ? null : validate.errors).toBeNull();
     const file = parseFile(json);
-    expect(file.animations.map((a) => a.name)).toEqual(['idle', 'party', 'hop']);
+    expect(file.animations.map((a) => a.name)).toEqual(['idle', 'jump', 'walk', 'party', 'candle']);
+    expect(file.normals).toBe('slime_n.png');
   });
 
-  it('match the sheet image', () => {
-    const png = read('examples/assets/slime.png');
-    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual(json.size);
-  });
-
-  it('are the same in the Godot example', () => {
-    for (const name of ['slime.png', 'slime.anims.json']) {
-      expect(read(`godot/examples/art/${name}`).equals(read(`examples/assets/${name}`)), name).toBe(
-        true,
-      );
+  it('match the sheet image and its normal map', () => {
+    for (const name of ['slime.png', 'slime_n.png']) {
+      const png = read(`examples/assets/${name}`);
+      expect([png.readUInt32BE(16), png.readUInt32BE(20)], name).toEqual(json.size);
     }
   });
 });
@@ -126,8 +121,8 @@ describe('browser examples', () => {
    * How many pixels of the canvas are slime green-ish, from a screenshot (a WebGL canvas can't
    * be read back once it has been shown).
    */
-  async function greenPixels(page: Page): Promise<number> {
-    const shot = await page.locator('canvas').screenshot();
+  async function greenPixels(page: Page, canvas = 'canvas'): Promise<number> {
+    const shot = await page.locator(canvas).screenshot();
     return page.evaluate(async (base64) => {
       const image = new Image();
       image.src = `data:image/png;base64,${base64}`;
@@ -149,21 +144,83 @@ describe('browser examples', () => {
   it('the canvas example draws the slime and switches animations', async () => {
     const { page, errors } = await open('canvas');
     await expect.poll(() => greenPixels(page)).toBeGreaterThan(500);
-    await page.getByRole('button', { name: 'hop' }).click();
-    await expect.poll(() => page.textContent('#status')).toContain('"hop"');
-    // "hop" plays once, then onComplete goes back to idle.
+    await page.getByRole('button', { name: 'jump' }).click();
+    await expect.poll(() => page.textContent('#status')).toContain('"jump"');
+    // "jump" plays once, then onComplete goes back to idle.
     await expect.poll(() => page.textContent('#status'), { timeout: 5000 }).toContain('"idle"');
     expect(errors).toEqual([]);
     await page.close();
   }, 30_000);
 
-  it('the PixiJS example draws three slimes, and one hops when clicked', async () => {
+  it('the PixiJS example draws three slimes, and one jumps when clicked', async () => {
     const { page, errors } = await open('pixi');
-    await expect.poll(() => greenPixels(page)).toBeGreaterThan(1500);
-    const canvas = (await page.locator('canvas').boundingBox())!;
-    // The middle slime stands at (240, 200), 16 × 16 pixels drawn at 6×.
+    await expect.poll(() => greenPixels(page, '#stage canvas')).toBeGreaterThan(1500);
+    const canvas = (await page.locator('#stage canvas').boundingBox())!;
+    // The middle slime stands at (240, 200), about 14 × 11 pixels drawn at 6×.
     await page.mouse.click(canvas.x + 240, canvas.y + 200 - 30);
-    await expect.poll(() => page.textContent('#status')).toBe('Slime 2 hops');
+    await expect.poll(() => page.textContent('#status')).toBe('Slime 2 jumps');
+    expect(errors).toEqual([]);
+    await page.close();
+  }, 30_000);
+
+  /** Mean brightness (r + g + b) of the left and right halves of a box on a canvas. */
+  async function brightness(page: Page, canvas: string, box: number[]) {
+    const shot = await page.locator(canvas).screenshot();
+    return page.evaluate(
+      async ([base64, [x0, y0, x1, y1]]) => {
+        const image = new Image();
+        image.src = `data:image/png;base64,${base64}`;
+        await image.decode();
+        const copy = document.createElement('canvas');
+        copy.width = image.width;
+        copy.height = image.height;
+        const ctx = copy.getContext('2d')!;
+        ctx.drawImage(image, 0, 0);
+        const half = (from: number, to: number) => {
+          const data = ctx.getImageData(from, y0!, to - from, y1! - y0!).data;
+          let sum = 0;
+          for (let i = 0; i < data.length; i += 4) sum += data[i]! + data[i + 1]! + data[i + 2]!;
+          return sum / (data.length / 4);
+        };
+        const mid = Math.round((x0! + x1!) / 2);
+        return { left: half(x0!, mid), right: half(mid, x1!) };
+      },
+      [shot.toString('base64'), box] as const,
+    );
+  }
+
+  it('the PixiJS lighting example lights the slime from the candle, and the keys move it', async () => {
+    const { page, errors } = await open('pixi');
+    await page.waitForFunction(() => 'lightingExample' in window, null, { timeout: 20_000 });
+    // Puts the slime somewhere and measures it: it is 14 × 11 pixels drawn at 5×, standing on y.
+    const at = async (x: number, y: number) => {
+      await page.evaluate(
+        ([x, y]) => Object.assign((window as any).lightingExample.slime, { x, y }), // eslint-disable-line @typescript-eslint/no-explicit-any
+        [x, y] as const,
+      );
+      await page.waitForTimeout(100);
+      return brightness(page, '#lit-stage canvas', [x - 35, y - 55, x + 35, y]);
+    };
+    // The candle's flame is at (240, 125).
+    const far = await at(60, 290);
+    const left = await at(170, 190);
+    const right = await at(310, 190);
+    const total = (b: { left: number; right: number }) => b.left + b.right;
+    expect(total(left)).toBeGreaterThan(total(far) * 1.3);
+    // Lit from the side the candle is on.
+    expect(left.right).toBeGreaterThan(left.left);
+    expect(right.left).toBeGreaterThan(right.right);
+    expect(await page.textContent('#lit-status')).toMatch(/lighting the slime from the left/);
+
+    await page.keyboard.down('ArrowRight');
+    await expect
+      .poll(() => page.evaluate(() => (window as any).lightingExample.slime.x)) // eslint-disable-line @typescript-eslint/no-explicit-any
+      .toBeGreaterThan(330);
+    expect(await page.evaluate(() => (window as any).lightingExample.slime.animation)).toBe('walk'); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await page.keyboard.up('ArrowRight');
+    await expect
+      .poll(() => page.evaluate(() => (window as any).lightingExample.slime.animation)) // eslint-disable-line @typescript-eslint/no-explicit-any
+      .toBe('idle');
     expect(errors).toEqual([]);
     await page.close();
   }, 30_000);

@@ -57,8 +57,20 @@ and sprites you flip, turn or scale are all lit from the right side. Lit sprites
 renderer (PixiJS 8's default); with PixiJS 5 to 7, hand `sheet.normalTextures` to your own
 lighting shader.
 
+A light with a `radius` is a point light instead, such as a candle or a torch: it shines from
+(`x`, `y`) in the stage's coordinates, `z` pixels toward the viewer, and fades to nothing
+`radius` pixels away, so a sprite is lit brighter the closer it gets and from the side the light
+is on (`angle` and `height` are then unused):
+
+```ts
+const candle = sb.light({ radius: 300, x: 240, y: 120, z: 24, color: '#ffb466', ambient: 0.3 });
+const slime = sheet.sprite('walk', { light: candle });
+candle.set({ x: torch.x, y: torch.y }); // move it with whatever carries it
+```
+
 The [PixiJS example](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/pixi) is a complete page: three slimes from one
-sheet, one wearing a hat drawn as a live layer, and a hop on click.
+sheet, one wearing a hat drawn as a live layer, and a jump on click; then a slime you move with
+the cursor keys, lit by a flickering candle's point light.
 
 ## API
 
@@ -71,7 +83,8 @@ sheet, one wearing a hat drawn as a live layer, and a hop on click.
   (`{ normals: false }` skips it) and `sheet.normalTextures` holds one normal-map texture per
   frame, cut exactly like `sheet.textures`; `sheet.normalTexture(name)` finds one. With
   `sb.sheet()`, pass the loaded image as `{ normalMap }`.
-- `sb.light(settings?)` (PixiJS 8) makes a light for `{ light }`, and `sheet.editorLight(name?)`
+- `sb.light(settings?)` (PixiJS 8) makes a light for `{ light }`: directional, or a point light
+  when it has a `radius` (with `x`, `y` and `z`), and `sheet.editorLight(name?)`
   gives the light SpriteBuddy Pro lit an animation with (or null). `sprite.light` is the sprite's.
 - A sprite has `play(name, time?)`, `stop()`, `seek(ms)`, `update(ms)`, `speed`, `playing`,
   `animation`, `onFrame`, `onEvent` and `onComplete`. It moves on with `Ticker.shared` unless you set
