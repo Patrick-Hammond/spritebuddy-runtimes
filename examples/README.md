@@ -11,13 +11,15 @@ SpriteBuddy Pro:
   new art; the top of the leap lasts longer than the rest (**per-frame timing**).
 - `candle`: a flickering flame.
 
-The sheet has a **normal map** (`slime_n.png`), so the PixiJS example can light it in real time.
+The sheet has a **normal map** (`slime_n.png`), so the PixiJS, Phaser and Godot examples can light
+it in real time.
 
-| Example                             | Uses                | Shows                                                                                                                        |
-| ----------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [canvas](canvas)                    | `@spritebuddy/core` | The whole drawing rule by hand on a 2D canvas                                                                                |
-| [pixi](pixi)                        | `@spritebuddy/pixi` | Sprites in PixiJS 8, events, clicking to play a jump; a candle's point light lighting a slime you move with the cursor keys  |
-| [godot/examples](../godot/examples) | the Godot addon     | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime you move with the arrow keys |
+| Example                             | Uses                  | Shows                                                                                                                                                |
+| ----------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [canvas](canvas)                    | `@spritebuddy/core`   | The whole drawing rule by hand on a 2D canvas                                                                                                        |
+| [pixi](pixi)                        | `@spritebuddy/pixi`   | Sprites in PixiJS 8, events, clicking to play a jump; a candle's point light lighting a slime you move with the cursor keys                          |
+| [phaser](phaser)                    | `@spritebuddy/phaser` | Sprites in Phaser 4 made with `this.add.spritebuddy`, clicking to play a jump; a candle's point light lighting a slime you move with the cursor keys |
+| [godot/examples](../godot/examples) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime you move with the arrow keys                         |
 
 ## Running the browser examples
 
@@ -45,4 +47,4 @@ by [`scripts/example-assets.mjs`](../scripts/example-assets.mjs); `npm run examp
 redraws it.
 
 `examples.test.ts` keeps everything here working: it checks the assets against the schema and
-drives both pages in Chromium, including moving the lit slime around the candle. The Godot test run loads both example scenes.
+drives the browser pages in Chromium, including moving the lit slime around the candle. The Godot test run loads both example scenes.
