@@ -1,0 +1,256 @@
+{
+  "frames": {
+    "slime_0": {
+      "frame": {
+        "x": 25,
+        "y": 33,
+        "w": 8,
+        "h": 7
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 7
+      },
+      "sourceSize": {
+        "w": 8,
+        "h": 7
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    "slime_1": {
+      "frame": {
+        "x": 0,
+        "y": 23,
+        "w": 12,
+        "h": 13
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 13
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 13
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    "slime_2": {
+      "frame": {
+        "x": 0,
+        "y": 10,
+        "w": 14,
+        "h": 11
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 14,
+        "h": 11
+      },
+      "sourceSize": {
+        "w": 14,
+        "h": 11
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    "slime_3": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 8
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 8
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 8
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    "candlea_01": {
+      "frame": {
+        "x": 27,
+        "y": 17,
+        "w": 7,
+        "h": 14
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 14
+      },
+      "sourceSize": {
+        "w": 7,
+        "h": 14
+      },
+      "pivot": {
+        "x": 0.42857142857142855,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.42857142857142855,
+        "y": 1
+      }
+    },
+    "candlea_02": {
+      "frame": {
+        "x": 27,
+        "y": 0,
+        "w": 7,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 7,
+        "h": 15
+      },
+      "pivot": {
+        "x": 0.42857142857142855,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.42857142857142855,
+        "y": 1
+      }
+    },
+    "candlea_03": {
+      "frame": {
+        "x": 18,
+        "y": 0,
+        "w": 7,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 7,
+        "h": 16
+      },
+      "pivot": {
+        "x": 0.42857142857142855,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.42857142857142855,
+        "y": 1
+      }
+    },
+    "candlea_04": {
+      "frame": {
+        "x": 16,
+        "y": 18,
+        "w": 7,
+        "h": 14
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 7,
+        "h": 14
+      },
+      "sourceSize": {
+        "w": 7,
+        "h": 14
+      },
+      "pivot": {
+        "x": 0.42857142857142855,
+        "y": 1
+      },
+      "anchor": {
+        "x": 0.42857142857142855,
+        "y": 1
+      }
+    }
+  },
+  "animations": {
+    "idle": ["slime_2", "slime_3"],
+    "jump": [
+      "slime_2",
+      "slime_3",
+      "slime_3",
+      "slime_3",
+      "slime_3",
+      "slime_3",
+      "slime_3",
+      "slime_3",
+      "slime_2"
+    ],
+    "walk": ["slime_1", "slime_2", "slime_3"],
+    "party": ["slime_1", "slime_2", "slime_3"],
+    "candle": ["candlea_01", "candlea_02", "candlea_03", "candlea_04"]
+  },
+  "meta": {
+    "app": "https://github.com/Patrick-Hammond/spritebuddy",
+    "version": "1.0",
+    "image": "slime.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 34,
+      "h": 40
+    },
+    "scale": "1"
+  }
+}

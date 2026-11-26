@@ -2,6 +2,15 @@
 
 All runtimes share one version while they are below 1.0.
 
+## Unreleased
+
+- Point lights in PixiJS 8: give `sb.light()` a `radius` and it shines from (`x`, `y`), `z`
+  pixels toward the viewer, fading out `radius` pixels away, so sprites are lit by distance and
+  from the light's side. A radius of 0 (the default) is the directional light as before.
+- Examples: the browser examples play a slime exported from SpriteBuddy Pro, with a normal map, a
+  walk and a candle. The PixiJS page adds a second canvas where a candle lights the slime, which
+  the cursor keys move. The Godot example keeps its own drawn slime.
+
 ## 0.3.0
 
 - Normal maps for real-time lighting: an optional top-level `normals` image with the sheet's

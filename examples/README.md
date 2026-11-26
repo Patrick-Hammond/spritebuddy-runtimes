@@ -1,18 +1,23 @@
 # Examples
 
-Small, complete programs that play the same sheet, a slime with three animations:
+Small, complete programs that play the same sheet, a slime and a candle exported from
+SpriteBuddy Pro:
 
 - `idle`: breathing in and out (ping-pong).
-- `party`: the same, wearing a hat. The hat is a **live layer**: it is stored on the sheet once
+- `walk`: a looping squash and stretch.
+- `party`: the walk, wearing a hat. The hat is a **live layer**: it is stored on the sheet once
   and drawn on top of each frame at its own position.
-- `hop`: a jump that plays **once**. The leap is made of **per-frame offsets** that lift the
-  slime without new art; the squash frames last longer than the rest (**per-frame timing**).
+- `jump`: plays **once**. The leap is made of **per-frame offsets** that lift the slime without
+  new art; the top of the leap lasts longer than the rest (**per-frame timing**).
+- `candle`: a flickering flame.
 
-| Example                             | Uses                | Shows                                               |
-| ----------------------------------- | ------------------- | --------------------------------------------------- |
-| [canvas](canvas)                    | `@spritebuddy/core` | The whole drawing rule by hand on a 2D canvas       |
-| [pixi](pixi)                        | `@spritebuddy/pixi` | Sprites in PixiJS 8, events, clicking to play a hop |
-| [godot/examples](../godot/examples) | the Godot addon     | Sprites placed in a scene and made in code, signals |
+The sheet has a **normal map** (`slime_n.png`), so the PixiJS example can light it in real time.
+
+| Example                             | Uses                | Shows                                                                                                                       |
+| ----------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [canvas](canvas)                    | `@spritebuddy/core` | The whole drawing rule by hand on a 2D canvas                                                                               |
+| [pixi](pixi)                        | `@spritebuddy/pixi` | Sprites in PixiJS 8, events, clicking to play a jump; a candle's point light lighting a slime you move with the cursor keys |
+| [godot/examples](../godot/examples) | the Godot addon     | Sprites placed in a scene and made in code, signals                                                                         |
 
 ## Running the browser examples
 
@@ -31,10 +36,11 @@ Open the `godot` folder in Godot 4.3 or newer and press Run.
 
 ## The assets
 
-`assets/slime.png` and `assets/slime.anims.json` are drawn by
-[`scripts/example-assets.mjs`](../scripts/example-assets.mjs), which also copies them into the
-Godot example. `npm run examples:assets` redraws them. A real game would export both files from
-SpriteBuddy's Export page instead.
+`assets/` is an export from SpriteBuddy Pro: the sheet (`slime.png`), its normal map
+(`slime_n.png`), the runtime file (`slime.anims.json`) and a TexturePacker-style sheet
+(`slime.json`). The Godot example has its own simpler slime, drawn by
+[`scripts/example-assets.mjs`](../scripts/example-assets.mjs); `npm run examples:assets`
+redraws it.
 
 `examples.test.ts` keeps everything here working: it checks the assets against the schema and
-drives both pages in Chromium. The Godot test run loads the example scene.
+drives both pages in Chromium, including moving the lit slime around the candle. The Godot test run loads the example scene.

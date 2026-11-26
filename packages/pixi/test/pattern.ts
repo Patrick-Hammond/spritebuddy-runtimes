@@ -26,23 +26,41 @@ export interface Light {
   readonly ambient: number;
   readonly opacity: number;
   readonly bands: number;
+  /** A point light (when above 0) at x, y, z in canvas pixels, fading out this far away. */
+  readonly radius?: number;
+  readonly x?: number;
+  readonly y?: number;
+  readonly z?: number;
 }
 
 /**
  * Lights one pixel the way SpriteBuddy Pro's editor does (src/pro/core/lighting/light.ts), from
- * its colour and a y-up normal already turned to face the screen.
+ * its colour and a y-up normal already turned to face the screen. A point light also needs the
+ * pixel's centre on the canvas, `at`.
  */
 export function lightPixel(
   rgb: readonly number[],
   n: readonly [number, number, number],
   light: Light,
+  at: readonly [number, number] = [0, 0],
 ): [number, number, number] {
   const rad = Math.PI / 180;
   const flat = Math.cos(light.height * rad);
-  const l = [Math.sin(light.angle * rad) * flat, Math.cos(light.angle * rad) * flat];
-  const lz = Math.sin(light.height * rad);
+  let l = [Math.sin(light.angle * rad) * flat, Math.cos(light.angle * rad) * flat];
+  let lz = Math.sin(light.height * rad);
+  let falloff = 1;
+  if ((light.radius ?? 0) > 0) {
+    // Toward the light, y up like the normal.
+    const dx = light.x! - at[0];
+    const dy = at[1] - light.y!;
+    const len = Math.hypot(dx, dy, light.z!);
+    l = [dx / len, dy / len];
+    lz = light.z! / len;
+    falloff = Math.max(0, 1 - Math.hypot(dx, dy) / light.radius!) ** 2;
+  }
   const wrap = 0.6 * light.size;
   let d = Math.min(1, Math.max(0, (n[0] * l[0]! + n[1] * l[1]! + n[2] * lz + wrap) / (1 + wrap)));
+  d *= falloff;
   if (light.bands > 1) d = Math.round(d * (light.bands - 1)) / (light.bands - 1);
   const k = [(light.color >> 16) & 255, (light.color >> 8) & 255, light.color & 255];
   return rgb.map((c, i) => {
@@ -53,13 +71,13 @@ export function lightPixel(
 
 /** A shader for {@link softwareRender} that lights each pixel with {@link normalPixel}. */
 export function litShade(light: Light) {
-  return (rgb: readonly number[], sx: number, sy: number, part: Part) => {
+  return (rgb: readonly number[], sx: number, sy: number, part: Part, dx = 0, dy = 0) => {
     const [r, g, b] = normalPixel(sx, sy);
     let n: [number, number, number] = [(r / 255) * 2 - 1, (g / 255) * 2 - 1, (b / 255) * 2 - 1];
     if (part.frame.rotated) n = [-n[1], n[0], n[2]];
     if (part.flipX) n[0] = -n[0];
     if (part.flipY) n[1] = -n[1];
-    return lightPixel(rgb, n, light);
+    return lightPixel(rgb, n, light, [dx + 0.5, dy + 0.5]);
   };
 }
 
@@ -78,7 +96,14 @@ export function softwareRender(
   origin: { x: number; y: number },
   width: number,
   height: number,
-  shade?: (rgb: readonly number[], sx: number, sy: number, part: Part) => readonly number[],
+  shade?: (
+    rgb: readonly number[],
+    sx: number,
+    sy: number,
+    part: Part,
+    dx: number,
+    dy: number,
+  ) => readonly number[],
 ): Image {
   const data = new Uint8ClampedArray(width * height * 4);
   for (const part of parts) {
@@ -96,11 +121,11 @@ export function softwareRender(
           ? [f.rect.x + f.rect.h - 1 - tv, f.rect.y + tu]
           : [f.rect.x + tu, f.rect.y + tv];
         const pixel = sheetPixel(sx, sy);
-        const [r, g, b] = shade ? shade(pixel, sx, sy, part) : pixel;
         const a = pixel[3];
         const dx = origin.x + part.x + u;
         const dy = origin.y + part.y + v;
         if (dx < 0 || dy < 0 || dx >= width || dy >= height) continue;
+        const [r, g, b] = shade ? shade(pixel, sx, sy, part, dx, dy) : pixel;
         const i = (dy * width + dx) * 4;
         const sa = (a / 255) * part.opacity;
         const da = data[i + 3]! / 255;

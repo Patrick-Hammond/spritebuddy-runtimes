@@ -2,60 +2,144 @@
   "format": "spritebuddy-animations",
   "version": 3,
   "image": "slime.png",
-  "size": [64, 16],
-  "scale": 1,
+  "size": [34, 40],
+  "sheet": "slime.json",
+  "normals": "slime_n.png",
   "frames": [
     {
-      "name": "slime_tall",
-      "rect": [0, 0, 16, 16],
-      "pivot": [8, 16]
+      "name": "slime_0",
+      "rect": [25, 33, 8, 7],
+      "pivot": [4, 7]
     },
     {
-      "name": "slime",
-      "rect": [16, 0, 16, 16],
-      "pivot": [8, 16]
+      "name": "slime_1",
+      "rect": [0, 23, 12, 13],
+      "pivot": [6, 13]
     },
     {
-      "name": "slime_squash",
-      "rect": [32, 0, 16, 16],
-      "pivot": [8, 16]
+      "name": "slime_2",
+      "rect": [0, 10, 14, 11],
+      "pivot": [7, 11]
     },
     {
-      "name": "hat",
-      "rect": [48, 0, 16, 16]
+      "name": "slime_3",
+      "rect": [0, 0, 16, 8],
+      "pivot": [8, 8]
+    },
+    {
+      "name": "candlea_01",
+      "rect": [27, 17, 7, 14],
+      "pivot": [3, 14]
+    },
+    {
+      "name": "candlea_02",
+      "rect": [27, 0, 7, 15],
+      "pivot": [3, 15]
+    },
+    {
+      "name": "candlea_03",
+      "rect": [18, 0, 7, 16],
+      "pivot": [3, 16]
+    },
+    {
+      "name": "candlea_04",
+      "rect": [16, 18, 7, 14],
+      "pivot": [3, 14]
     }
   ],
   "animations": [
     {
       "name": "idle",
       "loop": "pingpong",
-      "duration": 160,
-      "frames": [0, 1, 2]
+      "duration": 200,
+      "frames": [2, 3],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
+    },
+    {
+      "name": "jump",
+      "loop": "once",
+      "duration": 100,
+      "frames": [
+        2,
+        3,
+        {
+          "frame": 3,
+          "offset": [0, -2]
+        },
+        {
+          "frame": 3,
+          "offset": [0, -4]
+        },
+        {
+          "frame": 3,
+          "duration": 200,
+          "offset": [0, -5]
+        },
+        {
+          "frame": 3,
+          "offset": [0, -4]
+        },
+        {
+          "frame": 3,
+          "offset": [0, -2]
+        },
+        3,
+        2
+      ],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
+    },
+    {
+      "name": "walk",
+      "loop": "loop",
+      "duration": 100,
+      "frames": [1, 2, 3],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
     },
     {
       "name": "party",
-      "loop": "pingpong",
-      "duration": 160,
+      "loop": "loop",
+      "duration": 100,
       "frames": [
-        {
-          "frame": 0,
-          "layers": [
-            {
-              "frame": 3,
-              "x": 4,
-              "y": -2,
-              "z": 1
-            }
-          ]
-        },
         {
           "frame": 1,
           "layers": [
             {
-              "frame": 3,
-              "x": 4,
-              "y": 0,
-              "z": 1
+              "frame": 0,
+              "x": 2,
+              "y": -5
             }
           ]
         },
@@ -63,53 +147,41 @@
           "frame": 2,
           "layers": [
             {
-              "frame": 3,
+              "frame": 0,
+              "x": 3,
+              "y": -5
+            }
+          ]
+        },
+        {
+          "frame": 3,
+          "layers": [
+            {
+              "frame": 0,
               "x": 4,
-              "y": 3,
-              "z": 1
+              "y": -5
             }
           ]
         }
-      ]
+      ],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
     },
     {
-      "name": "hop",
-      "loop": "once",
-      "duration": 70,
-      "frames": [
-        {
-          "frame": 2,
-          "duration": 120
-        },
-        {
-          "frame": 0,
-          "offset": [0, -4]
-        },
-        {
-          "frame": 0,
-          "offset": [0, -9]
-        },
-        {
-          "frame": 0,
-          "offset": [0, -11],
-          "duration": 120
-        },
-        {
-          "frame": 0,
-          "offset": [0, -9]
-        },
-        {
-          "frame": 1,
-          "offset": [0, -4]
-        },
-        {
-          "frame": 2,
-          "duration": 120
-        },
-        {
-          "frame": 1
-        }
-      ]
+      "name": "candle",
+      "loop": "loop",
+      "duration": 100,
+      "frames": [4, 5, 6, 7]
     }
   ]
 }

@@ -31,13 +31,13 @@ app.stage.addChild(ground);
   slime.scale.set(ZOOM);
   slime.speed = 0.8 + i * 0.2; // each breathes at its own pace
 
-  // Click to hop; "hop" plays once, then onComplete puts the slime back to its own animation.
+  // Click to jump; "jump" plays once, then onComplete puts the slime back to its own animation.
   slime.eventMode = 'static';
   slime.cursor = 'pointer';
-  slime.hitArea = new PIXI.Rectangle(-8, -16, 16, 16); // in the sprite's own pixels
+  slime.hitArea = new PIXI.Rectangle(-8, -13, 16, 13); // in the sprite's own pixels
   slime.on('pointertap', () => {
-    slime.play('hop');
-    status.textContent = `Slime ${i + 1} hops`;
+    slime.play('jump');
+    status.textContent = `Slime ${i + 1} jumps`;
   });
   slime.onComplete = () => slime.play(animation);
 

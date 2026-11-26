@@ -18,11 +18,22 @@ export interface LightSettings {
   readonly opacity?: number;
   /** Cel shading: 2, 3 or 4 light levels, or 0 for smooth shading. */
   readonly bands?: number;
+  /**
+   * Above 0 makes a point light, such as a candle or a torch: it shines from (`x`, `y`, `z`)
+   * and fades to nothing `radius` pixels away, and `angle` and `height` are unused. 0 (the
+   * default) is a directional light, like the sun.
+   */
+  readonly radius?: number;
+  /** A point light's position in the stage's coordinates (the canvas's pixels, unless moved). */
+  readonly x?: number;
+  readonly y?: number;
+  /** How far a point light floats toward the viewer, in pixels: low skims the surface. */
+  readonly z?: number;
 }
 
 /**
- * A directional light for lit sprites (PixiJS 8). Change its fields at any time: every sprite
- * using it is lit the new way on the next render.
+ * A light for lit sprites (PixiJS 8): directional, or a point light when its `radius` is above
+ * 0. Change its fields at any time: every sprite using it is lit the new way on the next render.
  */
 export interface SpriteBuddyLight {
   angle: number;
@@ -34,11 +45,19 @@ export interface SpriteBuddyLight {
   ambient: number;
   opacity: number;
   bands: number;
+  /** Above 0: a point light at (`x`, `y`, `z`) that fades out this many pixels away. */
+  radius: number;
+  x: number;
+  y: number;
+  z: number;
   /** Changes several settings at once. */
   set(settings: LightSettings | LightDef | null | undefined): this;
 }
 
-/** SpriteBuddy Pro's default light, so an unchanged light matches the editor's. */
+/**
+ * SpriteBuddy Pro's default light, so an unchanged light matches the editor's. It is directional
+ * (`radius` 0); the point light settings only matter once `radius` is set.
+ */
 export const DEFAULT_LIGHT = {
   angle: 315,
   height: 45,
@@ -48,6 +67,10 @@ export const DEFAULT_LIGHT = {
   ambient: 0.35,
   opacity: 1,
   bands: 0,
+  radius: 0,
+  x: 0,
+  y: 0,
+  z: 32,
 } as const;
 
 const RAD = Math.PI / 180;
@@ -77,6 +100,7 @@ out vec2 vUV;
 out vec4 vColor;
 out vec2 vNormal0;
 out vec2 vNormal1;
+out vec2 vWorld;
 
 uniform mat3 uProjectionMatrix;
 uniform mat3 uWorldTransformMatrix;
@@ -93,7 +117,9 @@ vec2 roundPixels(vec2 position, vec2 targetSize) {
 
 void main(void) {
   mat3 model = uWorldTransformMatrix * uTransformMatrix;
-  gl_Position = vec4((uProjectionMatrix * model * vec3(aPosition, 1.0)).xy, 0.0, 1.0);
+  vec3 world = model * vec3(aPosition, 1.0);
+  vWorld = world.xy;
+  gl_Position = vec4((uProjectionMatrix * world).xy, 0.0, 1.0);
   if (uRound == 1.0) gl_Position.xy = roundPixels(gl_Position.xy, uResolution);
   vUV = aUV;
   vColor = uColor * uWorldColorAlpha;
@@ -111,6 +137,7 @@ in vec2 vUV;
 in vec4 vColor;
 in vec2 vNormal0;
 in vec2 vNormal1;
+in vec2 vWorld;
 
 out vec4 finalColor;
 
@@ -122,6 +149,8 @@ uniform vec3 uLightColor;
 // ambient, brightness, opacity, wrap
 uniform vec4 uLightParams;
 uniform float uBands;
+// A point light's x, y, z and radius; a radius of 0 means directional (uLightDir).
+uniform vec4 uLightPos;
 
 uniform float uRotated;
 
@@ -142,8 +171,16 @@ void main(void) {
   if (len > 0.0) screen *= length(local) / len;
   vec3 N = vec3(screen, n.z);
 
+  vec3 L = uLightDir;
+  float falloff = 1.0;
+  if (uLightPos.w > 0.0) {
+    vec3 toLight = vec3(uLightPos.xy - vWorld, uLightPos.z);
+    L = normalize(toLight);
+    float f = clamp(1.0 - length(toLight.xy) / uLightPos.w, 0.0, 1.0);
+    falloff = f * f;
+  }
   float wrap = uLightParams.w;
-  float d = clamp((dot(N, uLightDir) + wrap) / (1.0 + wrap), 0.0, 1.0);
+  float d = clamp((dot(N, L) + wrap) / (1.0 + wrap), 0.0, 1.0) * falloff;
   if (uBands > 1.0) {
     float steps = uBands - 1.0;
     d = floor(d * steps + 0.5) / steps;
@@ -175,6 +212,7 @@ export function createLight(PIXI: PixiNamespace, settings?: LightSettings | Ligh
     uLightColor: { value: new Float32Array(3), type: 'vec3<f32>' },
     uLightParams: { value: new Float32Array(4), type: 'vec4<f32>' },
     uBands: { value: 0, type: 'f32' },
+    uLightPos: { value: new Float32Array(4), type: 'vec4<f32>' },
   });
   const state = { ...DEFAULT_LIGHT } as { -readonly [K in keyof typeof DEFAULT_LIGHT]: number };
   const u = group.uniforms;
@@ -185,6 +223,7 @@ export function createLight(PIXI: PixiNamespace, settings?: LightSettings | Ligh
     u.uLightColor.set([((c >> 16) & 255) / 255, ((c >> 8) & 255) / 255, (c & 255) / 255]);
     u.uLightParams.set([state.ambient, state.brightness, state.opacity, 0.6 * state.size]);
     u.uBands = state.bands;
+    u.uLightPos.set([state.x, state.y, state.z, Math.max(0, state.radius)]);
   }
 
   const light = {} as SpriteBuddyLight;

@@ -222,4 +222,32 @@ describe('pixi8 lit sprites', () => {
     },
     60_000,
   );
+
+  it.each([
+    { name: 'beside the sprite', point: { x: 40, y: 20, z: 12, radius: 40 }, bands: 0 },
+    { name: 'above it, cel shaded', point: { x: 20, y: 4, z: 6, radius: 50 }, bands: 3 },
+    { name: 'far off', point: { x: 2, y: 46, z: 30, radius: 12 }, bands: 0 },
+  ])(
+    'lights with a point light $name',
+    async ({ point, bands }) => {
+      const { p, errors } = await page('pixi8');
+      const json = JSON.parse(fixture('normals'));
+      const light = { ...base, ...point, bands };
+      const result = (await p.evaluate(
+        ([json, light, origin, size]) =>
+          (window as any).renderLit(json, 'idle', light, origin, size, 'none'), // eslint-disable-line @typescript-eslint/no-explicit-any
+        [json, light, origin, size] as const,
+      )) as { frames: { index: number; pixels: number[] }[] };
+      const file = parseFile(json);
+      expect(result.frames.length).toBeGreaterThan(0);
+      for (const frame of result.frames) {
+        const parts = partsAt(file, 'idle', frame.index);
+        const expected = softwareRender(parts, origin, size.w, size.h, litShade(light));
+        expect(mismatches(frame.pixels, expected.data, size.w), `frame ${frame.index}`).toEqual([]);
+      }
+      expect(errors).toEqual([]);
+      await p.close();
+    },
+    60_000,
+  );
 });

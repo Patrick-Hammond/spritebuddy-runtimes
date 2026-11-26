@@ -486,6 +486,21 @@ describe('lit sprites', () => {
     expect(sheet.sprite('idle', { autoUpdate: false }).light).toBeNull();
   });
 
+  it('is directional until it has a radius, then a point light at x, y, z', () => {
+    const { sb, sheet } = litSheet();
+    const light = sb.light();
+    const sprite = sheet.sprite('idle', { autoUpdate: false, light });
+    const mesh = sprite.children[0] as { shader: { options: { resources: Record<string, any> } } }; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const u = (mesh.shader.options.resources.lightUniforms as Uniforms).uniforms;
+    expect([...u.uLightPos]).toEqual([0, 0, 32, 0]);
+    light.set({ x: 120, y: 80, z: 40, radius: 200 });
+    expect([...u.uLightPos]).toEqual([120, 80, 40, 200]);
+    light.x = 10;
+    light.radius = -5; // anything below 0 is directional too
+    expect([...u.uLightPos]).toEqual([10, 80, 40, 0]);
+    expect(light.radius).toBe(-5);
+  });
+
   it('draws each part as a mesh over its full frame, with the sheet and its normals', () => {
     const { sb, sheet, image, normalMap, GlProgram } = litSheet({
       ...packed,
