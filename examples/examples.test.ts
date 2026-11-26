@@ -33,6 +33,13 @@ describe('example assets', () => {
       expect([png.readUInt32BE(16), png.readUInt32BE(20)], name).toEqual(json.size);
     }
   });
+
+  it('are the same in the Godot lighting example', () => {
+    for (const name of ['slime.png', 'slime_n.png', 'slime.anims.json']) {
+      const copy = read(`godot/examples/art/lit/${name}`);
+      expect(copy.equals(read(`examples/assets/${name}`)), name).toBe(true);
+    }
+  });
 });
 
 describe('published packages', () => {
