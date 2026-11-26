@@ -4,6 +4,15 @@ All runtimes share one version while they are below 1.0.
 
 ## Unreleased
 
+- New runtime, `@spritebuddy/phaser`, for Phaser 3.60+ and Phaser 4: `this.load.spritebuddy(key,
+url)` loads a runtime file with its sheet and normal map, and `this.add.spritebuddy(x, y, key,
+animation)` makes a Container that plays it with per-frame timing, loop modes, offsets, live
+  layers and frame events. `{ lit: true }` lights a sprite with Phaser's own lights through its
+  normal map (flipped layers, rotated frames and flipped or turned sprites lit from the right
+  side), and `sb.light(scene, settings)` adds a Phaser light that takes SpriteBuddy Pro's
+  settings, including point lights.
+- Examples: a Phaser 4 page, with the three slimes and the candle lighting demo.
+
 - Point lights in PixiJS 8: give `sb.light()` a `radius` and it shines from (`x`, `y`), `z`
   pixels toward the viewer, fading out `radius` pixels away, so sprites are lit by distance and
   from the light's side. A radius of 0 (the default) is the directional light as before.

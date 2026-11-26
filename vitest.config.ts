@@ -8,6 +8,8 @@ export default defineConfig({
       'schema/**/*.test.ts',
       'examples/**/*.test.ts',
     ],
+    // The browser tests share the machine with each other; give slow renders time to land.
+    expect: { poll: { timeout: 10_000 } },
     alias: {
       '@spritebuddy/core': new URL('./packages/core/src/index.ts', import.meta.url).pathname,
     },

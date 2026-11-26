@@ -9,8 +9,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { parseFile } from '@spritebuddy/core';
 
 /**
- * Keeps the examples working: their assets are valid, and both browser examples run in
- * Chromium against the packages' current source.
+ * Keeps the examples working: their assets are valid, and the browser examples run in Chromium
+ * against the packages' current source.
  */
 const ROOT = join(__dirname, '..');
 const read = (path: string) => readFileSync(join(ROOT, path));
@@ -46,7 +46,7 @@ describe('published packages', () => {
   // Node and browsers resolve ES modules without guessing extensions, so `./types` would only
   // work through a bundler. Built files must import `./types.js`.
   it('import their own files with a .js extension', () => {
-    for (const pkg of ['core', 'pixi']) {
+    for (const pkg of ['core', 'pixi', 'phaser']) {
       const dir = join(ROOT, 'packages', pkg, 'src');
       for (const name of readdirSync(dir).filter((f) => /(?<!\.test)\.ts$/.test(f))) {
         const source = readFileSync(join(dir, name), 'utf8');
@@ -75,7 +75,7 @@ describe('browser examples', () => {
   let base: string;
 
   beforeAll(async () => {
-    for (const pkg of ['core', 'pixi']) {
+    for (const pkg of ['core', 'pixi', 'phaser']) {
       const out = await build({
         entryPoints: [join(ROOT, 'packages', pkg, 'src/index.ts')],
         bundle: true,
@@ -120,7 +120,7 @@ describe('browser examples', () => {
     page.on('requestfailed', (r) => errors.push(`failed: ${r.url()}`));
     page.on('response', (r) => r.status() >= 400 && errors.push(`${r.status()}: ${r.url()}`));
     await page.goto(`${base}/examples/${example}/`);
-    await page.waitForFunction(() => 'exampleReady' in window, null, { timeout: 20_000 });
+    await page.waitForFunction(() => 'exampleReady' in window, null, { timeout: 40_000 });
     return { page, errors };
   }
 
@@ -157,7 +157,7 @@ describe('browser examples', () => {
     await expect.poll(() => page.textContent('#status'), { timeout: 5000 }).toContain('"idle"');
     expect(errors).toEqual([]);
     await page.close();
-  }, 30_000);
+  }, 60_000);
 
   it('the PixiJS example draws three slimes, and one jumps when clicked', async () => {
     const { page, errors } = await open('pixi');
@@ -168,7 +168,7 @@ describe('browser examples', () => {
     await expect.poll(() => page.textContent('#status')).toBe('Slime 2 jumps');
     expect(errors).toEqual([]);
     await page.close();
-  }, 30_000);
+  }, 60_000);
 
   /** Mean brightness (r + g + b) of the left and right halves of a box on a canvas. */
   async function brightness(page: Page, canvas: string, box: number[]) {
@@ -230,5 +230,58 @@ describe('browser examples', () => {
       .toBe('idle');
     expect(errors).toEqual([]);
     await page.close();
-  }, 30_000);
+  }, 60_000);
+
+  it('the Phaser example draws three slimes, and one jumps when clicked', async () => {
+    const { page, errors } = await open('phaser');
+    await expect.poll(() => greenPixels(page, '#stage canvas')).toBeGreaterThan(1500);
+    expect(await page.textContent('#status')).toMatch(/^Loaded 5 animations/);
+    const canvas = (await page.locator('#stage canvas').boundingBox())!;
+    // The middle slime stands at (240, 200), about 14 × 11 pixels drawn at 6×.
+    await page.mouse.click(canvas.x + 240, canvas.y + 200 - 30);
+    await expect.poll(() => page.textContent('#status')).toBe('Slime 2 jumps');
+    expect(errors).toEqual([]);
+    await page.close();
+  }, 60_000);
+
+  it('the Phaser lighting example lights the slime from the candle, and the keys move it', async () => {
+    const { page, errors } = await open('phaser');
+    await page.waitForFunction(() => 'lightingExample' in window, null, { timeout: 20_000 });
+    const slime = (key: string) =>
+      page.evaluate((key) => (window as any).lightingExample.slime[key], key); // eslint-disable-line @typescript-eslint/no-explicit-any
+    // Puts the slime somewhere and measures it: it is 14 × 11 pixels drawn at 5×, standing on y.
+    const at = async (x: number, y: number) => {
+      await page.evaluate(
+        ([x, y]) => Object.assign((window as any).lightingExample.slime, { x, y }), // eslint-disable-line @typescript-eslint/no-explicit-any
+        [x, y] as const,
+      );
+      await page.waitForTimeout(100);
+      return brightness(page, '#lit-stage canvas', [x - 35, y - 55, x + 35, y]);
+    };
+    // The candle's flame is at (240, 125).
+    const far = await at(60, 290);
+    const left = await at(170, 190);
+    const right = await at(310, 190);
+    const total = (b: { left: number; right: number }) => b.left + b.right;
+    expect(total(left)).toBeGreaterThan(total(far) * 1.3);
+    // Lit from the side the candle is on.
+    expect(left.right).toBeGreaterThan(left.left);
+    expect(right.left).toBeGreaterThan(right.right);
+    expect(await page.textContent('#lit-status')).toMatch(/lighting the slime from the left/);
+
+    await page.keyboard.down('ArrowRight');
+    await expect.poll(() => slime('x')).toBeGreaterThan(330);
+    expect(await slime('animation')).toBe('walk');
+    await page.keyboard.up('ArrowRight');
+    await expect.poll(() => slime('animation')).toBe('idle');
+
+    // Walking left flips the slime, and it is still lit from the candle's side.
+    await page.keyboard.down('ArrowLeft');
+    await expect.poll(() => slime('flipX')).toBe(true);
+    await page.keyboard.up('ArrowLeft');
+    const flipped = await at(310, 190);
+    expect(flipped.left).toBeGreaterThan(flipped.right);
+    expect(errors).toEqual([]);
+    await page.close();
+  }, 60_000);
 });
