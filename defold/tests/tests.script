@@ -267,7 +267,8 @@ local function run(self)
 	check_errors()
 	check_lookups()
 	check_player_callbacks(dir)
-	check_sprites()
+	-- The examples run before check_sprites() loads the sheet here, so each example loads it in
+	-- its own collection, which frees it again on unloading.
 	for _, name in ipairs(EXAMPLES) do
 		local proxy = msg.url("#" .. name)
 		msg.post(proxy, "async_load")
@@ -279,6 +280,7 @@ local function run(self)
 		self.loading = coroutine.running()
 		coroutine.yield()
 	end
+	check_sprites()
 	print(("%d checks, %d failures"):format(checks, failures))
 	sys.exit(failures > 0 and 1 or 0)
 end
