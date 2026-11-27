@@ -29,6 +29,12 @@ export const groups = [
         about:
           "A candle's point light lights the slime through its normal map. Click the preview, then move with the cursor keys; Space jumps.",
       },
+      {
+        id: 'pixi/stress',
+        title: 'Lighting stress test',
+        about:
+          'Many moving point lights and lit slimes, with sliders for both and a frames-per-second readout. Each sprite is lit by one light.',
+      },
     ],
   },
   {
@@ -45,6 +51,12 @@ export const groups = [
         title: 'Candle lighting',
         about:
           "A candle's point light, using Phaser's own lights. Click the preview, then move with the cursor keys; Space jumps.",
+      },
+      {
+        id: 'phaser/stress',
+        title: 'Lighting stress test',
+        about:
+          'Many moving point lights and lit slimes, with sliders for both and a frames-per-second readout. Every sprite is lit by all the lights (up to 64).',
       },
     ],
   },

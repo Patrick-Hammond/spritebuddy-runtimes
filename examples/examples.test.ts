@@ -309,6 +309,28 @@ describe('browser examples', () => {
     await page.close();
   }, 60_000);
 
+  for (const engine of ['pixi', 'phaser']) {
+    it(`the ${engine} lighting stress test draws lit slimes and remakes them at new counts`, async () => {
+      const { page, errors } = await open(`${engine}/stress`, 'stressExample');
+      await expect
+        .poll(() => page.textContent('#status'))
+        .toMatch(/^\d+ fps · 8 lights · 200 lit slimes$/);
+      await expect.poll(() => greenPixels(page, '#stage canvas')).toBeGreaterThan(500);
+      // The sliders change the counts.
+      for (const [index, value] of [
+        ['0', '20'],
+        ['1', '50'],
+      ]) {
+        await page.locator('input[type=range]').nth(Number(index)).fill(value!);
+      }
+      await expect
+        .poll(() => page.textContent('#status'))
+        .toMatch(/^\d+ fps · 20 lights · 50 lit slimes$/);
+      expect(errors).toEqual([]);
+      await page.close();
+    }, 60_000);
+  }
+
   it('the playground lists the examples and runs the chosen one beside its code', async () => {
     const page = await browser.newPage({ viewport: { width: 1400, height: 800 } });
     const errors: string[] = [];
@@ -356,10 +378,10 @@ describe('browser examples', () => {
     expect(await preview.locator('#error').isHidden()).toBe(true);
 
     // The filter narrows the list.
-    await page.locator('#filter').fill('lighting');
+    await page.locator('#filter').fill('stress');
     await expect
       .poll(() => page.locator('#list a:visible').allTextContents())
-      .toEqual(['Candle lighting', 'Candle lighting']);
+      .toEqual(['Lighting stress test', 'Lighting stress test']);
     await page.locator('#filter').fill('');
 
     // Godot runs in its own editor, so its entry links to the scenes instead.

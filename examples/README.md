@@ -23,8 +23,10 @@ one's code in an editor, and the example running beside it. Edit the code and it
 | [canvas/drawing](src/canvas/drawing.js)                    | `@spritebuddy/core`   | The whole drawing rule by hand on a 2D canvas                                                   |
 | [pixi/sprites](src/pixi/sprites.js)                        | `@spritebuddy/pixi`   | Sprites in PixiJS 8, a live-layer hat, clicking to play a jump                                  |
 | [pixi/lighting](src/pixi/lighting.js)                      | `@spritebuddy/pixi`   | A candle's point light lighting a slime you move with the cursor keys                           |
+| [pixi/stress](src/pixi/stress.js)                          | `@spritebuddy/pixi`   | A lighting stress test: sliders for lights and lit slimes, and a frames-per-second readout      |
 | [phaser/sprites](src/phaser/sprites.js)                    | `@spritebuddy/phaser` | Sprites in Phaser 4 made with `this.add.spritebuddy`, clicking to play a jump                   |
 | [phaser/lighting](src/phaser/lighting.js)                  | `@spritebuddy/phaser` | The candle lighting with Phaser's own lights                                                    |
+| [phaser/stress](src/phaser/stress.js)                      | `@spritebuddy/phaser` | The same stress test with Phaser's lights (up to 64 at once)                                    |
 | [godot/examples](../godot/examples) (linked, not run here) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime |
 
 ## How it fits together
