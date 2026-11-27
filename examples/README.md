@@ -28,6 +28,7 @@ one's code in an editor, and the example running beside it. Edit the code and it
 | [phaser/lighting](src/phaser/lighting.js)                  | `@spritebuddy/phaser` | The candle lighting with Phaser's own lights                                                    |
 | [phaser/stress](src/phaser/stress.js)                      | `@spritebuddy/phaser` | The same stress test with Phaser's lights (up to 64 at once)                                    |
 | [godot/examples](../godot/examples) (linked, not run here) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime |
+| [defold/examples](../defold/examples) (linked)             | the Defold library    | Slimes placed and made by a factory, a candle's point light, frame events playing sounds        |
 
 ## How it fits together
 
@@ -56,6 +57,11 @@ workflow does this and publishes it to GitHub Pages when started by hand.
 
 Open the `godot` folder in Godot 4.3 or newer and press Run for the slime demo. For the lighting
 demo, open `examples/candle_demo.tscn` and press F6 (Run Current Scene).
+
+## Running the Defold example
+
+Open `defold/game.project` in the Defold editor and press Project → Build; keys 1, 2 and 3 switch
+between the slimes, the candle light and the frame events. See [defold/README.md](../defold).
 
 ## The assets
 

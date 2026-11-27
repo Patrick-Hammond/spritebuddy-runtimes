@@ -1,0 +1,324 @@
+-- Runs the SpriteBuddy Defold tests in the engine and exits with 1 if any check fails:
+--   java -jar bob.jar build && dmengine --config=bootstrap.main_collection=/tests/tests.collectionc build/default/game.projectc
+-- (scripts/defold.sh does this). Checks every fixture against its golden table, the file checks,
+-- the player's sprites and callbacks, and each example collection.
+
+local core = require "spritebuddy.core"
+local shared = require "examples.shared"
+local spritebuddy = require "spritebuddy.spritebuddy"
+
+local checks, failures = 0, 0
+
+local function expect(condition, message)
+	checks = checks + 1
+	if not condition then
+		failures = failures + 1
+		print("FAIL: " .. message)
+	end
+end
+
+local function read_text(path)
+	local f = io.open(path, "rb")
+	if not f then
+		return nil
+	end
+	local text = f:read("*a")
+	f:close()
+	return text
+end
+
+local function near(a, b)
+	return math.abs(a - b) < 1e-4
+end
+
+local function check_fixture(dir, name)
+	local file, err = core.read(json.decode(read_text(dir .. "/" .. name)))
+	expect(file ~= nil, name .. " parses: " .. tostring(err))
+	if not file then
+		return
+	end
+	local expected = json.decode(read_text(dir .. "/" .. name:gsub("%.anims%.json$", ".expected.json")))
+	for _, tbl in ipairs(expected.animations) do
+		local animation = file.by_name[tbl.animation]
+		expect(animation ~= nil, name .. " has " .. tbl.animation)
+		for _, check in ipairs(tbl.checks) do
+			local index, done = core.frame_at(animation, check.time)
+			local want = check.index >= 0 and check.index + 1 or nil
+			local where = ("%s %s t=%d"):format(name, tbl.animation, check.time)
+			expect(index == want and done == check.done, ("%s: frame %s %s, expected %s %s"):format(where, tostring(index), tostring(done), tostring(want), tostring(check.done)))
+			if index then
+				local parts = core.parts_of(file, animation.frames[index])
+				expect(#parts == #check.parts, ("%s: %d parts, expected %d"):format(where, #parts, #check.parts))
+				for i = 1, math.min(#parts, #check.parts) do
+					local got, w = parts[i], check.parts[i]
+					local same = got.frame.name == w.frame and near(got.x, w.x) and near(got.y, w.y)
+						and near(got.opacity, w.opacity or 1) and got.flip_x == (w.flipX or false) and got.flip_y == (w.flipY or false)
+					expect(same, ("%s part %d: got %s %g,%g, expected %s %g,%g"):format(where, i, got.frame.name, got.x, got.y, w.frame, w.x, w.y))
+				end
+			end
+		end
+		for _, tick in ipairs(tbl.events or {}) do
+			local fired = core.events_between(animation, tick.from, tick.to)
+			local got, want = {}, {}
+			for _, e in ipairs(fired) do
+				got[#got + 1] = e.name .. "@" .. (e.index - 1)
+			end
+			for _, pair in ipairs(tick.fired) do
+				want[#want + 1] = pair[1] .. "@" .. pair[2]
+			end
+			expect(table.concat(got, " ") == table.concat(want, " "), ("%s %s events (%d, %d]: got %s, expected %s"):format(name, tbl.animation, tick.from, tick.to, table.concat(got, " "), table.concat(want, " ")))
+		end
+	end
+end
+
+local function merged(base, extra)
+	local out = {}
+	for k, v in pairs(base) do
+		out[k] = v
+	end
+	for k, v in pairs(extra) do
+		out[k] = v
+	end
+	return out
+end
+
+local function check_errors()
+	local base = {
+		format = "spritebuddy-animations", version = 3, image = "a.png", size = { 64, 32 },
+		frames = { { name = "a", rect = { 0, 0, 16, 32 } } },
+	}
+	local file, err = core.read(base)
+	expect(file ~= nil, "a minimal file reads: " .. tostring(err))
+	expect(file and file.frames[1].pivot_x == 8 and file.frames[1].pivot_y == 32, "pivot defaults to bottom centre")
+	local cases = {
+		{ { version = 4 }, "version: version 4 is newer" },
+		{ { version = 2 }, "version: version 2 files need" },
+		{ { format = "x" }, "format: not a SpriteBuddy" },
+		{ { size = { 64 } }, "size: expected 2 numbers" },
+		{ { frames = { { name = "a", rect = { 60, 0, 16, 4 } } } }, "frames[0].rect: lies outside the sheet" },
+		{ { frames = { { name = "a", rect = { 0, 0, 0, 4 } } } }, "frames[0].rect[2]: expected a whole number ≥ 1" },
+		{ { frames = { { name = "a", rect = { 0, 0, 4, 4 }, trim = { 2, 0, 4, 4 } } } }, "frames[0].trim: the trimmed pixels" },
+		{ { frames = { { name = "a", rect = { 0, 0, 4, 4 }, pivot = { 1 } } } }, "frames[0].pivot: expected 2 numbers" },
+		{ { animations = { { name = "w", frames = { 3 } } } }, "animations[0].frames[0]: no frame 3; the file has 1" },
+		{ { animations = { { name = "w", loop = "bounce", frames = {} } } }, "animations[0].loop" },
+		{ { animations = { { name = "w", frames = { { frame = 0, layers = { { frame = 0, opacity = 2 } } } } } } }, "animations[0].frames[0].layers[0].opacity" },
+		{ { animations = { { name = "w", frames = {} }, { name = "w", frames = {} } } }, "animations[1].name: duplicate" },
+		{ { animations = { { name = "w", frames = { { frame = 0, events = "hit" } } } } }, "animations[0].frames[0].events: expected a list" },
+		{ { animations = { { name = "w", frames = { { frame = 0, events = { "hit", "" } } } } } }, "animations[0].frames[0].events[1]: expected a non-empty string" },
+		{ { animations = { { name = "w", frames = { { frame = 0, duration = 0 } } } } }, "animations[0].frames[0].duration: expected a whole number ≥ 1" },
+		{ { normals = "" }, "normals: expected a non-empty string" },
+		{ { normals = 3 }, "normals: expected a non-empty string" },
+	}
+	for _, c in ipairs(cases) do
+		local _, e = core.read(merged(base, c[1]))
+		expect(type(e) == "string" and e:sub(1, #c[2]) == c[2], ('error: got "%s", expected "%s…"'):format(tostring(e), c[2]))
+	end
+end
+
+-- The player calls on_frame, then on_event, then on_done, and fires skipped frames' events.
+local function check_player_callbacks(dir)
+	local text = read_text(dir .. "/events.anims.json")
+	local file = core.read(json.decode(text))
+	-- A 1x1 sheet is enough here: nothing checks pixels.
+	local log = {}
+	local player = spritebuddy.player({ file = file, atlas = nil }, {
+		on_frame = function(index) log[#log + 1] = "frame " .. (index - 1) end,
+		on_event = function(name, index) log[#log + 1] = name .. " " .. (index - 1) end,
+		on_done = function(name) log[#log + 1] = "done " .. name end,
+	})
+	player.draw = function() end
+	player:play("swing")
+	expect(table.concat(log, ", ") == "frame 0, windup 0", "play fires the first frame's events, got " .. table.concat(log, ", "))
+	log = {}
+	player:update(0.5)
+	expect(table.concat(log, ", ") == "frame 2, hit 1, shake 1, done swing", "a long tick fires skipped frames' events, got " .. table.concat(log, ", "))
+	player:play("walk")
+	log = {}
+	for _ = 1, 6 do
+		player:update(0.04)
+	end
+	expect(table.concat(log, ", ") == "frame 1, frame 2, step 2, frame 0, step 0", "walk steps on frames 2 and 0, got " .. table.concat(log, ", "))
+	player:seek(0)
+	expect(player.index == 1, "seek jumps to the first frame")
+end
+
+local function vec_near(v, x, y)
+	return math.abs(v.x - x) < 1e-3 and math.abs(v.y - y) < 1e-3
+end
+
+-- A real sheet: the parts are placed where the drawing rule says, layers come and go, flips
+-- mirror about the pivot, and lit players use the normal map.
+local function check_sprites()
+	local sheet, err = spritebuddy.load("/examples/art/slime.anims.json")
+	expect(sheet ~= nil, "the example sheet loads: " .. tostring(err))
+	if not sheet then
+		return
+	end
+	expect(spritebuddy.load("/examples/art/slime.anims.json") == sheet, "loading again returns the same sheet")
+	expect(sheet.normal_atlas ~= nil, "the normal map is loaded")
+	local missing, merr = spritebuddy.load("/examples/art/nope.anims.json")
+	expect(missing == nil and merr:find("custom_resources"), "a missing file says why: " .. tostring(merr))
+
+	local player = spritebuddy.player(sheet)
+	expect(not player.lit, "players draw unlit unless asked")
+	player:play("party")
+	local ids = player:part_ids()
+	expect(#ids == 2, "party draws the slime and its hat, got " .. #ids)
+	-- Frame slime_1 (pivot 6,13) hangs from the origin; the hat (slime_0, pivot 4,7) sits at
+	-- x 2, y -5 from the slime's full-frame top-left: (-6+2, -13-5) is its top-left, plus its pivot.
+	expect(vec_near(go.get_position(ids[1]), 0, 0), "the slime hangs from its pivot, got " .. tostring(go.get_position(ids[1])))
+	expect(vec_near(go.get_position(ids[2]), 0, 11), "the hat sits on its head, got " .. tostring(go.get_position(ids[2])))
+	player:play("jump")
+	player:seek(450) -- the top of the leap: offset 0,-5
+	ids = player:part_ids()
+	expect(#ids == 1, "jump has no hat")
+	expect(vec_near(go.get_position(ids[1]), 0, 5), "the offset lifts the slime 5 pixels, got " .. tostring(go.get_position(ids[1])))
+	player:set_flip(true, false)
+	expect(vec_near(go.get_position(ids[1]), 0, 5), "flipping keeps a centred pivot in place")
+	expect(go.get(msg.url(nil, ids[1], "sprite"), "tint.w") == 1, "the base frame is opaque")
+	player:delete()
+
+	local lit = spritebuddy.player(sheet, { lit = true })
+	expect(lit.lit, "lit = true draws with the normal map")
+	lit:play("idle")
+	spritebuddy.light.x = 123
+	lit:update(0)
+	local url = msg.url(nil, lit:part_ids()[1], "sprite")
+	expect(go.get(url, "light_pos").x == 123, "the light is copied to lit sprites")
+	expect(go.get(url, "material") == hash("/spritebuddy/materials/lit_sprite.materialc"), "lit sprites use the lit material, got " .. tostring(go.get(url, "material")))
+	lit:delete()
+	spritebuddy.light.x = 0
+end
+
+local function check_lookups()
+	expect(spritebuddy.path_of(hash("/examples/art/slime.anims.json")) == "/examples/art/slime.anims.json", "files listed in game.project are found by their path's hash")
+	expect(spritebuddy.path_of(hash("slime")) == "/examples/art/slime.anims.json", "and by their name's")
+	expect(spritebuddy.path_of(hash("/nope.anims.json")) == nil, "unknown files aren't")
+	spritebuddy.add_path("/nope.anims.json")
+	expect(spritebuddy.path_of(hash("/nope.anims.json")) == "/nope.anims.json", "add_path adds one")
+end
+
+-- --- The example collections, loaded one after another through proxies ----------------------
+
+local EXAMPLES = { "slimes", "candle", "events" }
+
+-- Waits `n` frames' worth of game time (at 60 a second), however fast the engine runs.
+local function frames(n)
+	local co = coroutine.running()
+	local self = _G.__sb_test_self
+	self.waiting = { co = co, left = n / 60 }
+	coroutine.yield()
+end
+
+local function check_slimes()
+	local a = spritebuddy.get("slimes:/slime_a")
+	local b = spritebuddy.get("slimes:/slime_b")
+	expect(a and a:animation_name() == "idle", "the first placed slime idles")
+	expect(b and b:animation_name() == "party", "the second placed slime parties")
+	expect(shared.slimes.count == 3, "the example has 3 slimes, got " .. tostring(shared.slimes.count))
+	msg.post("slimes:/controller#slimes", "jump_all")
+	frames(2)
+	expect(a:animation_name() == "jump" and b:animation_name() == "jump", "space makes every slime jump")
+	frames(90)
+	expect(a:animation_name() == "idle" and b:animation_name() == "party", "each goes back to its own animation, got " .. a:animation_name() .. " and " .. b:animation_name())
+end
+
+local function check_candle()
+	local slime = spritebuddy.get("candle:/slime")
+	local candle = spritebuddy.get("candle:/candle")
+	expect(slime and slime.lit, "the slime is lit through its normal map")
+	expect(candle and not candle.lit, "the candle is drawn unlit")
+	expect(candle and candle:animation_name() == "candle", "the candle burns")
+	local x = shared.candle.slime_x
+	msg.post("candle:/controller#candle", "hold", { key = "right", down = true })
+	frames(20)
+	expect(shared.candle.slime_x > x and slime:animation_name() == "walk", "right walks the slime right")
+	expect(slime.flip_x == false, "walking right faces right")
+	msg.post("candle:/controller#candle", "hold", { key = "right", down = false })
+	msg.post("candle:/controller#candle", "hold", { key = "left", down = true })
+	frames(5)
+	expect(slime.flip_x == true, "walking left flips the slime")
+	msg.post("candle:/controller#candle", "hold", { key = "left", down = false })
+	frames(3)
+	expect(slime:animation_name() == "idle", "letting go idles")
+	expect(spritebuddy.light.radius > 0 and spritebuddy.light.x > 0, "the candle sets the light")
+end
+
+local function check_events()
+	frames(80)
+	local heard = shared.events.squelches
+	expect(heard >= 2, "walking fires squelch events that play a sound, got " .. heard)
+	msg.post("events:/controller#events", "jump")
+	frames(90)
+	expect(shared.events.lands == 1, "a jump lands once, got " .. shared.events.lands)
+end
+
+local CHECKS = { slimes = check_slimes, candle = check_candle, events = check_events }
+
+local function run(self)
+	local dir = sys.get_config_string("spritebuddy.fixtures", "../fixtures")
+	local names = {}
+	for _, n in ipairs({ "basic", "events", "layers", "loops", "normals", "packed" }) do
+		names[#names + 1] = n .. ".anims.json"
+	end
+	for _, n in ipairs(names) do
+		check_fixture(dir, n)
+	end
+	check_errors()
+	check_lookups()
+	check_player_callbacks(dir)
+	check_sprites()
+	for _, name in ipairs(EXAMPLES) do
+		local proxy = msg.url("#" .. name)
+		msg.post(proxy, "async_load")
+		self.loading = coroutine.running()
+		coroutine.yield()
+		frames(3)
+		CHECKS[name]()
+		msg.post(proxy, "unload")
+		self.loading = coroutine.running()
+		coroutine.yield()
+	end
+	print(("%d checks, %d failures"):format(checks, failures))
+	sys.exit(failures > 0 and 1 or 0)
+end
+
+function init(self)
+	_G.__sb_test_self = self
+	self.co = coroutine.create(function()
+		local ok, err = pcall(run, self)
+		if not ok then
+			print("FAIL: the tests stopped: " .. tostring(err))
+			sys.exit(1)
+		end
+	end)
+	local ok, err = coroutine.resume(self.co)
+	if not ok then
+		print(err)
+		sys.exit(1)
+	end
+end
+
+function update(self, dt)
+	local w = self.waiting
+	if w then
+		w.left = w.left - dt
+		if w.left <= 0 then
+			self.waiting = nil
+			coroutine.resume(w.co)
+		end
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("proxy_loaded") then
+		msg.post(sender, "enable")
+		local co = self.loading
+		self.loading = nil
+		coroutine.resume(co)
+	elseif message_id == hash("proxy_unloaded") then
+		local co = self.loading
+		self.loading = nil
+		coroutine.resume(co)
+	end
+end

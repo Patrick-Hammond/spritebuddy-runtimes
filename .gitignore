@@ -7,3 +7,5 @@ packages/*/schema.json
 godot/**/*.uid
 godot/**/*.import
 site
+defold/build
+defold/.internal
