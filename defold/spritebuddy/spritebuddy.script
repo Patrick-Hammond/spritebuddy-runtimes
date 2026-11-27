@@ -1,0 +1,119 @@
+-- Plays a SpriteBuddy animation on this game object: its position is where the character stands
+-- (the frame's pivot). Put it in a game object made from spritebuddy/spritebuddy.go, which has
+-- the factories it draws with.
+--
+-- Messages it takes:
+--   play { animation = "walk", from = 0 }   stop {}   seek { ms = 250 }
+--   flip { x = true, y = false }             speed { speed = 2 }   listen {}
+-- Messages it sends to the listener (whoever last sent `play` or `listen`, else this game
+-- object), in this order:
+--   frame_changed { index }   frame_event { name = hash("hit"), event = "hit", index }
+--   animation_finished { animation = hash("jump") }
+-- Or call it directly: require("spritebuddy.spritebuddy").get("/hero"):play("attack").
+
+local spritebuddy = require "spritebuddy.spritebuddy"
+
+-- The runtime file to play, by its name ("knight" for /art/knight.anims.json) or path without
+-- the leading slash. List the file under [spritebuddy] files in game.project.
+go.property("sheet", hash(""))
+go.property("animation", hash(""))
+go.property("autoplay", true)
+go.property("speed", 1)
+go.property("flip_x", false)
+go.property("flip_y", false)
+-- Light the sprite with its normal map and spritebuddy.light (needs a file with a normal map).
+go.property("lit", false)
+
+local PLAY = hash("play")
+local STOP = hash("stop")
+local SEEK = hash("seek")
+local FLIP = hash("flip")
+local SPEED = hash("speed")
+local LISTEN = hash("listen")
+
+local function notify(self, message_id, message)
+	msg.post(self.listener or ".", message_id, message)
+end
+
+function init(self)
+	self.listener = nil
+	self.id = go.get_id()
+	if self.sheet == hash("") then
+		print("SpriteBuddy: set the sheet property of " .. tostring(msg.url()) .. " to a runtime file's name")
+		return
+	end
+	-- A hash can't be turned back into text, so the file is found among the .anims.json files
+	-- game.project lists (see spritebuddy.path_of).
+	local path = spritebuddy.path_of(self.sheet)
+	if not path then
+		print("SpriteBuddy: " .. tostring(self.sheet) .. " isn't listed in game.project; add its path to files under [spritebuddy], or call spritebuddy.add_path() first")
+		return
+	end
+	local sheet, err = spritebuddy.load(path)
+	if not sheet then
+		print("SpriteBuddy: " .. err)
+		return
+	end
+	self.player = spritebuddy.player(sheet, {
+		lit = self.lit,
+		on_frame = function(index)
+			notify(self, "frame_changed", { index = index })
+		end,
+		on_event = function(name, index)
+			notify(self, "frame_event", { name = hash(name), event = name, index = index })
+		end,
+		on_done = function(name)
+			notify(self, "animation_finished", { animation = hash(name) })
+		end,
+	})
+	self.player.speed = self.speed
+	self.player:set_flip(self.flip_x, self.flip_y)
+	spritebuddy.register(self.id, self.player)
+	if self.autoplay then
+		local name = spritebuddy.name_of(sheet, self.animation)
+		if not name and sheet.file.animations[1] then
+			name = sheet.file.animations[1].name
+		end
+		if name then
+			self.player:play(name)
+		end
+	end
+end
+
+function update(self, dt)
+	if self.player then
+		self.player:update(dt)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	local player = self.player
+	if not player then
+		return
+	end
+	if message_id == PLAY then
+		self.listener = sender
+		local name = message.animation
+		if type(name) ~= "string" then
+			name = spritebuddy.name_of(player.sheet, name)
+		end
+		player:play(name, message.from)
+	elseif message_id == STOP then
+		player:stop()
+	elseif message_id == SEEK then
+		player:seek(message.ms or 0)
+	elseif message_id == FLIP then
+		player:set_flip(message.x, message.y)
+	elseif message_id == SPEED then
+		player.speed = message.speed or 1
+	elseif message_id == LISTEN then
+		self.listener = sender
+	end
+end
+
+function final(self)
+	if self.player then
+		spritebuddy.register(self.id, nil)
+		self.player:delete()
+	end
+end

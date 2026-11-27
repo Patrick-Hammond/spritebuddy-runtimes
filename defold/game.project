@@ -1,0 +1,26 @@
+[project]
+title = SpriteBuddy for Defold
+version = 0.1.0
+custom_resources = /examples/art
+
+[library]
+include_dirs = spritebuddy
+
+[bootstrap]
+main_collection = /examples/main.collectionc
+
+[input]
+game_binding = /examples/input/game.input_bindingc
+
+[display]
+width = 960
+height = 540
+high_dpi = 0
+
+[graphics]
+default_texture_min_filter = nearest
+default_texture_mag_filter = nearest
+
+[spritebuddy]
+files = /examples/art/slime.anims.json
+fixtures = ../fixtures

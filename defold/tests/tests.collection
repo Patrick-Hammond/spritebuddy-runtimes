@@ -1,0 +1,45 @@
+name: "tests"
+scale_along_z: 0
+embedded_instances {
+  id: "tests"
+  data: "components {\n"
+  "  id: \"tests\"\n"
+  "  component: \"/tests/tests.script\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"part_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/spritebuddy/part.go\\\"\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"lit_part_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/spritebuddy/lit_part.go\\\"\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"slimes\"\n"
+  "  type: \"collectionproxy\"\n"
+  "  data: \"collection: \\\"/examples/slimes.collection\\\"\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"candle\"\n"
+  "  type: \"collectionproxy\"\n"
+  "  data: \"collection: \\\"/examples/candle.collection\\\"\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"events\"\n"
+  "  type: \"collectionproxy\"\n"
+  "  data: \"collection: \\\"/examples/events.collection\\\"\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  ""
+  position {
+    x: 0
+    y: 0
+    z: 0
+  }
+}
