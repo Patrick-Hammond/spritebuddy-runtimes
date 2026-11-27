@@ -35,6 +35,36 @@ describe('example assets', () => {
     }
   });
 
+  it('have frame events in the sounds file, which is otherwise the same slime', () => {
+    const sounds = JSON.parse(read('examples/assets/slime_sounds.anims.json').toString('utf8'));
+    const schema = JSON.parse(read('schema/spritebuddy-animations.v3.schema.json').toString());
+    const validate = new Ajv2020({ strict: true, allErrors: true }).compile(schema);
+    expect(validate(sounds) ? null : validate.errors).toBeNull();
+    expect([sounds.image, sounds.size, sounds.frames]).toEqual([
+      json.image,
+      json.size,
+      json.frames,
+    ]);
+    const file = parseFile(sounds);
+    expect(file.animations.map((a) => a.name)).toEqual(['idle', 'jump']);
+    const jump = file.animations[1]!;
+    const original = parseFile(json).animations.find((a) => a.name === 'jump')!;
+    expect(jump.frames.map(({ events, ...rest }) => rest)).toEqual(
+      // eslint-disable-line @typescript-eslint/no-unused-vars
+      original.frames.map(({ events, ...rest }) => rest), // eslint-disable-line @typescript-eslint/no-unused-vars
+    );
+    expect(jump.frames.flatMap((f) => f.events)).toEqual(['jump', 'land']);
+  });
+
+  it('include the sounds, the same for the browser and Godot', () => {
+    for (const name of ['jump.wav', 'land.wav']) {
+      const wav = read(`examples/assets/sounds/${name}`);
+      expect(wav.subarray(0, 4).toString('latin1'), name).toBe('RIFF');
+      expect(wav.subarray(8, 12).toString('latin1'), name).toBe('WAVE');
+      expect(wav.equals(read(`godot/examples/sounds/${name}`)), name).toBe(true);
+    }
+  });
+
   it('are the same in the Godot lighting example', () => {
     for (const name of ['slime.png', 'slime_n.png', 'slime.anims.json']) {
       const copy = read(`godot/examples/art/lit/${name}`);
@@ -81,6 +111,7 @@ describe('browser examples', () => {
     '.css': 'text/css',
     '.json': 'application/json',
     '.png': 'image/png',
+    '.wav': 'audio/wav',
   };
   /** The packages' builds, made from source so the test needs no `npm run build`. */
   const builds = new Map<string, string>();
@@ -278,6 +309,43 @@ describe('browser examples', () => {
     await page.close();
   }, 60_000);
 
+  for (const engine of ['canvas', 'pixi', 'phaser']) {
+    it(`the ${engine} sounds example plays a sound on each of the jump's frame events`, async () => {
+      const { page, errors } = await open(`${engine}/sounds`);
+      // Counts each sound started, whichever way the engine plays it.
+      await page.evaluate(() => {
+        (window as any).started = 0; // eslint-disable-line @typescript-eslint/no-explicit-any
+        const start = AudioBufferSourceNode.prototype.start;
+        AudioBufferSourceNode.prototype.start = function (...args) {
+          (window as any).started++; // eslint-disable-line @typescript-eslint/no-explicit-any
+          return start.apply(this, args);
+        };
+      });
+      await expect.poll(() => greenPixels(page, '#stage canvas')).toBeGreaterThan(300);
+      const heard = () => page.evaluate(() => (window as any).soundsExample.heard); // eslint-disable-line @typescript-eslint/no-explicit-any
+      expect(await heard()).toEqual([]);
+      const canvas = (await page.locator('#stage canvas').boundingBox())!;
+      // The slime stands at (240, 200), about 14 × 11 pixels drawn at 6×.
+      await page.mouse.click(canvas.x + 240, canvas.y + 200 - 30);
+      await expect.poll(heard).toEqual(['jump', 'land']);
+      expect(await page.textContent('#status')).toBe('♪ land');
+      expect(await page.evaluate(() => (window as any).started)).toBe(2); // eslint-disable-line @typescript-eslint/no-explicit-any
+      // Space jumps too, and the slime idles between jumps.
+      await expect
+        .poll(() =>
+          page.evaluate(() => {
+            const { slime, player } = (window as any).soundsExample; // eslint-disable-line @typescript-eslint/no-explicit-any
+            return slime ? slime.animation : player.state.animation.name;
+          }),
+        )
+        .toBe('idle');
+      await page.keyboard.press('Space');
+      await expect.poll(heard).toEqual(['jump', 'land', 'jump', 'land']);
+      expect(errors).toEqual([]);
+      await page.close();
+    }, 60_000);
+  }
+
   it('the Phaser example draws three slimes, and one jumps when clicked', async () => {
     const { page, errors } = await open('phaser/sprites');
     await expect.poll(() => greenPixels(page, '#stage canvas')).toBeGreaterThan(1500);
@@ -405,10 +473,21 @@ describe('browser examples', () => {
     await expect
       .poll(() => page.locator('#list a:visible').allTextContents())
       .toEqual(['Lighting stress test', 'Lighting stress test']);
+    await page.locator('#filter').fill('sound');
+    await expect
+      .poll(() => page.locator('#list a:visible').allTextContents())
+      .toEqual([
+        'Sounds on frame events',
+        'Sounds on frame events',
+        'Sounds on frame events',
+        'Slime, candle and sound scenes',
+        'Slime, candle and sound scenes',
+        'Slime, candle and sound scenes',
+      ]);
     await page.locator('#filter').fill('');
 
     // Godot runs in its own editor, so its entry links to the scenes instead.
-    await page.locator('#list a', { hasText: 'Slime and candle scenes' }).click();
+    await page.locator('#list a[data-id="godot/scenes"]').click();
     await expect.poll(() => page.locator('#external-link').isVisible()).toBe(true);
     expect(await page.locator('#external-link').getAttribute('href')).toMatch(/godot\/examples$/);
     expect(await page.locator('#workspace').isHidden()).toBe(true);

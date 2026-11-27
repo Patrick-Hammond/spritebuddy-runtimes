@@ -49,6 +49,10 @@ from the side the flame is on, under a `CanvasModulate` that darkens the room. T
 unshaded `CanvasItemMaterial` and `use_normals = false`, because it makes the light. The arrow
 keys move the slime and Space makes it jump.
 
+`examples/sounds_demo.tscn` (open it and press F6) plays a sound on a frame event: the hop has
+the event `jump` on its take-off frame and `land` on its landing frame, and the scene connects
+`frame_event` to the `AudioStreamPlayer` of the same name. Click the slime, or press Space.
+
 ## Tests
 
 ```sh

@@ -18,19 +18,22 @@ The examples are a **playground**, like PixiJS's: a list of examples down the si
 one's code in an editor, and the example running beside it. Edit the code and it runs again
 (or press Ctrl+Enter); Reset puts it back.
 
-| Example                                                    | Uses                  | Shows                                                                                              |
-| ---------------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------- |
-| [canvas/drawing](src/canvas/drawing.js)                    | `@spritebuddy/core`   | The whole drawing rule by hand on a 2D canvas                                                      |
-| [pixi/sprites](src/pixi/sprites.js)                        | `@spritebuddy/pixi`   | Sprites in PixiJS 8, a live-layer hat, clicking to play a jump                                     |
-| [pixi/lighting](src/pixi/lighting.js)                      | `@spritebuddy/pixi`   | A candle's point light lighting a slime you move with the cursor keys                              |
-| [pixi/stress](src/pixi/stress.js)                          | `@spritebuddy/pixi`   | A lighting stress test: sliders for lights and lit slimes, and a frames-per-second readout         |
-| [phaser/sprites](src/phaser/sprites.js)                    | `@spritebuddy/phaser` | Sprites in Phaser 4 made with `this.add.spritebuddy`, clicking to play a jump                      |
-| [phaser/lighting](src/phaser/lighting.js)                  | `@spritebuddy/phaser` | The candle lighting with Phaser's own lights                                                       |
-| [phaser/stress](src/phaser/stress.js)                      | `@spritebuddy/phaser` | The same stress test with Phaser's lights (up to 64 at once)                                       |
-| [godot/examples](../godot/examples) (linked, not run here) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime    |
-| [cocos](cocos) (linked, not run here)                      | `@spritebuddy/cocos`  | Three slimes, a candle-lit slime, and sounds played by frame events, in Cocos Creator 3.8          |
-| [defold/examples](../defold/examples) (linked)             | the Defold library    | Slimes placed and made by a factory, a candle's point light, frame events playing sounds           |
-| [unity/examples](../unity/examples) (linked, not run here) | the Unity package     | Sprites placed in a scene and made in code; a candle's Point Light 2D; frame events playing sounds |
+| Example                                                    | Uses                  | Shows                                                                                                                   |
+| ---------------------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [canvas/drawing](src/canvas/drawing.js)                    | `@spritebuddy/core`   | The whole drawing rule by hand on a 2D canvas                                                                           |
+| [canvas/sounds](src/canvas/sounds.js)                      | `@spritebuddy/core`   | Frame events with the core Player's `onEvent`, each playing a sound (Web Audio)                                         |
+| [pixi/sprites](src/pixi/sprites.js)                        | `@spritebuddy/pixi`   | Sprites in PixiJS 8, a live-layer hat, clicking to play a jump                                                          |
+| [pixi/sounds](src/pixi/sounds.js)                          | `@spritebuddy/pixi`   | Frame events: the jump's "jump" and "land" events each play a sound (Web Audio)                                         |
+| [pixi/lighting](src/pixi/lighting.js)                      | `@spritebuddy/pixi`   | A candle's point light lighting a slime you move with the cursor keys                                                   |
+| [pixi/stress](src/pixi/stress.js)                          | `@spritebuddy/pixi`   | A lighting stress test: sliders for lights and lit slimes, and a frames-per-second readout                              |
+| [phaser/sprites](src/phaser/sprites.js)                    | `@spritebuddy/phaser` | Sprites in Phaser 4 made with `this.add.spritebuddy`, clicking to play a jump                                           |
+| [phaser/sounds](src/phaser/sounds.js)                      | `@spritebuddy/phaser` | The same frame events playing sounds with Phaser's `this.sound`                                                         |
+| [phaser/lighting](src/phaser/lighting.js)                  | `@spritebuddy/phaser` | The candle lighting with Phaser's own lights                                                                            |
+| [phaser/stress](src/phaser/stress.js)                      | `@spritebuddy/phaser` | The same stress test with Phaser's lights (up to 64 at once)                                                            |
+| [godot/examples](../godot/examples) (linked, not run here) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime; sounds on frame events |
+| [cocos](cocos) (linked, not run here)                      | `@spritebuddy/cocos`  | Three slimes, a candle-lit slime, and sounds played by frame events, in Cocos Creator 3.8                               |
+| [defold/examples](../defold/examples) (linked)             | the Defold library    | Slimes placed and made by a factory, a candle's point light, frame events playing sounds                                |
+| [unity/examples](../unity/examples) (linked, not run here) | the Unity package     | Sprites placed in a scene and made in code; a candle's Point Light 2D; frame events playing sounds                      |
 
 ## How it fits together
 
@@ -58,7 +61,8 @@ workflow does this and publishes it to GitHub Pages when started by hand.
 ## Running the Godot example
 
 Open the `godot` folder in Godot 4.3 or newer and press Run for the slime demo. For the lighting
-demo, open `examples/candle_demo.tscn` and press F6 (Run Current Scene).
+demo, open `examples/candle_demo.tscn` and press F6 (Run Current Scene); for sounds on frame
+events, `examples/sounds_demo.tscn`.
 
 ## Running the Cocos Creator example
 
@@ -86,6 +90,12 @@ can only load files inside its own project, and the Unity examples one in
 by [`scripts/example-assets.mjs`](../scripts/example-assets.mjs); `npm run examples:assets`
 redraws it.
 
+`slime_sounds.anims.json` is the same slime with **frame events** on its jump (`jump` on
+take-off, `land` on landing), for the sounds examples. The sounds themselves (`sounds/jump.wav`
+and `land.wav`, with copies in `godot/examples/sounds/`) are made in code by
+[`scripts/example-sounds.mjs`](../scripts/example-sounds.mjs), so they are free to use;
+`npm run examples:sounds` remakes them.
+
 `examples.test.ts` keeps everything here working: it checks the assets against the schema and
 drives every example and the playground (picking, editing, resetting) in Chromium, including
-moving the lit slime around the candle. The Godot test run loads both example scenes.
+moving the lit slime around the candle. The Godot test run loads all three example scenes.

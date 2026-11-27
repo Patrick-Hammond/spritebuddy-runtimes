@@ -11,6 +11,12 @@ export const groups = [
         title: 'Drawing by hand',
         about: 'No engine at all: the core package says what to draw and where, the page draws it.',
       },
+      {
+        id: 'canvas/sounds',
+        title: 'Sounds on frame events',
+        about:
+          'The Player\'s onEvent hears the jump\'s frame events, "jump" on take-off and "land" on landing, and each plays a sound. Click the slime or press Space.',
+      },
     ],
   },
   {
@@ -22,6 +28,12 @@ export const groups = [
         title: 'Sprites and clicks',
         about:
           'Three slimes from one sheet, one wearing a live-layer hat. Click one to make it jump.',
+      },
+      {
+        id: 'pixi/sounds',
+        title: 'Sounds on frame events',
+        about:
+          'The jump has frame events, "jump" on take-off and "land" on landing, and each plays a sound. Click the slime or press Space.',
       },
       {
         id: 'pixi/lighting',
@@ -47,6 +59,12 @@ export const groups = [
         about: 'Three slimes made with this.add.spritebuddy. Click one to make it jump.',
       },
       {
+        id: 'phaser/sounds',
+        title: 'Sounds on frame events',
+        about:
+          'The jump has frame events, "jump" on take-off and "land" on landing, and each plays a sound with this.sound. Click the slime or press Space.',
+      },
+      {
         id: 'phaser/lighting',
         title: 'Candle lighting',
         about:
@@ -66,7 +84,7 @@ export const groups = [
     examples: [
       {
         id: 'godot/scenes',
-        title: 'Slime and candle scenes',
+        title: 'Slime, candle and sound scenes',
         about:
           'The Godot examples are scenes in an editor project, so they run in Godot rather than here.',
         link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/godot/examples',
