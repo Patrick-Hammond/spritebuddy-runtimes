@@ -11,6 +11,12 @@ export const groups = [
         title: 'Drawing by hand',
         about: 'No engine at all: the core package says what to draw and where, the page draws it.',
       },
+      {
+        id: 'canvas/sounds',
+        title: 'Sounds on frame events',
+        about:
+          'The Player\'s onEvent hears the jump\'s frame events, "jump" on take-off and "land" on landing, and each plays a sound. Click the slime or press Space.',
+      },
     ],
   },
   {
@@ -108,6 +114,19 @@ export const groups = [
         about:
           'The Defold examples are collections in an editor project, so they run in Defold rather than here.',
         link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/defold/examples',
+      },
+    ],
+  },
+  {
+    name: 'Unity 6',
+    uses: 'the Unity package',
+    examples: [
+      {
+        id: 'unity/scenes',
+        title: 'Slime, candle and sound scenes',
+        about:
+          'The Unity examples are scenes in an editor project (slimes, a candle-lit slime, and frame events playing sounds), so they run in Unity rather than here.',
+        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/unity/examples',
       },
     ],
   },

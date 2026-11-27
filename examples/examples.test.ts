@@ -309,7 +309,7 @@ describe('browser examples', () => {
     await page.close();
   }, 60_000);
 
-  for (const engine of ['pixi', 'phaser']) {
+  for (const engine of ['canvas', 'pixi', 'phaser']) {
     it(`the ${engine} sounds example plays a sound on each of the jump's frame events`, async () => {
       const { page, errors } = await open(`${engine}/sounds`);
       // Counts each sound started, whichever way the engine plays it.
@@ -332,7 +332,12 @@ describe('browser examples', () => {
       expect(await page.evaluate(() => (window as any).started)).toBe(2); // eslint-disable-line @typescript-eslint/no-explicit-any
       // Space jumps too, and the slime idles between jumps.
       await expect
-        .poll(() => page.evaluate(() => (window as any).soundsExample.slime.animation)) // eslint-disable-line @typescript-eslint/no-explicit-any
+        .poll(() =>
+          page.evaluate(() => {
+            const { slime, player } = (window as any).soundsExample; // eslint-disable-line @typescript-eslint/no-explicit-any
+            return slime ? slime.animation : player.state.animation.name;
+          }),
+        )
         .toBe('idle');
       await page.keyboard.press('Space');
       await expect.poll(heard).toEqual(['jump', 'land', 'jump', 'land']);
@@ -474,6 +479,8 @@ describe('browser examples', () => {
       .toEqual([
         'Sounds on frame events',
         'Sounds on frame events',
+        'Sounds on frame events',
+        'Slime, candle and sound scenes',
         'Slime, candle and sound scenes',
         'Slime, candle and sound scenes',
       ]);
@@ -484,6 +491,11 @@ describe('browser examples', () => {
     await expect.poll(() => page.locator('#external-link').isVisible()).toBe(true);
     expect(await page.locator('#external-link').getAttribute('href')).toMatch(/godot\/examples$/);
     expect(await page.locator('#workspace').isHidden()).toBe(true);
+    // And so does Unity.
+    await page.locator('#list a[data-id="unity/scenes"]').click();
+    await expect
+      .poll(() => page.locator('#external-link').getAttribute('href'))
+      .toMatch(/unity\/examples$/);
     // The mistake typed above. (A run cut short by the next one can add an error of its own.)
     expect(errors).toContain('Oops');
     await page.close();

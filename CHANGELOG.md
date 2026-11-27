@@ -20,6 +20,14 @@ All runtimes share one version while they are below 1.0.
   release** workflow builds one). The Defold example project shows three slimes, a candle
   lighting a slime and frame events playing sounds; its tests run the shared fixtures in the
   engine, and CI runs them when started by hand.
+- Defold: a sheet is made again when the collection that loaded it has been unloaded (Defold frees
+  the textures a collection's scripts made), so switching examples no longer fails with
+  `go.set failed with error code -10` and invisible sprites.
+- New runtime for Unity 6, `com.spritebuddy.runtime` 0.1.0, a UPM package installed by git URL
+  (`unity/com.spritebuddy.runtime`). The **SpriteBuddy Sprite** component plays a runtime file
+  with per-frame timing, loop modes, offsets, live layers, rotated and trimmed frames, and frame
+  events, and hands the normal map to URP's 2D lights. Examples: a Unity 6 project in
+  `unity/examples` with slimes, a candle lighting a slime, and frame events playing sounds.
 
 - Examples: the browser examples are now a playground, like PixiJS's: a list of examples down
   the side, the chosen one's code in an editor (CodeMirror), and the example running beside it.
@@ -28,7 +36,7 @@ All runtimes share one version while they are below 1.0.
   `npm run examples:site` builds the playground into `site/` for static hosting.
 - Examples: a lighting stress test for PixiJS and Phaser, with sliders for the number of moving
   point lights and lit slimes and a frames-per-second readout.
-- Examples: sounds on frame events for PixiJS, Phaser and Godot 4. The slime's jump has the
+- Examples: sounds on frame events for the plain canvas (core), PixiJS, Phaser and Godot 4. The slime's jump has the
   events `jump` and `land`, and each plays a small sound made by `npm run examples:sounds`.
 
 - New runtime, `@spritebuddy/phaser`, for Phaser 3.60+ and Phaser 4: `this.load.spritebuddy(key,

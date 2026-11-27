@@ -1,0 +1,22 @@
+{
+  "name": "com.spritebuddy.runtime",
+  "displayName": "SpriteBuddy",
+  "version": "0.1.0",
+  "unity": "6000.0",
+  "description": "Plays animations exported from SpriteBuddy: per-frame timing, loop, ping-pong and play-once modes, frame offsets, live layers, frame events, and normal maps for URP 2D lights.",
+  "keywords": [
+    "sprite",
+    "spritesheet",
+    "animation",
+    "pixel art",
+    "2d"
+  ],
+  "license": "ISC",
+  "author": {
+    "name": "SpriteBuddy",
+    "url": "https://github.com/Patrick-Hammond/spritebuddy-runtimes"
+  },
+  "documentationUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/unity",
+  "changelogUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/blob/main/unity/com.spritebuddy.runtime/CHANGELOG.md",
+  "licensesUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/blob/main/LICENSE"
+}

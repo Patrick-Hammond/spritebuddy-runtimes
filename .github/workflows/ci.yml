@@ -59,3 +59,15 @@ jobs:
       - name: Run the library tests in the engine
         working-directory: defold
         run: LD_LIBRARY_PATH=../engine xvfb-run -a ../engine/dmengine build/tests/game.projectc
+
+  unity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Test the C# core against the fixtures
+        run: dotnet run --project unity/tests/Core
+      - name: Compile the package and examples against Unity's API
+        run: dotnet build unity/tests/Compile

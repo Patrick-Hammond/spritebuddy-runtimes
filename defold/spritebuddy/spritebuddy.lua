@@ -69,6 +69,13 @@ local function make_texture(path, bytes, premultiply)
 	return id, img.width, img.height
 end
 
+-- Defold frees the textures and atlases a script made when that script's collection is unloaded
+-- (a level loaded through a collection proxy, say), so a sheet a later collection asks for may
+-- have to be made again.
+local function alive(sheet)
+	return sheet ~= nil and pcall(resource.get_atlas, sheet.atlas_path)
+end
+
 -- One atlas animation per frame, each a single quad whose pivot is the frame's pivot, so a
 -- sprite showing it hangs from the game object's position. Trimmed frames get the quad of their
 -- trimmed pixels with the pivot moved to match; rotated frames are marked rotated.
@@ -113,7 +120,7 @@ end
 --- optional normal map. `key` names the sheet's textures; loading the same key again returns
 --- the sheet already made. Returns the sheet, or nil and an error.
 function M.load_data(key, json_text, image_bytes, normal_bytes)
-	if sheets[key] then
+	if alive(sheets[key]) then
 		return sheets[key]
 	end
 	local ok, data = pcall(json.decode, json_text)
@@ -137,6 +144,7 @@ function M.load_data(key, json_text, image_bytes, normal_bytes)
 		key = key,
 		file = file,
 		texture = texture,
+		atlas_path = base .. ".texturesetc",
 		atlas = resource.create_atlas(base .. ".texturesetc", atlas_params(file, base .. ".texturec")),
 	}
 	if normal_bytes then
@@ -156,9 +164,11 @@ end
 
 --- Loads a runtime file and the sheet image beside it (and its normal map, when it names one)
 --- with sys.load_resource, so list their folder in game.project's custom_resources. Returns the
---- sheet, or nil and an error. Loading the same path again returns the same sheet.
+--- sheet, or nil and an error. Loading the same path again returns the same sheet, unless the
+--- collection that loaded it has been unloaded since: Defold frees what a collection's scripts
+--- made, so the sheet is made again.
 function M.load(path)
-	if sheets[path] then
+	if alive(sheets[path]) then
 		return sheets[path]
 	end
 	local text = sys.load_resource(path)
