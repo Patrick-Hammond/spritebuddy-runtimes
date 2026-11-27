@@ -90,7 +90,7 @@ describe('published packages', () => {
   // Node and browsers resolve ES modules without guessing extensions, so `./types` would only
   // work through a bundler. Built files must import `./types.js`.
   it('import their own files with a .js extension', () => {
-    for (const pkg of ['core', 'pixi', 'phaser']) {
+    for (const pkg of ['core', 'pixi', 'phaser', 'cocos']) {
       const dir = join(ROOT, 'packages', pkg, 'src');
       for (const name of readdirSync(dir).filter((f) => /(?<!\.test)\.ts$/.test(f))) {
         const source = readFileSync(join(dir, name), 'utf8');
@@ -475,11 +475,12 @@ describe('browser examples', () => {
         'Sounds on frame events',
         'Sounds on frame events',
         'Slime, candle and sound scenes',
+        'Slime, candle and sound scenes',
       ]);
     await page.locator('#filter').fill('');
 
     // Godot runs in its own editor, so its entry links to the scenes instead.
-    await page.locator('#list a', { hasText: 'Slime, candle and sound scenes' }).click();
+    await page.locator('#list a[data-id="godot/scenes"]').click();
     await expect.poll(() => page.locator('#external-link').isVisible()).toBe(true);
     expect(await page.locator('#external-link').getAttribute('href')).toMatch(/godot\/examples$/);
     expect(await page.locator('#workspace').isHidden()).toBe(true);

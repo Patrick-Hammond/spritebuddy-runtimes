@@ -30,6 +30,7 @@ one's code in an editor, and the example running beside it. Edit the code and it
 | [phaser/lighting](src/phaser/lighting.js)                  | `@spritebuddy/phaser` | The candle lighting with Phaser's own lights                                                                            |
 | [phaser/stress](src/phaser/stress.js)                      | `@spritebuddy/phaser` | The same stress test with Phaser's lights (up to 64 at once)                                                            |
 | [godot/examples](../godot/examples) (linked, not run here) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime; sounds on frame events |
+| [cocos](cocos) (linked, not run here)                      | `@spritebuddy/cocos`  | Three slimes, a candle-lit slime, and sounds played by frame events, in Cocos Creator 3.8                               |
 
 ## How it fits together
 
@@ -59,6 +60,12 @@ workflow does this and publishes it to GitHub Pages when started by hand.
 Open the `godot` folder in Godot 4.3 or newer and press Run for the slime demo. For the lighting
 demo, open `examples/candle_demo.tscn` and press F6 (Run Current Scene); for sounds on frame
 events, `examples/sounds_demo.tscn`.
+
+## Running the Cocos Creator example
+
+See [cocos/README.md](cocos/README.md): `npm install` and `npm run build` here, `npm install` in
+`examples/cocos`, then open that folder in Cocos Creator 3.8 and play a scene from
+`assets/scenes`.
 
 ## The assets
 
