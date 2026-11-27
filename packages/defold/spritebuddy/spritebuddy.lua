@@ -9,7 +9,7 @@
 --   -- and in update(): self.knight:update(dt)
 --
 -- Most games use the `spritebuddy.go` game object instead, which wraps a player in a script
--- with properties and messages. See defold/README.md.
+-- with properties and messages. See packages/defold/README.md.
 
 local core = require "spritebuddy.core"
 

@@ -28,6 +28,6 @@ jobs:
           VERSION: ${{ inputs.version }}
         run: |
           url="https://github.com/$GITHUB_REPOSITORY/releases/download/defold-v$VERSION/spritebuddy-defold-$VERSION.zip"
-          printf 'Add this to your game.project under Project > Dependencies, then Project > Fetch Libraries:\n\n%s\n\nSee defold/README.md for how to use it.\n' "$url" > notes.md
+          printf 'Add this to your game.project under Project > Dependencies, then Project > Fetch Libraries:\n\n%s\n\nSee packages/defold/README.md for how to use it.\n' "$url" > notes.md
           gh release create "defold-v$VERSION" "dist/spritebuddy-defold-$VERSION.zip" \
             --target "$GITHUB_SHA" --title "SpriteBuddy for Defold $VERSION" --notes-file notes.md

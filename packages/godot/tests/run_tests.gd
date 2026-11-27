@@ -8,7 +8,7 @@ var checks := 0
 
 
 func _initialize() -> void:
-	var fixtures := ProjectSettings.globalize_path("res://").path_join("../fixtures").simplify_path()
+	var fixtures := ProjectSettings.globalize_path("res://").path_join("../../fixtures").simplify_path()
 	var dir := DirAccess.open(fixtures)
 	if dir == null:
 		_fail("can't open %s" % fixtures)

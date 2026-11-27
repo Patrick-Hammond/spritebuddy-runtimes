@@ -141,7 +141,7 @@ frame events added.
 
 ## Tests
 
-The tests run in the engine: `tests/tests.collection` checks every fixture in `../fixtures`
+The tests run in the engine: `tests/tests.collection` checks every fixture in `../../fixtures`
 against its golden table, the file checks, the players' sprites, flips, lighting and callbacks,
 and loads each example collection. With Defold's `bob.jar` (it needs Java 25; the editor ships
 one in `packages/`) and the `dmengine` it contains:

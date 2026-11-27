@@ -1,7 +1,7 @@
 # SpriteBuddy for Unity 6
 
 Plays [SpriteBuddy](https://github.com/Patrick-Hammond/spritebuddy) runtime files (`.anims.json`,
-[format](../docs/format.md)) in Unity 6, with per-frame timing, loop modes, frame offsets, live
+[format](../../docs/format.md)) in Unity 6, with per-frame timing, loop modes, frame offsets, live
 layers, frame events, and normal maps for URP's 2D lights.
 
 - [`com.spritebuddy.runtime`](com.spritebuddy.runtime): the package.
@@ -14,13 +14,13 @@ In Unity, open **Window → Package Manager**, click **+ → Install package fro
 paste:
 
 ```
-https://github.com/Patrick-Hammond/spritebuddy-runtimes.git?path=/unity/com.spritebuddy.runtime
+https://github.com/Patrick-Hammond/spritebuddy-runtimes.git?path=/packages/unity/com.spritebuddy.runtime
 ```
 
 Or add it to `Packages/manifest.json`:
 
 ```json
-"com.spritebuddy.runtime": "https://github.com/Patrick-Hammond/spritebuddy-runtimes.git?path=/unity/com.spritebuddy.runtime"
+"com.spritebuddy.runtime": "https://github.com/Patrick-Hammond/spritebuddy-runtimes.git?path=/packages/unity/com.spritebuddy.runtime"
 ```
 
 Add `#<tag or commit>` to the URL to pin a version.
@@ -97,13 +97,13 @@ so changes to the package show up straight away.
 ## Tests
 
 ```sh
-dotnet run --project unity/tests/Core      # the C# core against the golden tables in fixtures/
-dotnet build unity/tests/Compile           # the package and examples against Unity's API
+dotnet run --project packages/unity/tests/Core      # the C# core against the golden tables in fixtures/
+dotnet build packages/unity/tests/Compile           # the package and examples against Unity's API
 node scripts/unity-project.mjs             # after adding or moving files: metas and scenes
 ```
 
-`unity/tests/Core` checks the shared fixtures, the file checks, the player and where each part
-is drawn. `unity/tests/Compile` compiles the package and example scripts against UnityEngine's
+`packages/unity/tests/Core` checks the shared fixtures, the file checks, the player and where each part
+is drawn. `packages/unity/tests/Compile` compiles the package and example scripts against UnityEngine's
 reference assemblies (from NuGet), with stand-ins for the few URP and editor types they use.
 Both need the .NET 8 SDK; CI runs them when started by hand. `npm run check` checks the metas
 and scenes.

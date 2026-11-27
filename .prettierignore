@@ -11,5 +11,7 @@ examples/cocos/build
 examples/cocos/profiles
 examples/cocos/settings
 examples/cocos/node_modules
-defold/build
-defold/.internal
+packages/defold/build
+packages/defold/.internal
+packages/unity/tests/*/bin
+packages/unity/tests/*/obj

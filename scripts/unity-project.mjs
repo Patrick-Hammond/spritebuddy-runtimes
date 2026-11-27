@@ -2,7 +2,7 @@
 // package and the example project's Assets (Unity needs them, and a package installed from git
 // can't make its own), and the example scenes, which point at those metas' GUIDs. GUIDs come
 // from each file's path, so they never change. Run after adding, moving or removing a file
-// under unity/:
+// under packages/unity/:
 //
 //   node scripts/unity-project.mjs            # adds missing metas and scenes, removes stale metas
 //   node scripts/unity-project.mjs --scenes   # also writes the scenes over any saved in Unity
@@ -16,12 +16,18 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const PACKAGE = 'unity/com.spritebuddy.runtime';
-const ASSETS = 'unity/examples/Assets';
+const PACKAGE = 'packages/unity/com.spritebuddy.runtime';
+const ASSETS = 'packages/unity/examples/Assets';
 const EXAMPLES = `${ASSETS}/SpriteBuddyExamples`;
 
-/** A stable GUID for a repository path. */
-export const guid = (path) => createHash('md5').update(`spritebuddy-unity:${path}`).digest('hex');
+/**
+ * A stable GUID for a repository path. It hashes the path as it was before the Unity folder moved
+ * into packages/ (unity/...), so the GUIDs, which games' scenes point at, never change.
+ */
+export const guid = (path) =>
+  createHash('md5')
+    .update(`spritebuddy-unity:${path.replace(/^packages\//, '')}`)
+    .digest('hex');
 
 // GUIDs of URP's own assets, the same in every URP version.
 const URP_LIGHT_2D = '073797afb82c5a1438f328866b10b3f0';

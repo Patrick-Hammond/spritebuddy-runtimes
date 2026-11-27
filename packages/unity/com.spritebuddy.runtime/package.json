@@ -16,7 +16,7 @@
     "name": "SpriteBuddy",
     "url": "https://github.com/Patrick-Hammond/spritebuddy-runtimes"
   },
-  "documentationUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/unity",
-  "changelogUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/blob/main/unity/com.spritebuddy.runtime/CHANGELOG.md",
+  "documentationUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/packages/unity",
+  "changelogUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/blob/main/packages/unity/com.spritebuddy.runtime/CHANGELOG.md",
   "licensesUrl": "https://github.com/Patrick-Hammond/spritebuddy-runtimes/blob/main/LICENSE"
 }

@@ -3,15 +3,15 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parseFile } from '@spritebuddy/core';
 // @ts-expect-error: a plain script, without types
-import { check } from '../scripts/unity-project.mjs';
+import { check } from '../../scripts/unity-project.mjs';
 
 /**
  * Keeps the Unity package and example project whole. The C# itself is tested with dotnet
- * (unity/tests/Core) and compiled against Unity's API (unity/tests/Compile); see unity/README.md.
+ * (packages/unity/tests/Core) and compiled against Unity's API (packages/unity/tests/Compile); see packages/unity/README.md.
  */
-const ROOT = join(__dirname, '..');
+const ROOT = join(__dirname, '../..');
 const read = (path: string) => readFileSync(join(ROOT, path));
-const ART = 'unity/examples/Assets/SpriteBuddyExamples/Art';
+const ART = 'packages/unity/examples/Assets/SpriteBuddyExamples/Art';
 
 describe('the Unity package and example project', () => {
   it('have a meta with a stable GUID beside every file and folder, and every scene', () => {
@@ -47,7 +47,7 @@ describe('the Unity package and example project', () => {
 
   it('have the frame event sounds as WAV files', () => {
     for (const name of ['squelch', 'hop', 'land']) {
-      const wav = read(`unity/examples/Assets/SpriteBuddyExamples/Audio/${name}.wav`);
+      const wav = read(`packages/unity/examples/Assets/SpriteBuddyExamples/Audio/${name}.wav`);
       expect(
         wav.subarray(0, 4).toString('latin1') + wav.subarray(8, 12).toString('latin1'),
         name,
@@ -56,12 +56,16 @@ describe('the Unity package and example project', () => {
   });
 
   it('install from the package folder', () => {
-    const pkg = JSON.parse(read('unity/com.spritebuddy.runtime/package.json').toString('utf8'));
+    const pkg = JSON.parse(
+      read('packages/unity/com.spritebuddy.runtime/package.json').toString('utf8'),
+    );
     expect(pkg.name).toBe('com.spritebuddy.runtime');
     expect(pkg.unity).toBe('6000.0');
-    const changelog = read('unity/com.spritebuddy.runtime/CHANGELOG.md').toString('utf8');
+    const changelog = read('packages/unity/com.spritebuddy.runtime/CHANGELOG.md').toString('utf8');
     expect(changelog).toContain(`## ${pkg.version}`);
-    const manifest = JSON.parse(read('unity/examples/Packages/manifest.json').toString('utf8'));
+    const manifest = JSON.parse(
+      read('packages/unity/examples/Packages/manifest.json').toString('utf8'),
+    );
     expect(manifest.dependencies['com.spritebuddy.runtime']).toBe(
       'file:../../com.spritebuddy.runtime',
     );

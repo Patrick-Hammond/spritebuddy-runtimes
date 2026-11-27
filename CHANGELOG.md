@@ -4,6 +4,10 @@ All runtimes share one version while they are below 1.0.
 
 ## Unreleased
 
+- The Godot, Unity and Defold runtimes moved from the repository root into `packages/godot`,
+  `packages/unity` and `packages/defold`, beside the npm runtimes. Unity's git URL is now
+  `...spritebuddy-runtimes.git?path=/packages/unity/com.spritebuddy.runtime`; Godot users copy
+  `packages/godot/addons/spritebuddy`.
 - New runtime, `@spritebuddy/cocos`, for Cocos Creator 3.8: `sb.load('path/name.anims')` loads a
   runtime file with its sheet and normal map from a bundle, and `sheet.sprite(parent, animation)`
   makes a node with a `SpriteBuddySprite` component that plays it with per-frame timing, loop
@@ -12,7 +16,7 @@ All runtimes share one version while they are below 1.0.
   sums, using the package's `spritebuddy-lit.effect`, directional or as a point light.
 - Examples: a Cocos Creator project in `examples/cocos` with three scenes: the slimes, the candle
   lighting demo, and footstep and jump sounds played by frame events.
-- New runtime for Defold, in `defold/`: a library (`spritebuddy/`) that loads a runtime file and
+- New runtime for Defold, in `packages/defold/`: a library (`spritebuddy/`) that loads a runtime file and
   its sheet at run time and plays it with per-frame timing, loop modes, offsets, live layers and
   frame events, through a `spritebuddy.go` game object (properties and messages) or a Lua
   player. Sprites with a normal map can be lit by a point light with SpriteBuddy Pro's light
@@ -24,10 +28,10 @@ All runtimes share one version while they are below 1.0.
   the textures a collection's scripts made), so switching examples no longer fails with
   `go.set failed with error code -10` and invisible sprites.
 - New runtime for Unity 6, `com.spritebuddy.runtime` 0.1.0, a UPM package installed by git URL
-  (`unity/com.spritebuddy.runtime`). The **SpriteBuddy Sprite** component plays a runtime file
+  (`packages/unity/com.spritebuddy.runtime`). The **SpriteBuddy Sprite** component plays a runtime file
   with per-frame timing, loop modes, offsets, live layers, rotated and trimmed frames, and frame
   events, and hands the normal map to URP's 2D lights. Examples: a Unity 6 project in
-  `unity/examples` with slimes, a candle lighting a slime, and frame events playing sounds.
+  `packages/unity/examples` with slimes, a candle lighting a slime, and frame events playing sounds.
 
 - Examples: the browser examples are now a playground, like PixiJS's: a list of examples down
   the side, the chosen one's code in an editor (CodeMirror), and the example running beside it.

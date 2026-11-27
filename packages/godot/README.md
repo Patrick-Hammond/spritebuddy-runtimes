@@ -39,7 +39,7 @@ hero.frame_event.connect(func(event_name, _index):
 
 ## Example
 
-Open the `godot` folder in Godot and press Run: `examples/slime_demo.tscn` (the project's main
+Open this `packages/godot` folder in Godot and press Run: `examples/slime_demo.tscn` (the project's main
 scene) shows three slimes from one sheet, two placed in the scene and one made in code, with a
 hat drawn as a live layer. Click a slime, or press Space, to make it hop.
 
@@ -52,7 +52,7 @@ keys move the slime and Space makes it jump.
 ## Tests
 
 ```sh
-godot --headless --path godot -s tests/run_tests.gd
+godot --headless --path packages/godot -s tests/run_tests.gd
 ```
 
 They check the shared golden tables in `fixtures/`, the file checks and the example scene. CI

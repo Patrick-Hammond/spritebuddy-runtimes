@@ -5,7 +5,7 @@ using System.Linq;
 using SpriteBuddy;
 
 /// Tests the Unity package's core (Runtime/Core) without Unity:
-///   dotnet run --project unity/tests/Core
+///   dotnet run --project packages/unity/tests/Core
 /// Checks every fixture in fixtures/ against its golden table, the file checks, the player and
 /// where parts are placed. Exits with 1 if any check fails.
 static class Program
@@ -313,7 +313,7 @@ static class Program
 
     static void CheckExampleAssets(string root)
     {
-        var art = Path.Combine(root, "unity", "examples", "Assets", "SpriteBuddyExamples", "Art");
+        var art = Path.Combine(root, "packages", "unity", "examples", "Assets", "SpriteBuddyExamples", "Art");
         var path = Path.Combine(art, "slime.anims.json");
         Expect(File.Exists(path), "the Unity example has the slime");
         if (!File.Exists(path)) return;

@@ -8,15 +8,15 @@ lands) for your game to listen for.
 Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.json`, version
 3), plus its sheet image.
 
-| Package                                  | For                     | Status       |
-| ---------------------------------------- | ----------------------- | ------------ |
-| [`@spritebuddy/core`](packages/core)     | any JavaScript engine   | 0.3.0 on npm |
-| [`@spritebuddy/pixi`](packages/pixi)     | PixiJS 5.3+, 6, 7 and 8 | 0.3.0 on npm |
-| [`@spritebuddy/phaser`](packages/phaser) | Phaser 3.60+ and 4      | unreleased   |
-| [`addons/spritebuddy`](godot)            | Godot 4.3+              | 0.3.0        |
-| [`@spritebuddy/cocos`](packages/cocos)   | Cocos Creator 3.8       | unreleased   |
-| [`spritebuddy` library](defold)          | Defold                  | unreleased   |
-| [`com.spritebuddy.runtime`](unity)       | Unity 6                 | 0.1.0        |
+| Package                                     | For                     | Status       |
+| ------------------------------------------- | ----------------------- | ------------ |
+| [`@spritebuddy/core`](packages/core)        | any JavaScript engine   | 0.3.0 on npm |
+| [`@spritebuddy/pixi`](packages/pixi)        | PixiJS 5.3+, 6, 7 and 8 | 0.3.0 on npm |
+| [`@spritebuddy/phaser`](packages/phaser)    | Phaser 3.60+ and 4      | unreleased   |
+| [`addons/spritebuddy`](packages/godot)      | Godot 4.3+              | 0.3.0        |
+| [`@spritebuddy/cocos`](packages/cocos)      | Cocos Creator 3.8       | unreleased   |
+| [`spritebuddy` library](packages/defold)    | Defold                  | unreleased   |
+| [`com.spritebuddy.runtime`](packages/unity) | Unity 6                 | 0.1.0        |
 
 ## Getting started
 
@@ -44,6 +44,12 @@ npm run examples   # builds, then serves the examples playground at http://local
 npm run examples:site   # puts the playground in site/, ready for any static host
 UPDATE_FIXTURES=1 npx vitest run packages/core/src/golden.test.ts   # after a deliberate change
 ```
+
+Layout: every runtime lives in `packages/`. The npm ones (core, pixi, phaser, cocos) are npm
+workspaces; `godot/`, `unity/` and `defold/` are engine projects holding the addon, UPM package or
+library together with their example scenes and engine tests, because those engines need the
+runtime inside the project that uses it. `examples/` is the browser playground, plus the Cocos
+Creator project, which pulls in `@spritebuddy/cocos` from `packages/cocos`.
 
 Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 

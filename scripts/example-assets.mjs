@@ -2,7 +2,7 @@
 //
 //   npm run examples:assets
 //
-// It writes godot/examples/art/slime.png and slime.anims.json. The browser examples use
+// It writes packages/godot/examples/art/slime.png and slime.anims.json. The browser examples use
 // examples/assets instead: a real export from SpriteBuddy Pro, with a normal map and a candle.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -161,7 +161,7 @@ function png({ width, height, data }) {
   ]);
 }
 
-const godotArt = join(ROOT, 'godot/examples/art');
+const godotArt = join(ROOT, 'packages/godot/examples/art');
 mkdirSync(godotArt, { recursive: true });
 writeFileSync(join(godotArt, 'slime.png'), png(sheet));
 writeFileSync(join(godotArt, 'slime.anims.json'), JSON.stringify(file, null, 2) + '\n');

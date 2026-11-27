@@ -37,7 +37,7 @@ describe('example assets', () => {
 
   it('are the same in the Godot lighting example', () => {
     for (const name of ['slime.png', 'slime_n.png', 'slime.anims.json']) {
-      const copy = read(`godot/examples/art/lit/${name}`);
+      const copy = read(`packages/godot/examples/art/lit/${name}`);
       expect(copy.equals(read(`examples/assets/${name}`)), name).toBe(true);
     }
   });

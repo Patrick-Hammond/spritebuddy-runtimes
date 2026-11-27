@@ -7,7 +7,7 @@ export default defineConfig({
       'packages/*/test/**/*.test.ts',
       'schema/**/*.test.ts',
       'examples/**/*.test.ts',
-      'unity/*.test.ts',
+      'packages/unity/*.test.ts',
     ],
     // The browser tests share the machine with each other; give slow renders time to land.
     expect: { poll: { timeout: 10_000 } },

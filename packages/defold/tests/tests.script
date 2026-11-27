@@ -256,7 +256,7 @@ end
 local CHECKS = { slimes = check_slimes, candle = check_candle, events = check_events }
 
 local function run(self)
-	local dir = sys.get_config_string("spritebuddy.fixtures", "../fixtures")
+	local dir = sys.get_config_string("spritebuddy.fixtures", "../../fixtures")
 	local names = {}
 	for _, n in ipairs({ "basic", "events", "layers", "loops", "normals", "packed" }) do
 		names[#names + 1] = n .. ".anims.json"

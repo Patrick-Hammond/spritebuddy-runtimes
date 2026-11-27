@@ -8,19 +8,19 @@ import { parseFile } from '@spritebuddy/core';
  * The Defold example project plays a copy of the example slime, since Defold only loads files
  * inside its own project. Its runtime file adds frame events (a "squelch" on each step of the
  * walk and a "land" on the jump) for the frame events example; everything else must match.
- * The Defold runtime itself is tested in the engine: see defold/README.md.
+ * The Defold runtime itself is tested in the engine: see packages/defold/README.md.
  */
 const ROOT = join(__dirname, '..');
 const read = (path: string) => readFileSync(join(ROOT, path));
 const json = (path: string) => JSON.parse(read(path).toString('utf8'));
 
 describe('the Defold example art', () => {
-  const copy = json('defold/examples/art/slime.anims.json');
+  const copy = json('packages/defold/examples/art/slime.anims.json');
 
   it('has the same sheet and normal map as the examples', () => {
     for (const name of ['slime.png', 'slime_n.png']) {
       expect(
-        read(`defold/examples/art/${name}`).equals(read(`examples/assets/${name}`)),
+        read(`packages/defold/examples/art/${name}`).equals(read(`examples/assets/${name}`)),
         name,
       ).toBe(true);
     }

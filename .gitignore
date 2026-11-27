@@ -2,10 +2,10 @@ node_modules
 dist
 coverage
 *.tsbuildinfo
-godot/.godot
+packages/godot/.godot
 packages/*/schema.json
-godot/**/*.uid
-godot/**/*.import
+packages/godot/**/*.uid
+packages/godot/**/*.import
 site
-defold/build
-defold/.internal
+packages/defold/build
+packages/defold/.internal

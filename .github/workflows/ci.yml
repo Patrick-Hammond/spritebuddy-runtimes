@@ -31,9 +31,9 @@ jobs:
           unzip -q godot.zip
           mv Godot_v*_linux.x86_64 godot-bin
       - name: Import the test project
-        run: ./godot-bin --headless --path godot --import || true
+        run: ./godot-bin --headless --path packages/godot --import || true
       - name: Run the addon tests
-        run: ./godot-bin --headless --path godot -s tests/run_tests.gd
+        run: ./godot-bin --headless --path packages/godot -s tests/run_tests.gd
 
   defold:
     runs-on: ubuntu-latest
@@ -52,13 +52,13 @@ jobs:
           chmod +x engine/*
           sudo apt-get update -q && sudo apt-get install -y -q xvfb libglu1-mesa
       - name: Build the examples and the tests
-        working-directory: defold
+        working-directory: packages/defold
         run: |
-          java -jar ../bob.jar --platform x86_64-linux --variant debug build
-          java -jar ../bob.jar --platform x86_64-linux --variant debug --settings tests/tests.settings --output build/tests build
+          java -jar ../../bob.jar --platform x86_64-linux --variant debug build
+          java -jar ../../bob.jar --platform x86_64-linux --variant debug --settings tests/tests.settings --output build/tests build
       - name: Run the library tests in the engine
-        working-directory: defold
-        run: LD_LIBRARY_PATH=../engine xvfb-run -a ../engine/dmengine build/tests/game.projectc
+        working-directory: packages/defold
+        run: LD_LIBRARY_PATH=../../engine xvfb-run -a ../../engine/dmengine build/tests/game.projectc
 
   unity:
     runs-on: ubuntu-latest
@@ -68,6 +68,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - name: Test the C# core against the fixtures
-        run: dotnet run --project unity/tests/Core
+        run: dotnet run --project packages/unity/tests/Core
       - name: Compile the package and examples against Unity's API
-        run: dotnet build unity/tests/Compile
+        run: dotnet build packages/unity/tests/Compile

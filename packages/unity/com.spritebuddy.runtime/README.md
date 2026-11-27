@@ -6,6 +6,6 @@ animation. Per-frame timing, loop, ping-pong and play-once modes, frame offsets,
 frame events, and normal maps for URP's 2D lights.
 
 Full instructions and examples:
-<https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/unity>
+<https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/packages/unity>
 
 Licence: ISC.

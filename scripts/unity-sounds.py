@@ -3,7 +3,7 @@ to give away. Run after changing them (Python 3, no packages):
 
     python3 scripts/unity-sounds.py
 
-It writes unity/examples/Assets/SpriteBuddyExamples/Audio/{squelch,hop,land}.wav.
+It writes packages/unity/examples/Assets/SpriteBuddyExamples/Audio/{squelch,hop,land}.wav.
 """
 import math
 import os
@@ -12,7 +12,7 @@ import struct
 import wave
 
 RATE = 22050
-OUT = os.path.join(os.path.dirname(__file__), "..", "unity", "examples", "Assets", "SpriteBuddyExamples", "Audio")
+OUT = os.path.join(os.path.dirname(__file__), "..", "packages", "unity", "examples", "Assets", "SpriteBuddyExamples", "Audio")
 
 
 def write(name, samples):

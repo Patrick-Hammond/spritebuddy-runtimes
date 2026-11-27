@@ -69,7 +69,7 @@ export const groups = [
         title: 'Slime and candle scenes',
         about:
           'The Godot examples are scenes in an editor project, so they run in Godot rather than here.',
-        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/godot/examples',
+        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/packages/godot/examples',
       },
     ],
   },
@@ -95,7 +95,7 @@ export const groups = [
         title: 'Slimes, candle and frame events',
         about:
           'The Defold examples are collections in an editor project, so they run in Defold rather than here.',
-        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/defold/examples',
+        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/packages/defold/examples',
       },
     ],
   },
@@ -108,7 +108,7 @@ export const groups = [
         title: 'Slime, candle and sound scenes',
         about:
           'The Unity examples are scenes in an editor project (slimes, a candle-lit slime, and frame events playing sounds), so they run in Unity rather than here.',
-        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/unity/examples',
+        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/packages/unity/examples',
       },
     ],
   },

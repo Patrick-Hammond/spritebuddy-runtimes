@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!-- Runs the Unity package's pure C# core (Runtime/Core) against the shared golden fixtures,
-       without Unity. Run: dotnet run, from the project folder unity/tests/Core -->
+       without Unity. Run: dotnet run, from the project folder packages/unity/tests/Core -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>

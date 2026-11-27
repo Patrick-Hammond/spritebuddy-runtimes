@@ -17,7 +17,7 @@ version = $version
 [library]
 include_dirs = spritebuddy
 INI
-cp -R "$root/defold/spritebuddy" "$root/defold/README.md" "$root/LICENSE" "$work/spritebuddy-defold/"
+cp -R "$root/packages/defold/spritebuddy" "$root/packages/defold/README.md" "$root/LICENSE" "$work/spritebuddy-defold/"
 rm -f "$out"
 (cd "$work" && zip -qr "$out" spritebuddy-defold)
 rm -rf "$work"
