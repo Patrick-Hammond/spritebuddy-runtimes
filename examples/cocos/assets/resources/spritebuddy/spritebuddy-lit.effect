@@ -1,0 +1,101 @@
+// SpriteBuddy's lit sprite effect for Cocos Creator 3.8: Cocos's own sprite effect, plus a normal
+// map and one light (directional, or a point light with a radius), lit with the same sums as
+// SpriteBuddy Pro's preview. @spritebuddy/cocos makes the materials and sets every property;
+// copy this file into your project's assets (assets/resources/spritebuddy/ for sb.loadEffect()).
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        normalMap: { value: normal }
+        orient: { value: [1, 0, 0, 1] }
+        lightDir: { value: [0, 0, 1, 0] }
+        lightPos: { value: [0, 0, 32, 0] }
+        lightColor: { value: [1, 1, 1, 1] }
+        lightParams: { value: [0.35, 1, 1, 0.3] }
+}%
+
+CCProgram sprite-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+
+  out vec4 color;
+  out vec2 uv0;
+  out vec2 world;
+
+  vec4 vert () {
+    // Sprites are batched in world space, so a_position is already where the pixel is.
+    vec4 pos = vec4(a_position, 1);
+    world = pos.xy;
+    uv0 = a_texCoord;
+    color = a_color;
+    return cc_matViewProj * pos;
+  }
+}%
+
+CCProgram sprite-fs %{
+  precision highp float;
+
+  in vec4 color;
+  in vec2 uv0;
+  in vec2 world;
+
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+
+  uniform sampler2D normalMap;
+
+  uniform SpriteBuddyLight {
+    // Where the stored sheet's x and y axes face on screen: a turn and a mirror per part.
+    vec4 orient;
+    // Toward a directional light (world space, y up), and the number of cel bands.
+    vec4 lightDir;
+    // A point light's world x, y, z and radius; a radius of 0 means directional.
+    vec4 lightPos;
+    vec4 lightColor;
+    // Ambient, brightness, opacity, wrap.
+    vec4 lightParams;
+  };
+
+  vec4 frag () {
+    vec4 c = texture(cc_spriteTexture, uv0);
+    if (c.a <= 0.0) discard;
+    // Normals are stored as (n + 1) / 2 with green up; the normal map's alpha is the sheet's.
+    vec4 t = texture(normalMap, uv0);
+    vec3 n = t.a > 0.0 ? t.rgb * 2.0 - 1.0 : vec3(0.0, 0.0, 1.0);
+    vec3 N = vec3(mat2(orient.xy, orient.zw) * n.xy, n.z);
+
+    vec3 L = lightDir.xyz;
+    float falloff = 1.0;
+    if (lightPos.w > 0.0) {
+      vec3 toLight = vec3(lightPos.xy - world, lightPos.z);
+      L = normalize(toLight);
+      float f = clamp(1.0 - length(toLight.xy) / lightPos.w, 0.0, 1.0);
+      falloff = f * f;
+    }
+    float wrap = lightParams.w;
+    float d = clamp((dot(N, L) + wrap) / (1.0 + wrap), 0.0, 1.0) * falloff;
+    if (lightDir.w > 1.0) {
+      float steps = lightDir.w - 1.0;
+      d = floor(d * steps + 0.5) / steps;
+    }
+    vec3 lit = min(vec3(1.0), c.rgb * (lightParams.x + lightParams.y * d * lightColor.rgb));
+    return vec4(mix(c.rgb, lit, lightParams.z), c.a) * color;
+  }
+}%

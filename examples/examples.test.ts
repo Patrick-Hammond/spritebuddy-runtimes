@@ -60,7 +60,7 @@ describe('published packages', () => {
   // Node and browsers resolve ES modules without guessing extensions, so `./types` would only
   // work through a bundler. Built files must import `./types.js`.
   it('import their own files with a .js extension', () => {
-    for (const pkg of ['core', 'pixi', 'phaser']) {
+    for (const pkg of ['core', 'pixi', 'phaser', 'cocos']) {
       const dir = join(ROOT, 'packages', pkg, 'src');
       for (const name of readdirSync(dir).filter((f) => /(?<!\.test)\.ts$/.test(f))) {
         const source = readFileSync(join(dir, name), 'utf8');

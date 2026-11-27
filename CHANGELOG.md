@@ -4,6 +4,14 @@ All runtimes share one version while they are below 1.0.
 
 ## Unreleased
 
+- New runtime, `@spritebuddy/cocos`, for Cocos Creator 3.8: `sb.load('path/name.anims')` loads a
+  runtime file with its sheet and normal map from a bundle, and `sheet.sprite(parent, animation)`
+  makes a node with a `SpriteBuddySprite` component that plays it with per-frame timing, loop
+  modes, offsets, live layers and frame events (`onEvent`, and `"event:<name>"` on the node).
+  `sb.light(effect, settings)` lights sprites through their normal maps with SpriteBuddy Pro's own
+  sums, using the package's `spritebuddy-lit.effect`, directional or as a point light.
+- Examples: a Cocos Creator project in `examples/cocos` with three scenes: the slimes, the candle
+  lighting demo, and footstep and jump sounds played by frame events.
 - New runtime for Defold, in `defold/`: a library (`spritebuddy/`) that loads a runtime file and
   its sheet at run time and plays it with per-frame timing, loop modes, offsets, live layers and
   frame events, through a `spritebuddy.go` game object (properties and messages) or a Lua

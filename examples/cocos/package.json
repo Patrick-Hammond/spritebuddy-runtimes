@@ -1,0 +1,11 @@
+{
+  "name": "spritebuddy-cocos-example",
+  "uuid": "1c361d36-a072-492a-b7c6-3a145b965f13",
+  "private": true,
+  "creator": {
+    "version": "3.8.6"
+  },
+  "dependencies": {
+    "@spritebuddy/cocos": "file:../../packages/cocos"
+  }
+}
