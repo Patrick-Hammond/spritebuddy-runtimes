@@ -10,14 +10,14 @@ const ZOOM = 5;
 const WIDTH = 480;
 const HEIGHT = 300;
 const SPEED = 110; // the slime's speed, in pixels a second
-const status = document.getElementById('lit-status');
+const status = document.getElementById('status');
 
 const sb = spriteBuddy(Phaser);
 
 class Candlelight extends Phaser.Scene {
   preload() {
     // Also loads the normal map the file names (slime_n.png), which lit sprites need.
-    this.load.spritebuddy('slime', new URL('../assets/slime.anims.json', import.meta.url).href);
+    this.load.spritebuddy('slime', new URL('./assets/slime.anims.json', import.meta.url).href);
   }
 
   create() {
@@ -133,7 +133,7 @@ function glowTexture(scene, size) {
 
 new Phaser.Game({
   type: Phaser.WEBGL, // lit sprites need WebGL
-  parent: 'lit-stage',
+  parent: 'stage',
   width: WIDTH,
   height: HEIGHT,
   backgroundColor: '#0b0d14',

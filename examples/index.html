@@ -3,16 +3,48 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SpriteBuddy runtime examples</title>
-    <link rel="stylesheet" href="./example.css" />
+    <title>SpriteBuddy examples</title>
+    <link rel="icon" href="./assets/slime.png" />
+    <link rel="stylesheet" href="./playground/playground.css" />
   </head>
   <body>
-    <h1>SpriteBuddy runtime examples</h1>
-    <ul>
-      <li><a href="./canvas/">Plain canvas</a>: @spritebuddy/core, drawing by hand</li>
-      <li><a href="./pixi/">PixiJS 8</a>: @spritebuddy/pixi</li>
-      <li><a href="./phaser/">Phaser 4</a>: @spritebuddy/phaser</li>
-    </ul>
-    <p>The Godot example is a scene in <code>godot/examples/</code>.</p>
+    <aside class="sidebar">
+      <header>
+        <h1>SpriteBuddy</h1>
+        <p>Runtime examples</p>
+      </header>
+      <input id="filter" type="search" placeholder="Filter examples" aria-label="Filter examples" />
+      <nav id="list" aria-label="Examples"></nav>
+    </aside>
+
+    <main>
+      <header class="bar">
+        <div>
+          <h2 id="title"></h2>
+          <p id="about"></p>
+        </div>
+        <div class="actions">
+          <span id="uses" class="tag"></span>
+          <button id="run" type="button" title="Run (Ctrl+Enter)">▶ Run</button>
+          <button id="reset" type="button" title="Undo all your edits to this example">
+            ↺ Reset
+          </button>
+          <a id="open" target="_blank" rel="noopener" title="Open the example on its own">↗</a>
+        </div>
+      </header>
+
+      <section id="workspace" class="workspace">
+        <div id="editor" class="editor" aria-label="Example code"></div>
+        <iframe id="preview" class="preview" title="Example preview"></iframe>
+      </section>
+
+      <section id="external" class="external" hidden>
+        <p id="external-text"></p>
+        <a id="external-link" target="_blank" rel="noopener">Open on GitHub ↗</a>
+      </section>
+    </main>
+
+    <!-- Bundled from playground/main.js by `npm run examples` (scripts/build-playground.mjs). -->
+    <script type="module" src="./dist/playground.js"></script>
   </body>
 </html>

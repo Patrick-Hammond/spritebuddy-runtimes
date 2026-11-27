@@ -74,8 +74,8 @@ draws flipped parts from a copy of the sheet whose normal map is mirrored to mat
 layers, rotated frames and sprites you flip with `setFlipX` / `setFlipY` or turn are all lit from
 the right side. A negative scale is not; use the flips.
 
-The [Phaser example](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/phaser)
-is a complete page: three slimes from one sheet, one wearing a hat drawn as a live layer, and a
+The [Phaser examples](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/src/phaser)
+are complete programs: three slimes from one sheet, one wearing a hat drawn as a live layer, and a
 jump on click; then a slime you move with the cursor keys, lit by a flickering candle's point
 light.
 

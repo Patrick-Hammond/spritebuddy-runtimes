@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SpriteBuddy example</title>
+    <link rel="stylesheet" href="./example.css" />
+    <!--
+      Runs one example: run.html?example=pixi/sprites runs src/pixi/sprites.js. The playground
+      shows this page beside its editor and runs your edits here instead.
+
+      The import map says where the browser finds each package: this repo's builds (run
+      `npm run build` first) and the PixiJS and Phaser the tests use. In your own page, point them
+      at a CDN instead:
+        "pixi.js": "https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.mjs",
+        "phaser": "https://cdn.jsdelivr.net/npm/phaser@4/dist/phaser.esm.js",
+        "@spritebuddy/core": "https://cdn.jsdelivr.net/npm/@spritebuddy/core/dist/index.js",
+        "@spritebuddy/pixi": "https://cdn.jsdelivr.net/npm/@spritebuddy/pixi/dist/index.js",
+        "@spritebuddy/phaser": "https://cdn.jsdelivr.net/npm/@spritebuddy/phaser/dist/index.js"
+      or `npm install` them and let your bundler resolve them.
+    -->
+    <script type="importmap">
+      {
+        "imports": {
+          "pixi.js": "../node_modules/pixi8/dist/pixi.mjs",
+          "phaser": "../node_modules/phaser4/dist/phaser.esm.js",
+          "@spritebuddy/core": "../packages/core/dist/index.js",
+          "@spritebuddy/pixi": "../packages/pixi/dist/index.js",
+          "@spritebuddy/phaser": "../packages/phaser/dist/index.js"
+        }
+      }
+    </script>
+    <script>
+      // Shows anything the example throws, so a typo in the editor says what went wrong.
+      function showError(error) {
+        const box = document.getElementById('error');
+        box.hidden = false;
+        box.textContent += `${error?.stack ?? error}\n`;
+        window.exampleError = String(error?.message ?? error); // for the repo's tests
+      }
+      addEventListener('error', (e) => showError(e.error ?? e.message));
+      addEventListener('unhandledrejection', (e) => showError(e.reason));
+    </script>
+  </head>
+  <body class="run">
+    <div id="stage"></div>
+    <p id="status" class="status" aria-live="polite"></p>
+    <pre id="error" class="error" hidden></pre>
+    <script type="module">
+      // The example runs as an inline module, so its `import.meta.url` is this page and
+      // `./assets/...` means examples/assets.
+      const params = new URLSearchParams(location.search);
+      const id = params.get('example') ?? 'pixi/sprites';
+      const edited = params.has('edited') ? window.parent.playground?.code(id) : undefined;
+      try {
+        const code =
+          edited ??
+          (await fetch(`./src/${id}.js`).then((r) => {
+            if (!r.ok) throw new Error(`No example called "${id}"`);
+            return r.text();
+          }));
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.textContent = code;
+        document.body.append(script);
+      } catch (error) {
+        showError(error);
+      }
+    </script>
+  </body>
+</html>

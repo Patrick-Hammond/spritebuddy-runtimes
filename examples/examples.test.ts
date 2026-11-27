@@ -1,12 +1,13 @@
 import Ajv2020 from 'ajv/dist/2020.js';
 import { build } from 'esbuild';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { extname, join, normalize } from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { parseFile } from '@spritebuddy/core';
+import { examples } from './list.js';
 
 /**
  * Keeps the examples working: their assets are valid, and the browser examples run in Chromium
@@ -39,6 +40,19 @@ describe('example assets', () => {
       const copy = read(`godot/examples/art/lit/${name}`);
       expect(copy.equals(read(`examples/assets/${name}`)), name).toBe(true);
     }
+  });
+});
+
+describe('the examples list', () => {
+  it('names every example file, and every file it names exists', () => {
+    const runnable = examples.filter((e) => !e.link).map((e) => e.id);
+    for (const id of runnable)
+      expect(existsSync(join(ROOT, `examples/src/${id}.js`)), id).toBe(true);
+    const files = readdirSync(join(ROOT, 'examples/src'), { recursive: true, encoding: 'utf8' })
+      .filter((f) => f.endsWith('.js'))
+      .map((f) => f.replaceAll('\\', '/').replace(/\.js$/, ''));
+    expect([...files].sort()).toEqual([...runnable].sort());
+    expect(new Set(examples.map((e) => e.id)).size).toBe(examples.length);
   });
 });
 
@@ -86,6 +100,14 @@ describe('browser examples', () => {
       });
       builds.set(`/packages/${pkg}/dist/index.js`, out.outputFiles[0]!.text);
     }
+    const playground = await build({
+      entryPoints: [join(ROOT, 'examples/playground/main.js')],
+      bundle: true,
+      write: false,
+      format: 'esm',
+      logLevel: 'silent',
+    });
+    builds.set('/examples/dist/playground.js', playground.outputFiles[0]!.text);
     server = createServer((req, res) => {
       let path = decodeURIComponent((req.url ?? '/').split('?')[0]!);
       if (path.endsWith('/')) path += 'index.html';
@@ -113,14 +135,18 @@ describe('browser examples', () => {
     server?.close();
   });
 
-  async function open(example: string): Promise<{ page: Page; errors: string[] }> {
+  /** Opens one example on its own, and waits for the global it sets when it is running. */
+  async function open(
+    example: string,
+    ready = 'exampleReady',
+  ): Promise<{ page: Page; errors: string[] }> {
     const page = await browser.newPage();
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(e.message));
     page.on('requestfailed', (r) => errors.push(`failed: ${r.url()}`));
     page.on('response', (r) => r.status() >= 400 && errors.push(`${r.status()}: ${r.url()}`));
-    await page.goto(`${base}/examples/${example}/`);
-    await page.waitForFunction(() => 'exampleReady' in window, null, { timeout: 40_000 });
+    await page.goto(`${base}/examples/run.html?example=${example}`);
+    await page.waitForFunction((ready) => ready in window, ready, { timeout: 40_000 });
     return { page, errors };
   }
 
@@ -149,7 +175,7 @@ describe('browser examples', () => {
   }
 
   it('the canvas example draws the slime and switches animations', async () => {
-    const { page, errors } = await open('canvas');
+    const { page, errors } = await open('canvas/drawing');
     await expect.poll(() => greenPixels(page)).toBeGreaterThan(500);
     await page.getByRole('button', { name: 'jump' }).click();
     await expect.poll(() => page.textContent('#status')).toContain('"jump"');
@@ -160,7 +186,7 @@ describe('browser examples', () => {
   }, 60_000);
 
   it('the PixiJS example draws three slimes, and one jumps when clicked', async () => {
-    const { page, errors } = await open('pixi');
+    const { page, errors } = await open('pixi/sprites');
     await expect.poll(() => greenPixels(page, '#stage canvas')).toBeGreaterThan(1500);
     const canvas = (await page.locator('#stage canvas').boundingBox())!;
     // The middle slime stands at (240, 200), about 14 × 11 pixels drawn at 6×.
@@ -197,8 +223,7 @@ describe('browser examples', () => {
   }
 
   it('the PixiJS lighting example lights the slime from the candle, and the keys move it', async () => {
-    const { page, errors } = await open('pixi');
-    await page.waitForFunction(() => 'lightingExample' in window, null, { timeout: 20_000 });
+    const { page, errors } = await open('pixi/lighting', 'lightingExample');
     // Puts the slime somewhere and measures it: it is 14 × 11 pixels drawn at 5×, standing on y.
     const at = async (x: number, y: number) => {
       await page.evaluate(
@@ -206,7 +231,7 @@ describe('browser examples', () => {
         [x, y] as const,
       );
       await page.waitForTimeout(100);
-      return brightness(page, '#lit-stage canvas', [x - 35, y - 55, x + 35, y]);
+      return brightness(page, '#stage canvas', [x - 35, y - 55, x + 35, y]);
     };
     // The candle's flame is at (240, 125).
     const far = await at(60, 290);
@@ -217,7 +242,7 @@ describe('browser examples', () => {
     // Lit from the side the candle is on.
     expect(left.right).toBeGreaterThan(left.left);
     expect(right.left).toBeGreaterThan(right.right);
-    expect(await page.textContent('#lit-status')).toMatch(/lighting the slime from the left/);
+    expect(await page.textContent('#status')).toMatch(/lighting the slime from the left/);
 
     await page.keyboard.down('ArrowRight');
     await expect
@@ -233,7 +258,7 @@ describe('browser examples', () => {
   }, 60_000);
 
   it('the Phaser example draws three slimes, and one jumps when clicked', async () => {
-    const { page, errors } = await open('phaser');
+    const { page, errors } = await open('phaser/sprites');
     await expect.poll(() => greenPixels(page, '#stage canvas')).toBeGreaterThan(1500);
     expect(await page.textContent('#status')).toMatch(/^Loaded 5 animations/);
     const canvas = (await page.locator('#stage canvas').boundingBox())!;
@@ -245,8 +270,7 @@ describe('browser examples', () => {
   }, 60_000);
 
   it('the Phaser lighting example lights the slime from the candle, and the keys move it', async () => {
-    const { page, errors } = await open('phaser');
-    await page.waitForFunction(() => 'lightingExample' in window, null, { timeout: 20_000 });
+    const { page, errors } = await open('phaser/lighting', 'lightingExample');
     const slime = (key: string) =>
       page.evaluate((key) => (window as any).lightingExample.slime[key], key); // eslint-disable-line @typescript-eslint/no-explicit-any
     // Puts the slime somewhere and measures it: it is 14 × 11 pixels drawn at 5×, standing on y.
@@ -256,7 +280,7 @@ describe('browser examples', () => {
         [x, y] as const,
       );
       await page.waitForTimeout(100);
-      return brightness(page, '#lit-stage canvas', [x - 35, y - 55, x + 35, y]);
+      return brightness(page, '#stage canvas', [x - 35, y - 55, x + 35, y]);
     };
     // The candle's flame is at (240, 125).
     const far = await at(60, 290);
@@ -267,7 +291,7 @@ describe('browser examples', () => {
     // Lit from the side the candle is on.
     expect(left.right).toBeGreaterThan(left.left);
     expect(right.left).toBeGreaterThan(right.right);
-    expect(await page.textContent('#lit-status')).toMatch(/lighting the slime from the left/);
+    expect(await page.textContent('#status')).toMatch(/lighting the slime from the left/);
 
     await page.keyboard.down('ArrowRight');
     await expect.poll(() => slime('x')).toBeGreaterThan(330);
@@ -284,4 +308,66 @@ describe('browser examples', () => {
     expect(errors).toEqual([]);
     await page.close();
   }, 60_000);
+
+  it('the playground lists the examples and runs the chosen one beside its code', async () => {
+    const page = await browser.newPage({ viewport: { width: 1400, height: 800 } });
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto(`${base}/examples/#pixi/sprites`);
+    const links = page.locator('#list a');
+    await expect.poll(() => links.allTextContents()).toEqual(examples.map((e) => e.title));
+    await expect(page.locator('#list a[aria-current]').textContent()).resolves.toBe(
+      'Sprites and clicks',
+    );
+    const preview = page.frameLocator('#preview');
+    await expect
+      .poll(() => preview.locator('#status').textContent(), { timeout: 40_000 })
+      .toMatch(/^Loaded 5 animations/);
+    await expect
+      .poll(() => page.locator('.cm-content').textContent())
+      .toContain('spriteBuddy(PIXI)');
+
+    // Picking another example shows its code and runs it.
+    await page.locator('#list a', { hasText: 'Drawing by hand' }).click();
+    expect(page.url()).toMatch(/#canvas\/drawing$/);
+    await expect.poll(() => page.locator('.cm-content').textContent()).toContain('new Player(');
+    await expect
+      .poll(() => preview.locator('#status').textContent(), { timeout: 40_000 })
+      .toContain('"party"');
+
+    // Editing the code runs it again, with the edit.
+    await page.locator('.cm-content').click();
+    await page.keyboard.press('Control+End');
+    await page.keyboard.type("\nstatus.textContent = 'Edited!';");
+    await expect
+      .poll(() => preview.locator('#status').textContent(), { timeout: 40_000 })
+      .toBe('Edited!');
+    // A mistake shows in the preview.
+    await page.keyboard.type("\nthrow new Error('Oops');");
+    await expect
+      .poll(() => preview.locator('#error').textContent(), { timeout: 40_000 })
+      .toContain('Oops');
+    // Reset puts the example back as it was.
+    await page.locator('#reset').click();
+    await expect.poll(() => page.locator('.cm-content').textContent()).not.toContain('Oops');
+    await expect
+      .poll(() => preview.locator('#status').textContent(), { timeout: 40_000 })
+      .toContain('"party"');
+    expect(await preview.locator('#error').isHidden()).toBe(true);
+
+    // The filter narrows the list.
+    await page.locator('#filter').fill('lighting');
+    await expect
+      .poll(() => page.locator('#list a:visible').allTextContents())
+      .toEqual(['Candle lighting', 'Candle lighting']);
+    await page.locator('#filter').fill('');
+
+    // Godot runs in its own editor, so its entry links to the scenes instead.
+    await page.locator('#list a', { hasText: 'Slime and candle scenes' }).click();
+    await expect.poll(() => page.locator('#external-link').isVisible()).toBe(true);
+    expect(await page.locator('#external-link').getAttribute('href')).toMatch(/godot\/examples$/);
+    expect(await page.locator('#workspace').isHidden()).toBe(true);
+    expect(errors).toEqual(['Oops']); // only the mistake typed above
+    await page.close();
+  }, 120_000);
 });

@@ -14,7 +14,7 @@ class Slimes extends Phaser.Scene {
   preload() {
     // Loads the runtime file, then the sheet image (and normal map) it names, from beside it.
     // Both end up under the one key: the texture and the JSON.
-    this.load.spritebuddy('slime', new URL('../assets/slime.anims.json', import.meta.url).href);
+    this.load.spritebuddy('slime', new URL('./assets/slime.anims.json', import.meta.url).href);
   }
 
   create() {
