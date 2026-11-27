@@ -14,6 +14,7 @@ Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.
 | [`@spritebuddy/pixi`](packages/pixi)     | PixiJS 5.3+, 6, 7 and 8 | 0.3.0 on npm |
 | [`@spritebuddy/phaser`](packages/phaser) | Phaser 3.60+ and 4      | unreleased   |
 | [`addons/spritebuddy`](godot)            | Godot 4.3+              | 0.3.0        |
+| [`@spritebuddy/cocos`](packages/cocos)   | Cocos Creator 3.8       | unreleased   |
 | [`com.spritebuddy.runtime`](unity)       | Unity 6                 | 0.1.0        |
 
 ## Getting started
@@ -21,8 +22,8 @@ Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.
 1. Make your sheet in [SpriteBuddy](https://github.com/Patrick-Hammond/spritebuddy) and export it
    with **Also write `<name>.anims.json`** ticked. You get `<name>.png` and `<name>.anims.json`.
 2. Pick your runtime from the table above and follow its README.
-3. Or start from an [example](examples): a plain canvas, PixiJS 8, Phaser 4, Godot 4 and Unity 6,
-   all playing the same slime.
+3. Or start from an [example](examples): a plain canvas, PixiJS 8, Phaser 4, Godot 4, Cocos
+   Creator 3.8 and Unity 6, all playing the same slime.
 
 ## The format
 

@@ -74,6 +74,19 @@ export const groups = [
     ],
   },
   {
+    name: 'Cocos Creator 3.8',
+    uses: '@spritebuddy/cocos',
+    examples: [
+      {
+        id: 'cocos/scenes',
+        title: 'Slime, candle and sound scenes',
+        about:
+          'The Cocos examples are scenes in an editor project: three slimes, a candle-lit slime, and footstep sounds played by frame events. They run in Cocos Creator rather than here.',
+        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/cocos',
+      },
+    ],
+  },
+  {
     name: 'Unity 6',
     uses: 'the Unity package',
     examples: [

@@ -1,0 +1,7 @@
+{
+  /* Cocos Creator writes temp/tsconfig.cocos.json when it opens the project. */
+  "extends": "./temp/tsconfig.cocos.json",
+  "compilerOptions": {
+    "strict": true
+  }
+}
