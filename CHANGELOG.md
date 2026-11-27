@@ -20,6 +20,11 @@ All runtimes share one version while they are below 1.0.
   release** workflow builds one). The Defold example project shows three slimes, a candle
   lighting a slime and frame events playing sounds; its tests run the shared fixtures in the
   engine, and CI runs them when started by hand.
+- New runtime for Unity 6, `com.spritebuddy.runtime` 0.1.0, a UPM package installed by git URL
+  (`unity/com.spritebuddy.runtime`). The **SpriteBuddy Sprite** component plays a runtime file
+  with per-frame timing, loop modes, offsets, live layers, rotated and trimmed frames, and frame
+  events, and hands the normal map to URP's 2D lights. Examples: a Unity 6 project in
+  `unity/examples` with slimes, a candle lighting a slime, and frame events playing sounds.
 
 - Examples: the browser examples are now a playground, like PixiJS's: a list of examples down
   the side, the chosen one's code in an editor (CodeMirror), and the example running beside it.

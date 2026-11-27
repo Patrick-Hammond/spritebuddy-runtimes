@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "com.spritebuddy.runtime": "file:../../com.spritebuddy.runtime",
+    "com.unity.render-pipelines.universal": "17.0.4",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0",
+    "com.unity.modules.jsonserialize": "1.0.0"
+  }
+}

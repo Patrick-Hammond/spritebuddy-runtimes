@@ -1,0 +1,20 @@
+# Unity makes these when it opens the project.
+/Library/
+/Temp/
+/Logs/
+/UserSettings/
+/obj/
+/Build/
+/Builds/
+*.csproj
+*.sln
+*.slnx
+.vs/
+.idea/
+/Packages/packages-lock.json
+# Unity fills in its project settings, and the example's setup makes its URP assets, on first
+# open; only the editor version is kept.
+/ProjectSettings/*
+!/ProjectSettings/ProjectVersion.txt
+/Assets/Settings/
+/Assets/Settings.meta

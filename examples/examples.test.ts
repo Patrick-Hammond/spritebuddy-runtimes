@@ -412,6 +412,11 @@ describe('browser examples', () => {
     await expect.poll(() => page.locator('#external-link').isVisible()).toBe(true);
     expect(await page.locator('#external-link').getAttribute('href')).toMatch(/godot\/examples$/);
     expect(await page.locator('#workspace').isHidden()).toBe(true);
+    // And so does Unity.
+    await page.locator('#list a[data-id="unity/scenes"]').click();
+    await expect
+      .poll(() => page.locator('#external-link').getAttribute('href'))
+      .toMatch(/unity\/examples$/);
     // The mistake typed above. (A run cut short by the next one can add an error of its own.)
     expect(errors).toContain('Oops');
     await page.close();
