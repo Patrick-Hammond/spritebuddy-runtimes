@@ -27,7 +27,12 @@ const sheet = await sb.load(new URL('./assets/slime.anims.json', import.meta.url
 const glow = glowTexture(64);
 
 // Sliders for how many lights and slimes there are.
-const settings = { lights: 8, slimes: 200 };
+// Start with ?lights=20&slimes=500 in the address to pick the counts (the sliders change them too).
+const query = new URLSearchParams(location.search);
+const settings = {
+  lights: Number(query.get('lights') ?? 8),
+  slimes: Number(query.get('slimes') ?? 200),
+};
 const controls = document.createElement('div');
 controls.className = 'buttons';
 stage.append(controls);

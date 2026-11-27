@@ -14,7 +14,12 @@ const status = document.getElementById('status');
 const stage = document.getElementById('stage');
 
 const sb = spriteBuddy(Phaser);
-const settings = { lights: 8, slimes: 200 };
+// Start with ?lights=20&slimes=500 in the address to pick the counts (the sliders change them too).
+const query = new URLSearchParams(location.search);
+const settings = {
+  lights: Number(query.get('lights') ?? 8),
+  slimes: Number(query.get('slimes') ?? 200),
+};
 
 class Stress extends Phaser.Scene {
   preload() {
