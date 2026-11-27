@@ -1,0 +1,8 @@
+# Made by Cocos Creator when it opens the project.
+library/
+temp/
+local/
+build/
+profiles/
+node_modules/
+package-lock.json

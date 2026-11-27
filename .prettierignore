@@ -4,3 +4,10 @@ coverage
 packages/*/schema.json
 fixtures/*.expected.json
 site
+examples/cocos/library
+examples/cocos/temp
+examples/cocos/local
+examples/cocos/build
+examples/cocos/profiles
+examples/cocos/settings
+examples/cocos/node_modules
