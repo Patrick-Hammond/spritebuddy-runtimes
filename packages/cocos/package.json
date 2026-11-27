@@ -1,0 +1,45 @@
+{
+  "name": "@spritebuddy/cocos",
+  "version": "0.5.0",
+  "description": "Play SpriteBuddy animations in Cocos Creator 3.8: per-frame timing, offsets, live layers, frame events and normal-mapped lighting.",
+  "license": "ISC",
+  "author": "Patrick Hammond",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Patrick-Hammond/spritebuddy-runtimes.git",
+    "directory": "packages/cocos"
+  },
+  "keywords": [
+    "spritebuddy",
+    "cocos",
+    "cocos-creator",
+    "spritesheet",
+    "animation",
+    "gamedev"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./effects/spritebuddy-lit.effect": "./effects/spritebuddy-lit.effect"
+  },
+  "files": [
+    "dist",
+    "effects"
+  ],
+  "dependencies": {
+    "@spritebuddy/core": "^0.3.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}
