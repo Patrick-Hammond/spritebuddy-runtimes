@@ -1,6 +1,6 @@
 {
   "name": "@spritebuddy/pixi",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Play SpriteBuddy animations in PixiJS 5, 6, 7 and 8: per-frame timing, offsets and live layers.",
   "license": "ISC",
   "author": "Patrick Hammond",
