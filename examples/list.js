@@ -87,6 +87,19 @@ export const groups = [
     ],
   },
   {
+    name: 'Defold',
+    uses: 'the Defold library',
+    examples: [
+      {
+        id: 'defold/collections',
+        title: 'Slimes, candle and frame events',
+        about:
+          'The Defold examples are collections in an editor project, so they run in Defold rather than here.',
+        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/defold/examples',
+      },
+    ],
+  },
+  {
     name: 'Unity 6',
     uses: 'the Unity package',
     examples: [

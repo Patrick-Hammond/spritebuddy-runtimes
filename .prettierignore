@@ -11,3 +11,5 @@ examples/cocos/build
 examples/cocos/profiles
 examples/cocos/settings
 examples/cocos/node_modules
+defold/build
+defold/.internal

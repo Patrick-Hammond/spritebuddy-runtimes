@@ -1,0 +1,163 @@
+name: "candle"
+scale_along_z: 0
+embedded_instances {
+  id: "glow"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"glow\\\"\\n\"\n"
+  "  \"material: \\\"/builtins/materials/sprite.material\\\"\\n\"\n"
+  "  \"blend_mode: BLEND_MODE_ADD\\n\"\n"
+  "  \"textures {\\n\"\n"
+  "  \"  sampler: \\\"texture_sampler\\\"\\n\"\n"
+  "  \"  texture: \\\"/examples/art/glow.atlas\\\"\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  ""
+  position {
+    x: 480.0
+    y: 200
+    z: -0.5
+  }
+  scale3 {
+    x: 5
+    y: 5
+    z: 1.0
+  }
+}
+instances {
+  id: "candle"
+  prototype: "/spritebuddy/spritebuddy.go"
+  component_properties {
+    id: "spritebuddy"
+    properties {
+      id: "sheet"
+      value: "slime"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "animation"
+      value: "candle"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "lit"
+      value: "false"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+  position {
+    x: 480.0
+    y: 210
+    z: 0
+  }
+  scale3 {
+    x: 5
+    y: 5
+    z: 1.0
+  }
+}
+instances {
+  id: "slime"
+  prototype: "/spritebuddy/spritebuddy.go"
+  component_properties {
+    id: "spritebuddy"
+    properties {
+      id: "sheet"
+      value: "slime"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "animation"
+      value: "idle"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "lit"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+  position {
+    x: 230
+    y: 130
+    z: 0
+  }
+  scale3 {
+    x: 5
+    y: 5
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "controller"
+  data: "components {\n"
+  "  id: \"candle\"\n"
+  "  component: \"/examples/candle.script\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"help\"\n"
+  "  type: \"label\"\n"
+  "  data: \"size {\\n\"\n"
+  "  \"  x: 930\\n\"\n"
+  "  \"  y: 80\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"color {\\n\"\n"
+  "  \"  x: 0.8\\n\"\n"
+  "  \"  y: 0.85\\n\"\n"
+  "  \"  z: 0.95\\n\"\n"
+  "  \"  w: 1\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"pivot: PIVOT_NW\\n\"\n"
+  "  \"line_break: true\\n\"\n"
+  "  \"text: \\\"The candle's point light lights the slime through its normal map, brighter the closer it gets and from the side the flame is on.\\\\nArrow keys move the slime; Space jumps.\\\"\\n\"\n"
+  "  \"font: \\\"/builtins/fonts/default.font\\\"\\n\"\n"
+  "  \"material: \\\"/builtins/fonts/label-df.material\\\"\\n\"\n"
+  "  \"\"\n"
+  "  position {\n"
+  "    x: 16\n"
+  "    y: 492\n"
+  "  }\n"
+  "  scale {\n"
+  "    x: 1\n"
+  "    y: 1\n"
+  "    z: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"status\"\n"
+  "  type: \"label\"\n"
+  "  data: \"size {\\n\"\n"
+  "  \"  x: 930\\n\"\n"
+  "  \"  y: 40\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"color {\\n\"\n"
+  "  \"  x: 1\\n\"\n"
+  "  \"  y: 0.8\\n\"\n"
+  "  \"  z: 0.55\\n\"\n"
+  "  \"  w: 1\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"pivot: PIVOT_NW\\n\"\n"
+  "  \"line_break: true\\n\"\n"
+  "  \"text: \\\"\\\"\\n\"\n"
+  "  \"font: \\\"/builtins/fonts/default.font\\\"\\n\"\n"
+  "  \"material: \\\"/builtins/fonts/label-df.material\\\"\\n\"\n"
+  "  \"\"\n"
+  "  position {\n"
+  "    x: 16\n"
+  "    y: 40\n"
+  "  }\n"
+  "  scale {\n"
+  "    x: 1\n"
+  "    y: 1\n"
+  "    z: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0
+    y: 0
+    z: 0.9
+  }
+}

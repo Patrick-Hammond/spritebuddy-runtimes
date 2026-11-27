@@ -35,6 +35,31 @@ jobs:
       - name: Run the addon tests
         run: ./godot-bin --headless --path godot -s tests/run_tests.gd
 
+  defold:
+    runs-on: ubuntu-latest
+    env:
+      DEFOLD: '1.14.1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Download Defold ${{ env.DEFOLD }}
+        run: |
+          curl -sSL -o bob.jar "https://github.com/defold/defold/releases/download/$DEFOLD/bob.jar"
+          unzip -q -j bob.jar 'libexec/x86_64-linux/*' -d engine
+          chmod +x engine/*
+          sudo apt-get update -q && sudo apt-get install -y -q xvfb libglu1-mesa
+      - name: Build the examples and the tests
+        working-directory: defold
+        run: |
+          java -jar ../bob.jar --platform x86_64-linux --variant debug build
+          java -jar ../bob.jar --platform x86_64-linux --variant debug --settings tests/tests.settings --output build/tests build
+      - name: Run the library tests in the engine
+        working-directory: defold
+        run: LD_LIBRARY_PATH=../engine xvfb-run -a ../engine/dmengine build/tests/game.projectc
+
   unity:
     runs-on: ubuntu-latest
     steps:
