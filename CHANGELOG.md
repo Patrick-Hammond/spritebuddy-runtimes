@@ -20,6 +20,9 @@ All runtimes share one version while they are below 1.0.
   release** workflow builds one). The Defold example project shows three slimes, a candle
   lighting a slime and frame events playing sounds; its tests run the shared fixtures in the
   engine, and CI runs them when started by hand.
+- Defold: a sheet is made again when the collection that loaded it has been unloaded (Defold frees
+  the textures a collection's scripts made), so switching examples no longer fails with
+  `go.set failed with error code -10` and invisible sprites.
 - New runtime for Unity 6, `com.spritebuddy.runtime` 0.1.0, a UPM package installed by git URL
   (`unity/com.spritebuddy.runtime`). The **SpriteBuddy Sprite** component plays a runtime file
   with per-frame timing, loop modes, offsets, live layers, rotated and trimmed frames, and frame
