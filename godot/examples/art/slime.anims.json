@@ -83,7 +83,8 @@
         },
         {
           "frame": 0,
-          "offset": [0, -4]
+          "offset": [0, -4],
+          "events": ["jump"]
         },
         {
           "frame": 0,
@@ -104,7 +105,8 @@
         },
         {
           "frame": 2,
-          "duration": 120
+          "duration": 120,
+          "events": ["land"]
         },
         {
           "frame": 1

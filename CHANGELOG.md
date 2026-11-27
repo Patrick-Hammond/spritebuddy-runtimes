@@ -11,6 +11,8 @@ All runtimes share one version while they are below 1.0.
   `npm run examples:site` builds the playground into `site/` for static hosting.
 - Examples: a lighting stress test for PixiJS and Phaser, with sliders for the number of moving
   point lights and lit slimes and a frames-per-second readout.
+- Examples: sounds on frame events for PixiJS, Phaser and Godot 4. The slime's jump has the
+  events `jump` and `land`, and each plays a small sound made by `npm run examples:sounds`.
 
 - New runtime, `@spritebuddy/phaser`, for Phaser 3.60+ and Phaser 4: `this.load.spritebuddy(key,
 url)` loads a runtime file with its sheet and normal map, and `this.add.spritebuddy(x, y, key,

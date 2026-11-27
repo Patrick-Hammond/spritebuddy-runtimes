@@ -102,19 +102,20 @@ const file = {
       duration: 160,
       frames: POSES.map((p, i) => ({ frame: i, layers: [hatOn(p)] })),
     },
-    // A jump: squash, leap (offsets lift the slime), land, squash. Plays once.
+    // A jump: squash, leap (offsets lift the slime), land, squash. Plays once. The take-off and
+    // landing frames have frame events, which the sounds demo plays a sound on.
     {
       name: 'hop',
       loop: 'once',
       duration: 70,
       frames: [
         { frame: 2, duration: 120 },
-        { frame: 0, offset: [0, -4] },
+        { frame: 0, offset: [0, -4], events: ['jump'] },
         { frame: 0, offset: [0, -9] },
         { frame: 0, offset: [0, -11], duration: 120 },
         { frame: 0, offset: [0, -9] },
         { frame: 1, offset: [0, -4] },
-        { frame: 2, duration: 120 },
+        { frame: 2, duration: 120, events: ['land'] },
         { frame: 1 },
       ],
     },

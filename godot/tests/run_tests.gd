@@ -24,6 +24,7 @@ func _initialize() -> void:
 	await process_frame
 	_check_example()
 	await _check_candle_example()
+	await _check_sounds_example()
 	print("%d checks, %d failures" % [checks, failures])
 	quit(1 if failures > 0 else 0)
 
@@ -211,3 +212,33 @@ func _check_candle_example() -> void:
 	await process_frame
 	_expect(slime.animation == "idle", "letting go idles, got %s" % slime.animation)
 	demo.queue_free()
+
+
+## The sounds example: the hop's frame events play the sound of the same name, in order, and
+## the slime breathes again after.
+func _check_sounds_example() -> void:
+	var scene: PackedScene = load("res://examples/sounds_demo.tscn")
+	_expect(scene != null, "the sounds scene loads")
+	if scene == null:
+		return
+	var demo := scene.instantiate()
+	root.add_child(demo)
+	await process_frame
+	for sound_name in ["jump", "land"]:
+		var player := demo.get_node_or_null("Sounds/" + sound_name) as AudioStreamPlayer
+		_expect(player != null and player.stream is AudioStreamWAV, "the %s sound is a WAV" % sound_name)
+	var slime: SpriteBuddySprite2D = demo.get_node("Slime")
+	demo.call("hop")
+	slime.advance(150.0)
+	_expect(demo.heard == ["jump"], "taking off plays jump, got %s" % [demo.heard])
+	_expect((demo.get_node("Sounds/jump") as AudioStreamPlayer).playing, "the jump sound is playing")
+	slime.advance(10000.0)
+	_expect(demo.heard == ["jump", "land"], "landing plays land, got %s" % [demo.heard])
+	_expect(slime.animation == "idle", "the slime idles after the hop, got %s" % slime.animation)
+	_expect(String(demo.status.text) == "♪ land", "status: %s" % demo.status.text)
+	# Stopped, and given a moment, so the audio server lets go of the sounds before the test quits.
+	for player in demo.get_node("Sounds").get_children():
+		player.stop()
+	await create_timer(0.2).timeout
+	demo.queue_free()
+	await process_frame
