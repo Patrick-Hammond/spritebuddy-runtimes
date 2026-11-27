@@ -73,6 +73,19 @@ export const groups = [
       },
     ],
   },
+  {
+    name: 'Unity 6',
+    uses: 'the Unity package',
+    examples: [
+      {
+        id: 'unity/scenes',
+        title: 'Slime, candle and sound scenes',
+        about:
+          'The Unity examples are scenes in an editor project (slimes, a candle-lit slime, and frame events playing sounds), so they run in Unity rather than here.',
+        link: 'https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/unity/examples',
+      },
+    ],
+  },
 ];
 
 /** Every example, in sidebar order. */

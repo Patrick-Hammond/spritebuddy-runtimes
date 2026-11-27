@@ -1,0 +1,197 @@
+{
+  "format": "spritebuddy-animations",
+  "version": 3,
+  "image": "slime.png",
+  "size": [34, 40],
+  "normals": "slime_n.png",
+  "frames": [
+    {
+      "name": "slime_0",
+      "rect": [25, 33, 8, 7],
+      "pivot": [4, 7]
+    },
+    {
+      "name": "slime_1",
+      "rect": [0, 23, 12, 13],
+      "pivot": [6, 13]
+    },
+    {
+      "name": "slime_2",
+      "rect": [0, 10, 14, 11],
+      "pivot": [7, 11]
+    },
+    {
+      "name": "slime_3",
+      "rect": [0, 0, 16, 8],
+      "pivot": [8, 8]
+    },
+    {
+      "name": "candlea_01",
+      "rect": [27, 17, 7, 14],
+      "pivot": [3, 14]
+    },
+    {
+      "name": "candlea_02",
+      "rect": [27, 0, 7, 15],
+      "pivot": [3, 15]
+    },
+    {
+      "name": "candlea_03",
+      "rect": [18, 0, 7, 16],
+      "pivot": [3, 16]
+    },
+    {
+      "name": "candlea_04",
+      "rect": [16, 18, 7, 14],
+      "pivot": [3, 14]
+    }
+  ],
+  "animations": [
+    {
+      "name": "idle",
+      "loop": "pingpong",
+      "duration": 200,
+      "frames": [2, 3],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
+    },
+    {
+      "name": "jump",
+      "loop": "once",
+      "duration": 100,
+      "frames": [
+        2,
+        3,
+        {
+          "frame": 3,
+          "offset": [0, -2],
+          "events": ["hop"]
+        },
+        {
+          "frame": 3,
+          "offset": [0, -4]
+        },
+        {
+          "frame": 3,
+          "duration": 200,
+          "offset": [0, -5]
+        },
+        {
+          "frame": 3,
+          "offset": [0, -4]
+        },
+        {
+          "frame": 3,
+          "offset": [0, -2]
+        },
+        3,
+        {
+          "frame": 2,
+          "events": ["land"]
+        }
+      ],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
+    },
+    {
+      "name": "walk",
+      "loop": "loop",
+      "duration": 100,
+      "frames": [
+        {
+          "frame": 1,
+          "events": ["squelch"]
+        },
+        2,
+        3
+      ],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
+    },
+    {
+      "name": "party",
+      "loop": "loop",
+      "duration": 100,
+      "frames": [
+        {
+          "frame": 1,
+          "layers": [
+            {
+              "frame": 0,
+              "x": 2,
+              "y": -5
+            }
+          ]
+        },
+        {
+          "frame": 2,
+          "layers": [
+            {
+              "frame": 0,
+              "x": 3,
+              "y": -5
+            }
+          ]
+        },
+        {
+          "frame": 3,
+          "layers": [
+            {
+              "frame": 0,
+              "x": 4,
+              "y": -5
+            }
+          ]
+        }
+      ],
+      "lighting": {
+        "light": {
+          "angle": 313,
+          "height": -9,
+          "ambient": 0.6,
+          "opacity": 0.8,
+          "bands": 4
+        },
+        "normals": {
+          "detail": 1
+        }
+      }
+    },
+    {
+      "name": "candle",
+      "loop": "loop",
+      "duration": 100,
+      "frames": [4, 5, 6, 7]
+    }
+  ]
+}

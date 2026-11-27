@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Compiles the Unity package and the example project's scripts against UnityEngine's
+       reference assemblies, to catch mistakes without the Unity editor. URP and UnityEditor
+       aren't on NuGet, so Stubs/ declares just the parts the scripts use. Build: dotnet build -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DefineConstants>$(DefineConstants);UNITY_EDITOR;UNITY_2021_3_OR_NEWER;ENABLE_LEGACY_INPUT_MANAGER</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- Unity fills [SerializeField] fields, and doesn't warn about them either. -->
+    <NoWarn>$(NoWarn);CS0649</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../com.spritebuddy.runtime/**/*.cs" />
+    <Compile Include="../../examples/Assets/**/*.cs" />
+    <Compile Include="Stubs/*.cs" />
+  </ItemGroup>
+</Project>
