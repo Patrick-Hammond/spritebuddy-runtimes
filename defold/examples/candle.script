@@ -1,0 +1,105 @@
+-- A candle's point light lights the slime through its normal map, brighter the closer it gets
+-- and from whichever side the flame is on. Arrow keys move the slime; Space makes it jump.
+local spritebuddy = require "spritebuddy.spritebuddy"
+local shared = require "examples.shared"
+
+local ZOOM = 5
+local SPEED = 110 -- world units a second
+local KEYS = { left = true, right = true, up = true, down = true }
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	self.held = {}
+	self.time = 0
+	self.jumping = false
+	-- The flame is about 13 sheet pixels above the candle's base.
+	local candle = go.get_position("candle")
+	self.flame = vmath.vector3(candle.x, candle.y + 13 * ZOOM, 0)
+	local light = spritebuddy.light
+	light.x, light.y, light.z = self.flame.x, self.flame.y, 24
+	light.radius = 320
+	light.color = vmath.vector3(1, 0.706, 0.4) -- #ffb466
+	light.brightness = 2.2
+	light.ambient = 0.3
+	light.size = 0.3
+	light.bands = 4 -- the cel bands SpriteBuddy Pro's preview used for this art
+	shared.candle.slime_x = go.get_position("slime").x
+end
+
+local function status(self, p)
+	local x = self.flame.x - p.x
+	local y = self.flame.y - (p.y + 5 * ZOOM) -- from the slime's middle
+	local distance = math.floor(math.sqrt(x * x + y * y) + 0.5)
+	local text
+	if distance > spritebuddy.light.radius then
+		text = ("The candle is %d px away: out of reach"):format(distance)
+	else
+		local side = math.abs(x) > math.abs(y) and (x > 0 and "the right" or "the left") or (y > 0 and "above" or "below")
+		text = ("The candle is %d px away, lighting the slime from %s"):format(distance, side)
+	end
+	label.set_text("#status", text)
+end
+
+function update(self, dt)
+	if not self.slime then
+		-- The slime's player, to call directly. Its script makes it in init(), so fetch it here.
+		self.slime = spritebuddy.get("slime")
+		self.slime.on_done = function()
+			self.jumping = false
+		end
+	end
+	self.time = self.time + dt
+	local dx = (self.held.right and 1 or 0) - (self.held.left and 1 or 0)
+	local dy = (self.held.up and 1 or 0) - (self.held.down and 1 or 0)
+	local moving = dx ~= 0 or dy ~= 0
+	local p = go.get_position("slime")
+	if moving then
+		local step = SPEED * dt / math.sqrt(dx * dx + dy * dy)
+		p.x = math.min(920, math.max(40, p.x + dx * step))
+		p.y = math.min(260, math.max(40, p.y + dy * step))
+		if dx ~= 0 then
+			-- Face the way it goes. Flipped sprites are lit from the right side.
+			self.slime:set_flip(dx < 0, false)
+		end
+	end
+	-- Further up the screen is further away: draw the slime behind the candle there.
+	p.z = p.y < go.get_position("candle").y and 0.1 or -0.1
+	go.set_position(p, "slime")
+	if not self.jumping then
+		local wanted = moving and "walk" or "idle"
+		if self.slime:animation_name() ~= wanted then
+			self.slime:play(wanted)
+		end
+	end
+	-- Flicker: change the light whenever you like; lit sprites pick it up on their next update.
+	local flicker = 0.08 * math.sin(self.time * 13) + 0.05 * math.sin(self.time * 29 + 1.7)
+	spritebuddy.light.brightness = 2.2 + 2 * flicker
+	spritebuddy.light.radius = 320 + 40 * flicker
+	go.set("glow#sprite", "tint.w", 0.7 + 1.5 * flicker)
+	shared.candle.slime_x = p.x
+	status(self, p)
+end
+
+function on_message(self, message_id, message)
+	-- The tests hold keys this way.
+	if message_id == hash("hold") then
+		self.held[message.key] = message.down
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("jump") and action.pressed and not self.jumping then
+		self.jumping = true
+		self.slime:play("jump")
+	elseif action_id then
+		for key in pairs(KEYS) do
+			if action_id == hash(key) then
+				if action.pressed then
+					self.held[key] = true
+				elseif action.released then
+					self.held[key] = nil
+				end
+			end
+		end
+	end
+end

@@ -1,0 +1,114 @@
+name: "events"
+scale_along_z: 0
+instances {
+  id: "slime"
+  prototype: "/spritebuddy/spritebuddy.go"
+  component_properties {
+    id: "spritebuddy"
+    properties {
+      id: "sheet"
+      value: "slime"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "animation"
+      value: "walk"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+  position {
+    x: 200
+    y: 160
+    z: 0
+  }
+  scale3 {
+    x: 6
+    y: 6
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "controller"
+  data: "components {\n"
+  "  id: \"events\"\n"
+  "  component: \"/examples/events.script\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"squelch\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/examples/art/squelch.wav\\\"\\n\"\n"
+  "  \"gain: 0.7\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"land\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/examples/art/land.wav\\\"\\n\"\n"
+  "  \"gain: 0.9\\n\"\n"
+  "  \"\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"help\"\n"
+  "  type: \"label\"\n"
+  "  data: \"size {\\n\"\n"
+  "  \"  x: 930\\n\"\n"
+  "  \"  y: 80\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"color {\\n\"\n"
+  "  \"  x: 0.8\\n\"\n"
+  "  \"  y: 0.85\\n\"\n"
+  "  \"  z: 0.95\\n\"\n"
+  "  \"  w: 1\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"pivot: PIVOT_NW\\n\"\n"
+  "  \"line_break: true\\n\"\n"
+  "  \"text: \\\"Frame events: the walk tags a \\\\\\\"squelch\\\\\\\" on the frame the slime lands, and the jump a \\\\\\\"land\\\\\\\". Each one plays a sound.\\\\nPress Space to jump.\\\"\\n\"\n"
+  "  \"font: \\\"/builtins/fonts/default.font\\\"\\n\"\n"
+  "  \"material: \\\"/builtins/fonts/label-df.material\\\"\\n\"\n"
+  "  \"\"\n"
+  "  position {\n"
+  "    x: 16\n"
+  "    y: 492\n"
+  "  }\n"
+  "  scale {\n"
+  "    x: 1\n"
+  "    y: 1\n"
+  "    z: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"log\"\n"
+  "  type: \"label\"\n"
+  "  data: \"size {\\n\"\n"
+  "  \"  x: 930\\n\"\n"
+  "  \"  y: 60\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"color {\\n\"\n"
+  "  \"  x: 0.6\\n\"\n"
+  "  \"  y: 1\\n\"\n"
+  "  \"  z: 0.6\\n\"\n"
+  "  \"  w: 1\\n\"\n"
+  "  \"}\\n\"\n"
+  "  \"pivot: PIVOT_NW\\n\"\n"
+  "  \"line_break: true\\n\"\n"
+  "  \"text: \\\"\\\"\\n\"\n"
+  "  \"font: \\\"/builtins/fonts/default.font\\\"\\n\"\n"
+  "  \"material: \\\"/builtins/fonts/label-df.material\\\"\\n\"\n"
+  "  \"\"\n"
+  "  position {\n"
+  "    x: 16\n"
+  "    y: 110\n"
+  "  }\n"
+  "  scale {\n"
+  "    x: 1\n"
+  "    y: 1\n"
+  "    z: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0
+    y: 0
+    z: 0.9
+  }
+}

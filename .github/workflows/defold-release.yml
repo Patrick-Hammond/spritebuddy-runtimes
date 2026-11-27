@@ -1,0 +1,33 @@
+name: Defold release
+
+# Builds the Defold library zip and publishes it as a GitHub release tagged defold-v<version>,
+# the URL games add under Project > Dependencies. Started by hand only (Actions tab > Defold
+# release > Run workflow).
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version, such as 0.1.0'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the library zip
+        env:
+          VERSION: ${{ inputs.version }}
+        run: scripts/defold-library.sh "$VERSION"
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          url="https://github.com/$GITHUB_REPOSITORY/releases/download/defold-v$VERSION/spritebuddy-defold-$VERSION.zip"
+          printf 'Add this to your game.project under Project > Dependencies, then Project > Fetch Libraries:\n\n%s\n\nSee defold/README.md for how to use it.\n' "$url" > notes.md
+          gh release create "defold-v$VERSION" "dist/spritebuddy-defold-$VERSION.zip" \
+            --target "$GITHUB_SHA" --title "SpriteBuddy for Defold $VERSION" --notes-file notes.md

@@ -1,0 +1,55 @@
+-- Three slimes from one sheet: two placed in the collection, one made here by a factory. Click a
+-- slime, or press Space, to make it jump; when the jump ends it goes back to its own animation.
+local spritebuddy = require "spritebuddy.spritebuddy"
+local shared = require "examples.shared"
+
+local SHEET = hash("slime") -- /examples/art/slime.anims.json, listed in game.project
+local SCALE = 6
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	-- A slime made in code: spritebuddy.go's script takes the same properties as in the editor.
+	local made = factory.create("#slime_factory", vmath.vector3(680, 200, 0), nil, { sheet = SHEET, animation = hash("walk") }, SCALE)
+	-- Each slime's own animation, to go back to after a jump.
+	self.slimes = {
+		{ id = go.get_id("slime_a"), home = "idle" },
+		{ id = go.get_id("slime_b"), home = "party" },
+		{ id = made, home = "walk" },
+	}
+	shared.slimes.count = #self.slimes
+end
+
+local function jump(slime)
+	-- Whoever sends `play` hears frame_changed, frame_event and animation_finished back.
+	msg.post(msg.url(nil, slime.id, "spritebuddy"), "play", { animation = "jump" })
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("animation_finished") and message.animation == hash("jump") then
+		for _, slime in ipairs(self.slimes) do
+			if slime.id == sender.path then
+				msg.post(sender, "play", { animation = slime.home })
+			end
+		end
+	elseif message_id == hash("jump_all") then
+		for _, slime in ipairs(self.slimes) do
+			jump(slime)
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("jump") and action.pressed then
+		for _, slime in ipairs(self.slimes) do
+			jump(slime)
+		end
+	elseif action_id == hash("touch") and action.pressed then
+		for _, slime in ipairs(self.slimes) do
+			-- The slime stands on its position and is about 16 sheet pixels wide and tall.
+			local p = go.get_position(slime.id)
+			if math.abs(action.x - p.x) < 8 * SCALE and action.y > p.y and action.y < p.y + 16 * SCALE then
+				jump(slime)
+			end
+		end
+	end
+end

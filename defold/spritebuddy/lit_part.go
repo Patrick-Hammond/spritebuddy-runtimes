@@ -1,0 +1,15 @@
+embedded_components {
+  id: "sprite"
+  type: "sprite"
+  data: "default_animation: \"placeholder\"\n"
+  "material: \"/spritebuddy/materials/lit_sprite.material\"\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/spritebuddy/placeholder.atlas\"\n"
+  "}\n"
+  "textures {\n"
+  "  sampler: \"normal_sampler\"\n"
+  "  texture: \"/spritebuddy/placeholder.atlas\"\n"
+  "}\n"
+  ""
+}

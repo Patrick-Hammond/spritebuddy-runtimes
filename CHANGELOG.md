@@ -12,6 +12,14 @@ All runtimes share one version while they are below 1.0.
   sums, using the package's `spritebuddy-lit.effect`, directional or as a point light.
 - Examples: a Cocos Creator project in `examples/cocos` with three scenes: the slimes, the candle
   lighting demo, and footstep and jump sounds played by frame events.
+- New runtime for Defold, in `defold/`: a library (`spritebuddy/`) that loads a runtime file and
+  its sheet at run time and plays it with per-frame timing, loop modes, offsets, live layers and
+  frame events, through a `spritebuddy.go` game object (properties and messages) or a Lua
+  player. Sprites with a normal map can be lit by a point light with SpriteBuddy Pro's light
+  model. Games add it as a library zip from the `defold-v*` GitHub releases (the **Defold
+  release** workflow builds one). The Defold example project shows three slimes, a candle
+  lighting a slime and frame events playing sounds; its tests run the shared fixtures in the
+  engine, and CI runs them when started by hand.
 
 - Examples: the browser examples are now a playground, like PixiJS's: a list of examples down
   the side, the chosen one's code in an editor (CodeMirror), and the example running beside it.

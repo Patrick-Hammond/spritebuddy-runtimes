@@ -29,6 +29,7 @@ one's code in an editor, and the example running beside it. Edit the code and it
 | [phaser/stress](src/phaser/stress.js)                      | `@spritebuddy/phaser` | The same stress test with Phaser's lights (up to 64 at once)                                    |
 | [godot/examples](../godot/examples) (linked, not run here) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime |
 | [cocos](cocos) (linked, not run here)                      | `@spritebuddy/cocos`  | Three slimes, a candle-lit slime, and sounds played by frame events, in Cocos Creator 3.8       |
+| [defold/examples](../defold/examples) (linked)             | the Defold library    | Slimes placed and made by a factory, a candle's point light, frame events playing sounds        |
 
 ## How it fits together
 
@@ -63,6 +64,11 @@ demo, open `examples/candle_demo.tscn` and press F6 (Run Current Scene).
 See [cocos/README.md](cocos/README.md): `npm install` and `npm run build` here, `npm install` in
 `examples/cocos`, then open that folder in Cocos Creator 3.8 and play a scene from
 `assets/scenes`.
+
+## Running the Defold example
+
+Open `defold/game.project` in the Defold editor and press Project → Build; keys 1, 2 and 3 switch
+between the slimes, the candle light and the frame events. See [defold/README.md](../defold).
 
 ## The assets
 
