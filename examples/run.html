@@ -62,6 +62,13 @@
         const script = document.createElement('script');
         script.type = 'module';
         script.textContent = code;
+        // An import that can't be loaded fails here, on the script, not on the window.
+        script.addEventListener('error', () =>
+          showError(
+            "One of the example's imports could not be loaded (see the browser console). " +
+              'Serve the repo root with `npm run examples`, which builds the packages first.',
+          ),
+        );
         document.body.append(script);
       } catch (error) {
         showError(error);
