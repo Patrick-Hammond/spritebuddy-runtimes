@@ -14,23 +14,43 @@ SpriteBuddy Pro:
 The sheet has a **normal map** (`slime_n.png`), so the PixiJS, Phaser and Godot examples can light
 it in real time.
 
-| Example                             | Uses                  | Shows                                                                                                                                                |
-| ----------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [canvas](canvas)                    | `@spritebuddy/core`   | The whole drawing rule by hand on a 2D canvas                                                                                                        |
-| [pixi](pixi)                        | `@spritebuddy/pixi`   | Sprites in PixiJS 8, events, clicking to play a jump; a candle's point light lighting a slime you move with the cursor keys                          |
-| [phaser](phaser)                    | `@spritebuddy/phaser` | Sprites in Phaser 4 made with `this.add.spritebuddy`, clicking to play a jump; a candle's point light lighting a slime you move with the cursor keys |
-| [godot/examples](../godot/examples) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime you move with the arrow keys                         |
+The examples are a **playground**, like PixiJS's: a list of examples down the side, the chosen
+one's code in an editor, and the example running beside it. Edit the code and it runs again
+(or press Ctrl+Enter); Reset puts it back.
+
+| Example                                                    | Uses                  | Shows                                                                                           |
+| ---------------------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------- |
+| [canvas/drawing](src/canvas/drawing.js)                    | `@spritebuddy/core`   | The whole drawing rule by hand on a 2D canvas                                                   |
+| [pixi/sprites](src/pixi/sprites.js)                        | `@spritebuddy/pixi`   | Sprites in PixiJS 8, a live-layer hat, clicking to play a jump                                  |
+| [pixi/lighting](src/pixi/lighting.js)                      | `@spritebuddy/pixi`   | A candle's point light lighting a slime you move with the cursor keys                           |
+| [pixi/stress](src/pixi/stress.js)                          | `@spritebuddy/pixi`   | A lighting stress test: sliders for lights and lit slimes, and a frames-per-second readout      |
+| [phaser/sprites](src/phaser/sprites.js)                    | `@spritebuddy/phaser` | Sprites in Phaser 4 made with `this.add.spritebuddy`, clicking to play a jump                   |
+| [phaser/lighting](src/phaser/lighting.js)                  | `@spritebuddy/phaser` | The candle lighting with Phaser's own lights                                                    |
+| [phaser/stress](src/phaser/stress.js)                      | `@spritebuddy/phaser` | The same stress test with Phaser's lights (up to 64 at once)                                    |
+| [godot/examples](../godot/examples) (linked, not run here) | the Godot addon       | Sprites placed in a scene and made in code, signals; a candle's `PointLight2D` lighting a slime |
+
+## How it fits together
+
+- `src/<engine>/<name>.js`: one file per example, a complete program. Each draws into the page's
+  `#stage` and writes to its `#status` line, and loads `./assets/...`.
+- `list.js`: the sidebar, grouped by engine. Add a line here when you add a file.
+- `run.html?example=pixi/sprites`: runs one example on its own. Its import map says where the
+  packages are; its comments show the CDN lines to use in your own page.
+- `index.html` and `playground/`: the playground. `playground/main.js` (with CodeMirror) is
+  bundled into `dist/playground.js` by `scripts/build-playground.mjs`.
 
 ## Running the browser examples
 
 ```sh
 npm install
-npm run examples   # builds the packages and serves this repo
+npm run examples        # builds the packages and the playground, and serves this repo
 ```
 
-Then open <http://localhost:8080/examples/>. The pages load the packages from this repo's
-`packages/*/dist` through an import map; each page's comments show the lines to use instead in
-your own project (a CDN URL, or `npm install` and a bundler).
+Then open <http://localhost:8080/examples/>.
+
+To put the playground online, `npm run examples:site` gathers everything it loads into `site/`,
+which any static host can serve as it is (open `site/examples/`). The **Examples site**
+workflow does this and publishes it to GitHub Pages when started by hand.
 
 ## Running the Godot example
 
@@ -47,4 +67,5 @@ by [`scripts/example-assets.mjs`](../scripts/example-assets.mjs); `npm run examp
 redraws it.
 
 `examples.test.ts` keeps everything here working: it checks the assets against the schema and
-drives the browser pages in Chromium, including moving the lit slime around the candle. The Godot test run loads both example scenes.
+drives every example and the playground (picking, editing, resetting) in Chromium, including
+moving the lit slime around the candle. The Godot test run loads both example scenes.

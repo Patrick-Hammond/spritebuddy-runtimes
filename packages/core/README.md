@@ -30,7 +30,7 @@ for (const part of player.parts) {
 }
 ```
 
-The [canvas example](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/canvas) is a complete page that does exactly
+The [canvas example](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/src/canvas/drawing.js) is a complete program that does exactly
 this with a 2D canvas, rotation, trim and flips included, in about 60 lines.
 
 ## API

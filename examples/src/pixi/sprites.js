@@ -16,7 +16,7 @@ document.getElementById('stage').append(app.canvas);
 const sb = spriteBuddy(PIXI);
 
 // Loads the runtime file and the sheet image beside it. Pixel art sampling is on by default.
-const slimes = await sb.load(new URL('../assets/slime.anims.json', import.meta.url).href);
+const slimes = await sb.load(new URL('./assets/slime.anims.json', import.meta.url).href);
 
 // The ground.
 const ground = new PIXI.Graphics().rect(0, 200, 480, 40).fill('#2b3a2f');

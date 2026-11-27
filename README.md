@@ -37,7 +37,8 @@ Every runtime reads one file, the [runtime file](docs/format.md) (`<name>.anims.
 npm install
 npm run check      # format, typecheck, tests with 95% coverage (Pixi and Phaser tests render in Chromium)
 npm run build      # builds every package into its dist/
-npm run examples   # builds, then serves the examples at http://localhost:8080/examples/
+npm run examples   # builds, then serves the examples playground at http://localhost:8080/examples/
+npm run examples:site   # puts the playground in site/, ready for any static host
 UPDATE_FIXTURES=1 npx vitest run packages/core/src/golden.test.ts   # after a deliberate change
 ```
 

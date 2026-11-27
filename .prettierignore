@@ -3,3 +3,4 @@ dist
 coverage
 packages/*/schema.json
 fixtures/*.expected.json
+site

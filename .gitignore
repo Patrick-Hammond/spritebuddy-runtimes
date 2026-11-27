@@ -6,3 +6,4 @@ godot/.godot
 packages/*/schema.json
 godot/**/*.uid
 godot/**/*.import
+site

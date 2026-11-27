@@ -6,12 +6,18 @@ import { parseFile, Player } from '@spritebuddy/core';
 
 const ZOOM = 6; // pixel art is tiny: draw every sheet pixel as a 6 × 6 block
 
-const canvas = document.getElementById('stage');
+// The page gives every example a #stage to draw in and a #status line.
+const canvas = document.createElement('canvas');
+canvas.width = 480;
+canvas.height = 240;
+const buttons = document.createElement('div');
+buttons.className = 'buttons';
+document.getElementById('stage').append(canvas, buttons);
 const ctx = canvas.getContext('2d');
 const status = document.getElementById('status');
 
 // 1. Load the runtime file and its sheet image. `file.image` is relative to the file.
-const fileUrl = new URL('../assets/slime.anims.json', import.meta.url);
+const fileUrl = new URL('./assets/slime.anims.json', import.meta.url);
 const file = parseFile(await (await fetch(fileUrl)).json()); // throws a FormatError if wrong
 const sheet = new Image();
 sheet.src = new URL(file.image, fileUrl).href;
@@ -28,7 +34,6 @@ function play(name) {
 }
 
 // One button per animation in the file.
-const buttons = document.getElementById('buttons');
 for (const name of player.names) {
   const button = document.createElement('button');
   button.textContent = name;

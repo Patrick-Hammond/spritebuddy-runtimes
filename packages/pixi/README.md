@@ -68,7 +68,7 @@ const slime = sheet.sprite('walk', { light: candle });
 candle.set({ x: torch.x, y: torch.y }); // move it with whatever carries it
 ```
 
-The [PixiJS example](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/pixi) is a complete page: three slimes from one
+The [PixiJS examples](https://github.com/Patrick-Hammond/spritebuddy-runtimes/tree/main/examples/src/pixi) are complete programs: three slimes from one
 sheet, one wearing a hat drawn as a live layer, and a jump on click; then a slime you move with
 the cursor keys, lit by a flickering candle's point light.
 

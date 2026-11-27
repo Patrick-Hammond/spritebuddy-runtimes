@@ -8,7 +8,7 @@ const ZOOM = 5;
 const WIDTH = 480;
 const HEIGHT = 300;
 const SPEED = 110; // the slime's speed, in canvas pixels a second
-const status = document.getElementById('lit-status');
+const status = document.getElementById('status');
 
 const app = new PIXI.Application();
 await app.init({
@@ -18,11 +18,11 @@ await app.init({
   antialias: false,
   preference: 'webgl', // lit sprites use a WebGL shader
 });
-document.getElementById('lit-stage').append(app.canvas);
+document.getElementById('stage').append(app.canvas);
 
 const sb = spriteBuddy(PIXI);
 // `load` also loads the normal map the file names (slime_n.png), which lit sprites need.
-const sheet = await sb.load(new URL('../assets/slime.anims.json', import.meta.url).href);
+const sheet = await sb.load(new URL('./assets/slime.anims.json', import.meta.url).href);
 
 // The world is y-sorted, so the slime walks behind the candle when it is further up the screen.
 const world = new PIXI.Container();

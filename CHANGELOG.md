@@ -4,6 +4,14 @@ All runtimes share one version while they are below 1.0.
 
 ## Unreleased
 
+- Examples: the browser examples are now a playground, like PixiJS's: a list of examples down
+  the side, the chosen one's code in an editor (CodeMirror), and the example running beside it.
+  Editing the code runs it again. Each example is one file in `examples/src/`, listed in
+  `examples/list.js`, and runs on its own at `examples/run.html?example=<id>`.
+  `npm run examples:site` builds the playground into `site/` for static hosting.
+- Examples: a lighting stress test for PixiJS and Phaser, with sliders for the number of moving
+  point lights and lit slimes and a frames-per-second readout.
+
 - New runtime, `@spritebuddy/phaser`, for Phaser 3.60+ and Phaser 4: `this.load.spritebuddy(key,
 url)` loads a runtime file with its sheet and normal map, and `this.add.spritebuddy(x, y, key,
 animation)` makes a Container that plays it with per-frame timing, loop modes, offsets, live
